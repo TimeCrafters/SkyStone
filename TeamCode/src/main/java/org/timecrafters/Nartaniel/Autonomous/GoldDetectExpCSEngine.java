@@ -1,10 +1,11 @@
 package org.timecrafters.Nartaniel.Autonomous;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
 import org.timecrafters.engine.Engine;
-
+@Disabled
 @TeleOp (name = "Gold Detect Test")
 public class GoldDetectExpCSEngine extends Engine {
 

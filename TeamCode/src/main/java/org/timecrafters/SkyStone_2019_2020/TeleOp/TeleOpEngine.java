@@ -1,19 +1,14 @@
-package org.timecrafters.PINKS_2018.TeleOp.Engine;
+package org.timecrafters.SkyStone_2019_2020.TeleOp;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.timecrafters.PINKS_2018.TeleOp.States.TeleOpState;
 import org.timecrafters.engine.Engine;
 
-@Disabled
-@TeleOp (name = "TeleOp")
-
+@TeleOp (name = "TeleOp", group = "SkyStone")
 public class TeleOpEngine extends Engine {
 
     @Override
     public void setProcesses() {
         addState(new TeleOpState(this));
-
     }
 }

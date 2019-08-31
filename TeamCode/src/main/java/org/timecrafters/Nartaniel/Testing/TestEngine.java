@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.timecrafters.engine.Engine;
 
-@TeleOp (name = "Testing Ground")
+@TeleOp (name = "Testing Ground", group = "Testing")
 public class TestEngine extends Engine {
     @Override
     public void setProcesses() {

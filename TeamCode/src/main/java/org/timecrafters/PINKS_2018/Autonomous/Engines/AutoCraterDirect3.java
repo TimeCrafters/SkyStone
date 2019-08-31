@@ -12,6 +12,7 @@ package org.timecrafters.PINKS_2018.Autonomous.Engines;
  **********************************************************************************************/
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.cyberarm.NeXT.StateConfiguration;
 import org.timecrafters.PINKS_2018.Autonomous.States.Paddle;
@@ -22,7 +23,7 @@ import org.timecrafters.PINKS_2018.Autonomous.SubEngines.V2.CMineralPathLeft;
 import org.timecrafters.PINKS_2018.Autonomous.SubEngines.V2.CMineralPathRight;
 import org.timecrafters.PINKS_2018.Autonomous.Support.PinksHardwareConfig;
 import org.timecrafters.engine.Engine;
-
+@Disabled
 @Autonomous (name = "Autonomous: Crater 3")
 public class AutoCraterDirect3 extends Engine {
 
