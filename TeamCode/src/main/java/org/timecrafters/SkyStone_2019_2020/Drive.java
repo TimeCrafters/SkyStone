@@ -7,7 +7,7 @@ public class Drive extends State {
 
     public void init() {
 
-        //Drive Motor Initialization can go here
+        //Drive Motor Initialization could go here
 
     }
 
@@ -16,21 +16,29 @@ public class Drive extends State {
 
     }
 
-    public void drivetowards(int degrees) {
+    //The forward-left and backward-right motors need the same powers and the forward-right and
+    //backward-left need the same power.
+
+    public double getForwardLeftPower(double directionDegrees) {
 
         //positive degrees are towards the right (clockwise), negative degrees are towards the left
         //(counterclockwise)
 
-        double forwardLeftPower = 1.415 * (Math.sin((degrees + 45) * Math.PI / 180));
-        double forwardRightPower = 1.415 * (Math.sin((degrees + 135) * Math.PI / 180));
+        double forwardLeftPower = 1.415 * (Math.sin((directionDegrees + 45) * Math.PI / 180));
 
         if(forwardLeftPower > 1) {forwardLeftPower = 1.0;}
-        if(forwardRightPower > 1) {forwardRightPower = 1.0;}
         if(forwardLeftPower < -1) {forwardLeftPower = -1.0;}
+
+        return forwardLeftPower;
+    }
+
+    public double getForwardRightPower(double directionDegrees) {
+
+        double forwardRightPower = 1.415 * (Math.sin((directionDegrees + 135) * Math.PI / 180));
+
+        if(forwardRightPower > 1) {forwardRightPower = 1.0;}
         if(forwardRightPower < -1) {forwardRightPower = -1.0;}
 
-        engine.telemetry.addData("Left Power", forwardLeftPower);
-        engine.telemetry.addData("Right Power", forwardRightPower);
-
+        return forwardRightPower;
     }
 }

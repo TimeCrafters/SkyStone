@@ -20,7 +20,17 @@ public class TeleOpState extends Drive {
     @Override
     public void exec() throws InterruptedException {
 
-        drivetowards(0);
+        double powerThrottle = 1 - engine.gamepad1.right_trigger;
+
+        double leftJoystickDegrees = Math.atan (engine.gamepad1.left_stick_y/engine.gamepad1.left_stick_x);
+
+        double FutureSetPowerLeft = powerThrottle * getForwardLeftPower(leftJoystickDegrees);
+
+
+        engine.telemetry.addData("Power Throttle", powerThrottle);
+        engine.telemetry.addData("Stick Degrees", leftJoystickDegrees);
+        engine.telemetry.addData("Forward Left Power", FutureSetPowerLeft);
+
         engine.telemetry.update();
     }
 
