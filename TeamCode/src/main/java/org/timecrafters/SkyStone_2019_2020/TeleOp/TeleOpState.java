@@ -24,7 +24,7 @@ public class TeleOpState extends Drive {
 
         double leftJoystickDegrees = Math.atan (engine.gamepad1.left_stick_y/engine.gamepad1.left_stick_x);
 
-        double FutureSetPowerLeft = powerThrottle * getForwardLeftPower(leftJoystickDegrees);
+        double FutureSetPowerLeft = powerThrottle * getForwardLeftPower(leftJoystickDegrees, 0.05);
 
 
         engine.telemetry.addData("Power Throttle", powerThrottle);
