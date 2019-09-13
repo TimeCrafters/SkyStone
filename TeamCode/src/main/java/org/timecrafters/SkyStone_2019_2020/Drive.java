@@ -35,10 +35,11 @@ public class Drive extends State {
 
     private double degreesToPower(int translation, double directionDegrees, double zeroPowerThreshold) {
 
-        double power = 1.415 * (Math.sin((directionDegrees + translation) * Math.PI / 180));
+        double power = 1.415 * (Math.sin(Math.toRadians(directionDegrees + translation)));
 
         if (power > 1) {power = 1;}
         if (power < -1) {power = -1;}
+
         if (power < zeroPowerThreshold && power > -zeroPowerThreshold) {power = 0;}
 
         return power;
