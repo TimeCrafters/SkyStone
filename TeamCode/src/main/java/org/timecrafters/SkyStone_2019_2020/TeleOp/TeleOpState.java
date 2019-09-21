@@ -36,10 +36,14 @@ public class TeleOpState extends Drive {
         engine.telemetry.addData("Stick Degrees", JoystickDegrees);
         engine.telemetry.addData("Forward Left Power", forwardLeftPower);
         engine.telemetry.addData("Forward Right Power", forwardRightPower);
-        engine.telemetry.addData("y", engine.gamepad1.left_stick_y);
 
         engine.telemetry.update();
 
+        //test for config on new drive train
+        DriveForwardLeft.setPower(1.0);
+        DriveForwardRight.setPower(1.0);
+        DriveBackLeft.setPower(1.0);
+        DriveBackRight.setPower(1.0);
 
     }
 
@@ -48,7 +52,9 @@ public class TeleOpState extends Drive {
         double left_stick_y = -engine.gamepad1.left_stick_y;
         double left_stick_x = -engine.gamepad1.left_stick_x;
         double zeroToNinety = Math.toDegrees(Math.atan(left_stick_x / left_stick_y));
+
         engine.telemetry.addData("raw", zeroToNinety);
+
         if (left_stick_y == 0 && left_stick_x == 0) {
 
             JoystickDegrees = 0;

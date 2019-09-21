@@ -17,6 +17,7 @@ public class TestState extends State {
 
     private BNO055IMU IMU;
 
+
     public TestState(Engine engine) {
         this.engine = engine;
     }
@@ -33,14 +34,18 @@ public class TestState extends State {
         parameters.loggingEnabled = false;
 
         IMU.initialize(parameters);
-        sleep(500);
-        engine.telemetry.addData("IMU Calibrated...", IMU.isGyroCalibrated());
+        while (!IMU.isGyroCalibrated()) {
+            sleep(10);
+        }
+
+        engine.telemetry.addLine("IMU Calibrated...");
         engine.telemetry.update();
     }
 
     @Override
     public void exec() throws InterruptedException {
         Orientation orientation = IMU.getAngularOrientation();
+
 
         engine.telemetry.addData("x", orientation.firstAngle);
         engine.telemetry.addData("y", orientation.secondAngle);

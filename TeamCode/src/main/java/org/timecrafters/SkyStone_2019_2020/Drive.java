@@ -1,13 +1,45 @@
 package org.timecrafters.SkyStone_2019_2020;
 
-import org.timecrafters.engine.State;
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.timecrafters.engine.State;
 
 public class Drive extends State {
 
+    public DcMotor DriveForwardLeft;
+    public DcMotor DriveForwardRight;
+    public DcMotor DriveBackLeft;
+    public DcMotor DriveBackRight;
+    private BNO055IMU IMU;
+    private Orientation StartOrientation;
+
     public void init() {
 
-        //Drive Motor Initialization could go here
+        DriveForwardLeft = engine.hardwareMap.dcMotor.get("forwardLeftDrive");
+        DriveForwardRight = engine.hardwareMap.dcMotor.get("forwardRightDrive");
+        DriveBackLeft = engine.hardwareMap.dcMotor.get("forwardLeftDrive");
+        DriveBackRight = engine.hardwareMap.dcMotor.get("forwardRightDrive");
+
+        IMU = engine.hardwareMap.get(BNO055IMU.class, "imu");
+
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+
+        parameters.mode = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled = false;
+
+        IMU.initialize(parameters);
+
+        IMU.initialize(parameters);
+        while (!IMU.isGyroCalibrated()) {
+            sleep(10);
+        }
+
+        engine.telemetry.addLine("IMU Calibrated...");
+        engine.telemetry.update();
 
     }
 
@@ -44,4 +76,11 @@ public class Drive extends State {
 
         return power;
     }
+
+    public void setStartOrientation() {
+        StartOrientation = IMU.getAngularOrientation();
+    }
+
+
+
 }
