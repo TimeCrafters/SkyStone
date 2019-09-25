@@ -41,6 +41,8 @@ public class Drive extends State {
         engine.telemetry.addLine("IMU Calibrated...");
         engine.telemetry.update();
 
+        setStartOrientation();
+
     }
 
     @Override
@@ -81,6 +83,12 @@ public class Drive extends State {
         StartOrientation = IMU.getAngularOrientation();
     }
 
+    public float getRobotRotation() {
+        Orientation currentOrientation = IMU.getAngularOrientation();
+        Orientation startOrientation = StartOrientation;
+
+        return currentOrientation.firstAngle - startOrientation.firstAngle;
+    }
 
 
 }

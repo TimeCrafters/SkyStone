@@ -14,7 +14,6 @@ public class TeleOpState extends Drive {
     public void init() {
 
         super.init();
-
     }
 
     public TeleOpState(Engine engine) {
@@ -27,24 +26,45 @@ public class TeleOpState extends Drive {
 
         double powerThrottle = engine.gamepad1.right_trigger;
 
-        calcJoystickDegrees();
 
-        forwardLeftPower = powerThrottle * getForwardLeftPower(JoystickDegrees, 0.1);
-        forwardRightPower = powerThrottle * getForwardRightPower(JoystickDegrees, 0.1);
+        if (engine.gamepad1.right_stick_x != 0) {
+
+            //if the right joystick is moved to either side, turn the robot
+            if (engine.gamepad1.right_stick_x > 0) {
+                DriveForwardLeft.setPower(powerThrottle);
+                DriveForwardRight.setPower(-powerThrottle);
+                DriveBackLeft.setPower(powerThrottle);
+                DriveBackRight.setPower(-powerThrottle);
+            } else {
+                DriveForwardLeft.setPower(-powerThrottle);
+                DriveForwardRight.setPower(powerThrottle);
+                DriveBackLeft.setPower(-powerThrottle);
+                DriveBackRight.setPower(powerThrottle);
+            }
+
+        } else {
+
+            //if the robot isn't being turned, drive the robot in the direction of the left Joystick
+
+            calcJoystickDegrees();
+
+            forwardLeftPower = powerThrottle * getForwardLeftPower(JoystickDegrees, 0.1);
+            forwardRightPower = powerThrottle * getForwardRightPower(JoystickDegrees, 0.1);
+
+            DriveForwardLeft.setPower(forwardLeftPower);
+            DriveForwardRight.setPower(forwardRightPower);
+            DriveBackLeft.setPower(forwardRightPower);
+            DriveBackRight.setPower(forwardLeftPower);
+        }
+
 
         engine.telemetry.addData("Power Throttle", powerThrottle);
         engine.telemetry.addData("Stick Degrees", JoystickDegrees);
         engine.telemetry.addData("Forward Left Power", forwardLeftPower);
         engine.telemetry.addData("Forward Right Power", forwardRightPower);
+        engine.telemetry.addData("Robot Rotation", getRobotRotation());
 
         engine.telemetry.update();
-
-        //test for config on new drive train
-        DriveForwardLeft.setPower(1.0);
-        DriveForwardRight.setPower(1.0);
-        DriveBackLeft.setPower(1.0);
-        DriveBackRight.setPower(1.0);
-
     }
 
     private void calcJoystickDegrees() {
