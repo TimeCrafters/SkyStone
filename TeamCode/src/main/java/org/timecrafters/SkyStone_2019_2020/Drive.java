@@ -2,6 +2,7 @@ package org.timecrafters.SkyStone_2019_2020;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.timecrafters.engine.State;
@@ -19,8 +20,16 @@ public class Drive extends State {
 
         DriveForwardLeft = engine.hardwareMap.dcMotor.get("forwardLeftDrive");
         DriveForwardRight = engine.hardwareMap.dcMotor.get("forwardRightDrive");
-        DriveBackLeft = engine.hardwareMap.dcMotor.get("forwardLeftDrive");
-        DriveBackRight = engine.hardwareMap.dcMotor.get("forwardRightDrive");
+        DriveBackLeft = engine.hardwareMap.dcMotor.get("backLeftDrive");
+        DriveBackRight = engine.hardwareMap.dcMotor.get("backRightDrive");
+
+        DriveForwardRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        DriveBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        DriveForwardLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        DriveForwardRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         IMU = engine.hardwareMap.get(BNO055IMU.class, "imu");
 

@@ -42,19 +42,24 @@ public class TeleOpState extends Drive {
                 DriveBackRight.setPower(powerThrottle);
             }
 
-        } else {
+        } else if (engine.gamepad1.left_stick_x !=0 || engine.gamepad1.left_stick_y !=0) {
 
             //if the robot isn't being turned, drive the robot in the direction of the left Joystick
 
             calcJoystickDegrees();
 
-            forwardLeftPower = powerThrottle * getForwardLeftPower(JoystickDegrees, 0.1);
-            forwardRightPower = powerThrottle * getForwardRightPower(JoystickDegrees, 0.1);
+            forwardLeftPower = powerThrottle * getForwardLeftPower(JoystickDegrees + getRobotRotation(), 0.1);
+            forwardRightPower = powerThrottle * getForwardRightPower(JoystickDegrees +  getRobotRotation(), 0.1);
 
             DriveForwardLeft.setPower(forwardLeftPower);
             DriveForwardRight.setPower(forwardRightPower);
             DriveBackLeft.setPower(forwardRightPower);
             DriveBackRight.setPower(forwardLeftPower);
+        } else {
+            DriveForwardLeft.setPower(0);
+            DriveForwardRight.setPower(0);
+            DriveBackLeft.setPower(0);
+            DriveBackRight.setPower(0);
         }
 
 

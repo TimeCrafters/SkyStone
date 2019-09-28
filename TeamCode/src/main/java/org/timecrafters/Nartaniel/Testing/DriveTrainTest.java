@@ -16,9 +16,9 @@ public class DriveTrainTest extends Drive {
 
     @Override
     public void exec() throws InterruptedException {
-        DriveForwardLeft.setPower(1.0);
-        DriveForwardRight.setPower(1.0);
-        DriveBackLeft.setPower(1.0);
-        DriveBackRight.setPower(1.0);
+        DriveForwardLeft.setPower(0.25);
+        DriveForwardRight.setPower(0.25);
+        DriveBackLeft.setPower(0.25);
+        DriveBackRight.setPower(0.25);
     }
 }

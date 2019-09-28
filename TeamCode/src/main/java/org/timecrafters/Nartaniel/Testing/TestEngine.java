@@ -8,6 +8,6 @@ import org.timecrafters.engine.Engine;
 public class TestEngine extends Engine {
     @Override
     public void setProcesses() {
-        addState(new RotationSensorTest(this));
+        addState(new DriveTrainTest(this));
     }
 }
