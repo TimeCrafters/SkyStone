@@ -1,5 +1,8 @@
 package org.timecrafters.SkyStone_2019_2020.TeleOp;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
 import org.timecrafters.SkyStone_2019_2020.Drive;
 import org.timecrafters.engine.Engine;
 
@@ -9,11 +12,22 @@ public class TeleOpState extends Drive {
     private double JoystickDegrees;
     private double forwardLeftPower;
     private double forwardRightPower;
+    private DcMotor RightLift;
+    private DcMotor LeftLift;
 
     @Override
     public void init() {
-
         super.init();
+
+        RightLift = engine.hardwareMap.dcMotor.get("liftRight");
+        RightLift.setDirection(DcMotor.Direction.REVERSE);
+        LeftLift = engine.hardwareMap.dcMotor.get("liftLeft");
+
+        RightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LeftLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        LeftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
     }
 
     public TeleOpState(Engine engine) {
@@ -23,9 +37,32 @@ public class TeleOpState extends Drive {
     @Override
     public void exec() throws InterruptedException {
 
+        //Lift
+        double lift_stick_y = engine.gamepad2.left_stick_y;
 
+        if (lift_stick_y > 0) {
+            if (RightLift.getCurrentPosition() < 400) {
+                RightLift.setPower(0.5*lift_stick_y);
+            }
+            if (LeftLift.getCurrentPosition() < 400) {
+                LeftLift.setPower(0.5*lift_stick_y);
+            }
+        } else if (lift_stick_y < 0) {
+            if (RightLift.getCurrentPosition() > 0) {
+                RightLift.setPower(0.5*lift_stick_y);
+            }
+            if (LeftLift.getCurrentPosition() > 0) {
+                LeftLift.setPower(0.5*lift_stick_y);
+            }
+        } else {
+            RightLift.setPower(0);
+            LeftLift.setPower(0);
+        }
+
+
+        //Drive
+        //--------------------------------------------------------------------------
         double powerThrottle = engine.gamepad1.right_trigger;
-
 
         if (engine.gamepad1.right_stick_x != 0) {
 
@@ -61,7 +98,7 @@ public class TeleOpState extends Drive {
             DriveBackLeft.setPower(0);
             DriveBackRight.setPower(0);
         }
-
+        //------------------------------------------------------------------------
 
         engine.telemetry.addData("Power Throttle", powerThrottle);
         engine.telemetry.addData("Stick Degrees", JoystickDegrees);
