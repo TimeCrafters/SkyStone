@@ -18,6 +18,7 @@ public class Drive extends State {
 
     public void init() {
 
+
         DriveForwardLeft = engine.hardwareMap.dcMotor.get("forwardLeftDrive");
         DriveForwardRight = engine.hardwareMap.dcMotor.get("forwardRightDrive");
         DriveBackLeft = engine.hardwareMap.dcMotor.get("backLeftDrive");
@@ -82,5 +83,9 @@ public class Drive extends State {
         return currentOrientation.firstAngle - startOrientation.firstAngle;
     }
 
+    public int InchesToTicks(double distanceIN, double whealDiameter, double gearRatio) {
+        int ticks = (int) (((distanceIN * 288) / (whealDiameter * Math.PI)) / gearRatio);
+        return ticks;
+    }
 
 }

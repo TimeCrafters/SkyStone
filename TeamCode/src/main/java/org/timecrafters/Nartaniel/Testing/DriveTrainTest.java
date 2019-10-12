@@ -63,8 +63,5 @@ public class DriveTrainTest extends Drive {
 
     }
 
-    private int InchesToTicks(double distanceIN, double whealDiameter, double gearRatio) {
-        int ticks = (int) (((distanceIN * 288) / (whealDiameter * Math.PI)) / gearRatio);
-        return ticks;
-    }
+
 }
