@@ -26,11 +26,9 @@ public class IMUInit extends Drive {
         parameters.loggingEnabled = false;
 
         IMU.initialize(parameters);
-        while (!IMU.isGyroCalibrated()) {
-            sleep(10);
-        }
+        sleep(500 );
 
-        engine.telemetry.addLine("IMU Calibrated...");
+        engine.telemetry.addData("IMU Calibrated?", IMU.isGyroCalibrated());
         engine.telemetry.update();
     }
 

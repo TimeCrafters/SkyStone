@@ -23,6 +23,8 @@ public class TeleOpState extends Drive {
     private CRServo ArmGripLeft;
     private DcMotor CraneX;
     private DcMotor CraneY;
+    private Servo FingerServoLeft;
+    private Servo FingerServoRight;
 
     @Override
     public void init() {
@@ -46,6 +48,11 @@ public class TeleOpState extends Drive {
         CraneX = engine.hardwareMap.dcMotor.get("craneX");
         CraneY = engine.hardwareMap.dcMotor.get("craneY");
 
+        FingerServoLeft = engine.hardwareMap.servo.get("fingerLeft");
+        FingerServoRight = engine.hardwareMap.servo.get("fingerRight");
+
+        FingerServoLeft.setDirection(Servo.Direction.REVERSE);
+
         GrabRotateServo.setPosition(0.15);
         ArmRight.setPosition(0.4);
         ArmLeft.setPosition(0.5);
@@ -57,6 +64,14 @@ public class TeleOpState extends Drive {
 
     @Override
     public void exec() throws InterruptedException {
+
+        if (engine.gamepad2.left_bumper) {
+            FingerServoLeft.setPosition(0.65);
+            FingerServoRight.setPosition(0.65);
+        } else {
+            FingerServoLeft.setPosition(0);
+            FingerServoRight.setPosition(0);
+        }
 
         //Crane
         //-----------------------------------------------------------
@@ -148,46 +163,46 @@ public class TeleOpState extends Drive {
             }
 
             //If the D pad is pressed, the aline the robot to the appropriate air
-        } else if (engine.gamepad1.dpad_up && robotRotation < 0) {
+        } else if (engine.gamepad1.dpad_up && robotRotation < -2.5) {
             DriveForwardLeft.setPower(powerThrottle);
             DriveForwardRight.setPower(-powerThrottle);
             DriveBackLeft.setPower(powerThrottle);
             DriveBackRight.setPower(-powerThrottle);
-        } else if (engine.gamepad1.dpad_up && robotRotation >  0) {
+        } else if (engine.gamepad1.dpad_up && robotRotation >  2.5) {
             DriveForwardLeft.setPower(-powerThrottle);
             DriveForwardRight.setPower(powerThrottle);
             DriveBackLeft.setPower(-powerThrottle);
             DriveBackRight.setPower(powerThrottle);
-        } else if (engine.gamepad1.dpad_left && (robotRotation < -90 || robotRotation > 90)) {
+        } else if (engine.gamepad1.dpad_left && (robotRotation < -92.5 || robotRotation >= 90)) {
             DriveForwardLeft.setPower(-powerThrottle);
             DriveForwardRight.setPower(powerThrottle);
             DriveBackLeft.setPower(-powerThrottle);
             DriveBackRight.setPower(powerThrottle);
-        } else if (engine.gamepad1.dpad_left && -90 < robotRotation && robotRotation <= 90) {
+        } else if (engine.gamepad1.dpad_left && -87.5 < robotRotation && robotRotation <= 90) {
+            DriveForwardLeft.setPower(-powerThrottle);
+            DriveForwardRight.setPower(powerThrottle);
+            DriveBackLeft.setPower(-powerThrottle);
+            DriveBackRight.setPower(powerThrottle);
+        } else if (engine.gamepad1.dpad_right && (robotRotation <= -90 || robotRotation > 92.5)) {
+            DriveForwardLeft.setPower(-powerThrottle);
+            DriveForwardRight.setPower(powerThrottle);
+            DriveBackLeft.setPower(-powerThrottle);
+            DriveBackRight.setPower(powerThrottle);
+        } else if (engine.gamepad1.dpad_right && -90 <= robotRotation && robotRotation < 87.5) {
             DriveForwardLeft.setPower(powerThrottle);
             DriveForwardRight.setPower(-powerThrottle);
             DriveBackLeft.setPower(powerThrottle);
             DriveBackRight.setPower(-powerThrottle);
-        } else if (engine.gamepad1.dpad_right && (robotRotation < -90 || robotRotation > 90)) {
+        } else if (engine.gamepad1.dpad_down && robotRotation < -2.5) {
+            DriveForwardLeft.setPower(-powerThrottle);
+            DriveForwardRight.setPower(powerThrottle);
+            DriveBackLeft.setPower(-powerThrottle);
+            DriveBackRight.setPower(powerThrottle);
+        } else if (engine.gamepad1.dpad_down && robotRotation >  2.5 && robotRotation < 177.5) {
             DriveForwardLeft.setPower(powerThrottle);
             DriveForwardRight.setPower(-powerThrottle);
             DriveBackLeft.setPower(powerThrottle);
             DriveBackRight.setPower(-powerThrottle);
-        } else if (engine.gamepad1.dpad_right && -90 < robotRotation && robotRotation <= 90) {
-            DriveForwardLeft.setPower(-powerThrottle);
-            DriveForwardRight.setPower(powerThrottle);
-            DriveBackLeft.setPower(-powerThrottle);
-            DriveBackRight.setPower(powerThrottle);
-        } else if (engine.gamepad1.dpad_down && robotRotation < 0) {
-            DriveForwardLeft.setPower(-powerThrottle);
-            DriveForwardRight.setPower(powerThrottle);
-            DriveBackLeft.setPower(-powerThrottle);
-            DriveBackRight.setPower(powerThrottle);
-        } else if (engine.gamepad1.dpad_down && robotRotation >  0 && robotRotation < 180) {
-            DriveForwardLeft.setPower(-powerThrottle);
-            DriveForwardRight.setPower(powerThrottle);
-            DriveBackLeft.setPower(-powerThrottle);
-            DriveBackRight.setPower(powerThrottle);
 
         } else if (engine.gamepad1.left_stick_x !=0 || engine.gamepad1.left_stick_y !=0) {
 
@@ -195,8 +210,8 @@ public class TeleOpState extends Drive {
 
             calcJoystickDegrees();
 
-            forwardLeftPower = powerThrottle * getForwardLeftPower(JoystickDegrees + robotRotation, 0.1);
-            forwardRightPower = powerThrottle * getForwardRightPower(JoystickDegrees +  robotRotation, 0.1);
+            forwardLeftPower = powerThrottle * getForwardLeftPower(JoystickDegrees + robotRotation, 0.01);
+            forwardRightPower = powerThrottle * getForwardRightPower(JoystickDegrees +  robotRotation, 0.01);
 
             DriveForwardLeft.setPower(forwardLeftPower);
             DriveForwardRight.setPower(forwardRightPower);
@@ -245,9 +260,10 @@ public class TeleOpState extends Drive {
 
     @Override
     public void telemetry() {
-        engine.telemetry.addData("Right Lift Pos", LiftRight.getCurrentPosition());
-        engine.telemetry.addData("Left Lift Pos", LiftLeft.getCurrentPosition());
-        engine.telemetry.addData("Servo Position", engine.gamepad2.right_stick_y);
+        engine.telemetry.addData("JoystickDegrees", JoystickDegrees);
+        engine.telemetry.addData("Absolute Degrees", JoystickDegrees + getRobotRotation());
+        engine.telemetry.addData("Left Power", getForwardLeftPower(JoystickDegrees + getRobotRotation(), 0.1));
+        engine.telemetry.addData("Right Power", getForwardRightPower(JoystickDegrees + getRobotRotation(), 0.1));
     }
 }
 
