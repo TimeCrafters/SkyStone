@@ -4,8 +4,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.cyberarm.NeXT.StateConfiguration;
 import org.timecrafters.SkyStone_2019_2020.Drive;
+import org.timecrafters.engine.Engine;
 
-public class Turn extends Drive {
+public class Face extends Drive {
 
     private StateConfiguration StateConfig;
     private String StateConfigID;
@@ -15,6 +16,11 @@ public class Turn extends Drive {
     private double Power;
     private boolean FirstRun = true;
 
+    public Face(Engine engine, StateConfiguration stateConfig, String stateConfigID) {
+        this.engine = engine;
+        StateConfig = stateConfig;
+        StateConfigID = stateConfigID;
+    }
 
     @Override
     public void init() {
@@ -22,6 +28,7 @@ public class Turn extends Drive {
 
         TargetDegrees = StateConfig.get(StateConfigID).variable("degrees");
         Power = StateConfig.get(StateConfigID).variable("power");
+        TickDegreeRatio = StateConfig.get(StateConfigID).variable("ratio");
 
     }
 

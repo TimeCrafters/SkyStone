@@ -49,9 +49,13 @@ public class Crane extends State {
 
             if (CraneX.getCurrentPosition() < PosX + Tolerance && CraneX.getCurrentPosition() > PosX - Tolerance) {
                 CraneX.setPower(0);
-                CraneY.setPower(0);
             } else {
                 CraneX.setTargetPosition(PosX);
+            }
+
+            if (CraneY.getCurrentPosition() < PosY + Tolerance && CraneY.getCurrentPosition() > PosY - Tolerance) {
+                CraneY.setPower(0);
+            } else {
                 CraneY.setTargetPosition(PosY);
             }
 

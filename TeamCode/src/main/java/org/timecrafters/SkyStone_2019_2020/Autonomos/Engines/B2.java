@@ -10,7 +10,7 @@ public class B2 extends Engine {
         StateConfiguration stateConfiguration = new StateConfiguration();
         addState(new RampDrive(this, stateConfiguration, "B2a"));
         //Sense+Grab
-        //Turn
+        //Face
         addState(new RampDrive(this, stateConfiguration, "B2d"));
     }
 }

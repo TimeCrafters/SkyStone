@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.cyberarm.NeXT.StateConfiguration;
 import org.timecrafters.SkyStone_2019_2020.Drive;
+import org.timecrafters.engine.Engine;
 
 public class TurnTesting extends Drive {
 
@@ -15,6 +16,9 @@ public class TurnTesting extends Drive {
     private boolean FirstRun = true;
     private int TargetTicks = 1000;
 
+    public TurnTesting(Engine engine) {
+        this.engine = engine;
+    }
 
     @Override
     public void init() {
