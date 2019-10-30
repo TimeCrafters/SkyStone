@@ -3,9 +3,12 @@ package org.timecrafters.SkyStone_2019_2020.Autonomos.States;
 import org.cyberarm.NeXT.StateConfiguration;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.timecrafters.engine.Engine;
 import org.timecrafters.engine.State;
+
+import java.util.List;
 
 public class SkystoneSight extends State {
 
@@ -13,6 +16,9 @@ public class SkystoneSight extends State {
     private String StateConfigID;
     private VuforiaLocalizer Vuforia;
     private TFObjectDetector TensorFlow;
+    private List<Recognition> LastRecognitions;
+    private Recognition SkyStone;
+    private boolean FirstRun = true;
 
     public SkystoneSight(Engine engine, StateConfiguration stateConfig, String stateConfigID) {
         this.engine = engine;
@@ -44,6 +50,16 @@ public class SkystoneSight extends State {
     @Override
     public void exec() throws InterruptedException {
         if (StateConfig.allow(StateConfigID)) {
+
+            if (FirstRun) {
+                TensorFlow.activate();
+                FirstRun = false;
+            }
+
+            List<Recognition> recognitions = TensorFlow.getRecognitions();
+
+
+
 
 
 

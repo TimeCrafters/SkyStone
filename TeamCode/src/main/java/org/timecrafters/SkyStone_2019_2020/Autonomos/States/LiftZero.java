@@ -13,6 +13,7 @@ public class LiftZero extends State {
     private String StateConfigID;
     private DcMotor LiftRight;
     private DcMotor LiftLeft;
+    private RevTouchSensor LimitSwitch;
 
 
     @Override

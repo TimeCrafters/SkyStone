@@ -121,16 +121,16 @@ public class TeleOpState extends Drive {
 //            ArmLeft.setPosition(0.5);
 //        }
 
-        if (engine.gamepad2.left_bumper && engine.gamepad2.left_bumper != GrabberTogglePrevious && GrabberClosed) {
+        if (engine.gamepad2.x && engine.gamepad2.x != GrabberTogglePrevious && GrabberClosed) {
             ArmRight.setPosition(0.4);
             ArmLeft.setPosition(0.5);
             GrabberClosed = false;
-        } else if (engine.gamepad2.left_bumper && engine.gamepad2.left_bumper != GrabberTogglePrevious && !GrabberClosed) {
+        } else if (engine.gamepad2.x && engine.gamepad2.x != GrabberTogglePrevious && !GrabberClosed) {
             ArmRight.setPosition(0.85);
             ArmLeft.setPosition(0.05);
             GrabberClosed = true;
         }
-        GrabberTogglePrevious = engine.gamepad2.left_bumper;
+        GrabberTogglePrevious = engine.gamepad2.x;
 
         //Grip Rollers
         //--------------------------------------------------------------------------
@@ -146,18 +146,32 @@ public class TeleOpState extends Drive {
             ArmGripLeft.setPower(0);
         }
 
+        //Grab Rotation Servo
+        //--------------------------------------------------------------------------
+
+        double wrist_stick_pos = 0.5 + (engine.gamepad2.right_stick_x / 2) ;
+        GrabRotateServo.setPosition(wrist_stick_pos);
+
         //Lift
         //--------------------------------------------------------------------------
         double lift_stick_y = -engine.gamepad2.left_stick_y;
         int leftLiftPosition = LiftLeft.getCurrentPosition();
 
         //If the lift is going down, power is significantly reduced do to gravity.
-        if (lift_stick_y > 0) {
-            LiftLeft.setPower(lift_stick_y);
-            LiftRight.setPower(lift_stick_y);
-        } else if (lift_stick_y < 0) {
-            LiftLeft.setPower(lift_stick_y * 0.2);
-            LiftRight.setPower(lift_stick_y * 0.2);
+//        if (lift_stick_y > 0) {
+//            LiftLeft.setPower(lift_stick_y);
+//            LiftRight.setPower(lift_stick_y);
+//        } else {
+//            LiftLeft.setPower(lift_stick_y * 0.2);
+//            LiftRight.setPower(lift_stick_y * 0.2);
+//        }
+
+        if (engine.gamepad2.b) {
+            LiftRight.setPower(1);
+            LiftLeft.setPower(1);
+        } else {
+            LiftRight.setPower(0);
+            LiftLeft.setPower(0);
         }
 
         //Drive
