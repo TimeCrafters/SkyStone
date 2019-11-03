@@ -13,6 +13,7 @@ public class Fingers extends State {
     private Servo FingerServoLeft;
     private Servo FingerServoRight;
     private boolean Clamp;
+    private double FinishTolerance;
 
     public Fingers(Engine engine, StateConfiguration stateConfig, String stateConfigID) {
         this.engine = engine;
@@ -24,6 +25,7 @@ public class Fingers extends State {
     public void init() {
 
         Clamp = StateConfig.get(StateConfigID).variable("clamp");
+        FinishTolerance = StateConfig.get(StateConfigID).variable("tolerance");
 
         FingerServoLeft = engine.hardwareMap.servo.get("fingerLeft");
         FingerServoRight = engine.hardwareMap.servo.get("fingerRight");
@@ -38,10 +40,16 @@ public class Fingers extends State {
             if (Clamp) {
                 FingerServoLeft.setPosition(0.65);
                 FingerServoRight.setPosition(0.65);
+
+                setFinished(FingerServoLeft.getPosition() > 0.65 - FinishTolerance);
+
             } else  {
                 FingerServoLeft.setPosition(0);
                 FingerServoRight.setPosition(0);
+
+                setFinished(FingerServoLeft.getPosition() < FinishTolerance);
             }
+
 
         } else {
             engine.telemetry.addData("Skipping Step", StateConfigID);

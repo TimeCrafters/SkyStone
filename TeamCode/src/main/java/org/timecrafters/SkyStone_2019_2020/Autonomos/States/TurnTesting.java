@@ -12,9 +12,10 @@ public class TurnTesting extends Drive {
     private String StateConfigID;
     private float TargetDegrees;
     private float DegreeDifference;
-    private double Power;
+    private double Power = 0.7;
     private boolean FirstRun = true;
     private int TargetTicks = 1000;
+
 
     public TurnTesting(Engine engine) {
         this.engine = engine;
@@ -35,22 +36,31 @@ public class TurnTesting extends Drive {
                 DriveForwardRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 DriveBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 DriveBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                DriveForwardLeft.setTargetPosition(TargetTicks);
+                DriveBackLeft.setTargetPosition(TargetTicks);
+                DriveForwardRight.setTargetPosition(-TargetTicks);
+                DriveBackRight.setTargetPosition(-TargetTicks);
                 DriveForwardLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 DriveForwardRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 DriveBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 DriveBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+                DriveForwardLeft.setPower(Power);
+                DriveForwardRight.setPower(Power);
+                DriveBackLeft.setPower(Power);
+                DriveBackRight.setPower(Power);
+
                 FirstRun = false;
             }
 
-            DriveForwardLeft.setTargetPosition(TargetTicks);
-            DriveBackLeft.setTargetPosition(TargetTicks);
-            DriveForwardRight.setTargetPosition(-TargetTicks);
-            DriveBackRight.setTargetPosition(-TargetTicks);
+
 
             engine.telemetry.addData("Robot Rotation", getRobotRotation());
             engine.telemetry.addData("Left Tick", DriveForwardLeft);
             engine.telemetry.addData("Right Tick", DriveForwardRight);
+            engine.telemetry.addData("Ratio", DriveForwardRight.getCurrentPosition() / getRobotRotation());
+            engine.telemetry.update();
 
 
     }

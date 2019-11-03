@@ -60,7 +60,7 @@ public class TeleOpState extends Drive {
 
         FingerServoLeft.setDirection(Servo.Direction.REVERSE);
 
-        GrabRotateServo.setPosition(0.15);
+        GrabRotateServo.setPosition(0.85);
         ArmRight.setPosition(0.4);
         ArmLeft.setPosition(0.5);
     }
@@ -110,16 +110,10 @@ public class TeleOpState extends Drive {
             CraneY.setPower(0);
         }
 
-        //Grabber
+        //Arms
         //---------------------------------------------------------------------
 
-//        if (engine.gamepad2.b) {
-//            ArmRight.setPosition(0.85);
-//            ArmLeft.setPosition(0.05);
-//        } else if (engine.gamepad2.x) {
-//            ArmRight.setPosition(0.4);
-//            ArmLeft.setPosition(0.5);
-//        }
+//
 
         if (engine.gamepad2.x && engine.gamepad2.x != GrabberTogglePrevious && GrabberClosed) {
             ArmRight.setPosition(0.4);
@@ -149,8 +143,8 @@ public class TeleOpState extends Drive {
         //Grab Rotation Servo
         //--------------------------------------------------------------------------
 
-        double wrist_stick_pos = 0.5 + (engine.gamepad2.right_stick_x / 2) ;
-        GrabRotateServo.setPosition(wrist_stick_pos);
+//        double wrist_stick_pos = 0.5 + (engine.gamepad2.right_stick_x / 2) ;
+//        GrabRotateServo.setPosition(wrist_stick_pos);
 
         //Lift
         //--------------------------------------------------------------------------
@@ -166,12 +160,15 @@ public class TeleOpState extends Drive {
 //            LiftRight.setPower(lift_stick_y * 0.2);
 //        }
 
-        if (engine.gamepad2.b) {
+        if (lift_stick_y > 0) {
             LiftRight.setPower(1);
             LiftLeft.setPower(1);
-        } else {
+        } else if (engine.gamepad2.left_stick_y == 0) {
             LiftRight.setPower(0);
             LiftLeft.setPower(0);
+        } else {
+            LiftRight.setPower(-0.7);
+            LiftLeft.setPower(-0.7);
         }
 
         //Drive

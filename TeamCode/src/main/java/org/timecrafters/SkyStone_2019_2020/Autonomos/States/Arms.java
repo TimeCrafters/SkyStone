@@ -7,7 +7,7 @@ import org.cyberarm.NeXT.StateConfiguration;
 import org.timecrafters.engine.Engine;
 import org.timecrafters.engine.State;
 
-public class Grabber extends State {
+public class Arms extends State {
 
     private StateConfiguration StateConfig;
     private String StateConfigID;
@@ -18,8 +18,9 @@ public class Grabber extends State {
     private CRServo ArmGripLeft;
     private boolean Close;
     private double RotationPosition;
+    private double FinishTolerance;
 
-    public Grabber(Engine engine, StateConfiguration stateConfig, String stateConfigID) {
+    public Arms(Engine engine, StateConfiguration stateConfig, String stateConfigID) {
         this.engine = engine;
         StateConfig = stateConfig;
         StateConfigID = stateConfigID;
@@ -29,6 +30,7 @@ public class Grabber extends State {
     public void init() {
         Close = StateConfig.get(StateConfigID).variable("close");
         RotationPosition = StateConfig.get(StateConfigID).variable("position");
+        FinishTolerance = StateConfig.get(StateConfigID).variable("tolerance");
 
         GrabRotateServo = engine.hardwareMap.servo.get("grabRot");
         ArmRight = engine.hardwareMap.servo.get("armRight");
@@ -52,9 +54,13 @@ public class Grabber extends State {
             if (Close) {
                 ArmRight.setPosition(0.85);
                 ArmLeft.setPosition(0.05);
+
+                setFinished(ArmRight.getPosition() > 0.85 - FinishTolerance);
             } else {
                 ArmRight.setPosition(0.4);
                 ArmLeft.setPosition(0.5);
+
+                setFinished(ArmRight.getPosition() < 0.4 + FinishTolerance);
             }
 
         } else {
