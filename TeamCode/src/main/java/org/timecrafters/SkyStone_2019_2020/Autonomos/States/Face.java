@@ -83,9 +83,7 @@ public class Face extends Drive {
             }
 
 
-            engine.telemetry.addData("Robot Rotation", getRobotRotation());
-            engine.telemetry.addData("Left Tick", DriveForwardLeft);
-            engine.telemetry.addData("Right Tick", DriveForwardRight);
+            engine.telemetry.addData("Running Step", StateConfigID);
             engine.telemetry.update();
 
         } else {

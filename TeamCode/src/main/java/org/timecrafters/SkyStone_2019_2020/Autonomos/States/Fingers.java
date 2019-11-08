@@ -24,7 +24,11 @@ public class Fingers extends State {
     @Override
     public void init() {
 
-        Clamp = StateConfig.get(StateConfigID).variable("clamp");
+        engine.telemetry.addData("Initializing", StateConfigID);
+        engine.telemetry.update();
+        sleep(1000);
+
+        //Clamp = StateConfig.get(StateConfigID).variable("clamp");
         FinishTolerance = StateConfig.get(StateConfigID).variable("tolerance");
 
         FingerServoLeft = engine.hardwareMap.servo.get("fingerLeft");
@@ -37,19 +41,21 @@ public class Fingers extends State {
     public void exec() throws InterruptedException {
         if (StateConfig.allow(StateConfigID)) {
 
-            if (Clamp) {
-                FingerServoLeft.setPosition(0.65);
-                FingerServoRight.setPosition(0.65);
+//            if (Clamp) {
+//                FingerServoLeft.setPosition(0.65);
+//                FingerServoRight.setPosition(0.65);
+//
+//                setFinished(FingerServoLeft.getPosition() > 0.65 - FinishTolerance);
+//
+//            } else  {
+//                FingerServoLeft.setPosition(0);
+//                FingerServoRight.setPosition(0);
+//
+//                setFinished(FingerServoLeft.getPosition() < FinishTolerance);
+//            }
 
-                setFinished(FingerServoLeft.getPosition() > 0.65 - FinishTolerance);
-
-            } else  {
-                FingerServoLeft.setPosition(0);
-                FingerServoRight.setPosition(0);
-
-                setFinished(FingerServoLeft.getPosition() < FinishTolerance);
-            }
-
+            engine.telemetry.addData("Running Step", StateConfigID);
+            engine.telemetry.update();
 
         } else {
             engine.telemetry.addData("Skipping Step", StateConfigID);

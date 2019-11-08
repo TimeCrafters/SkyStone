@@ -2,6 +2,9 @@ package org.timecrafters.Nartaniel.Testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.cyberarm.NeXT.StateConfiguration;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.States.SkystoneSight;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.States.TurnTesting;
 import org.timecrafters.SkyStone_2019_2020.IMUInit;
 import org.timecrafters.engine.Engine;
 
@@ -9,11 +12,7 @@ import org.timecrafters.engine.Engine;
 public class TestEngine extends Engine {
     @Override
     public void setProcesses() {
-        addState(new IMUInit(this));
-        addState(new DriveTrainTest(this, .5, 96, 0));
-        addState(new DriveTrainTest(this, .5, 96, -90));
-        addState(new DriveTrainTest(this, .5, 96, 180));
-        addState(new DriveTrainTest(this, .5, 96, 90));
-
+        StateConfiguration stateConfiguration = new StateConfiguration();
+        addState(new SkystoneSight(this, stateConfiguration, "Exist"));
     }
 }

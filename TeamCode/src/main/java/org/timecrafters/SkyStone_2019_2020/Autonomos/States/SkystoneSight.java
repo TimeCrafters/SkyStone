@@ -5,19 +5,21 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.timecrafters.SkyStone_2019_2020.Drive;
 import org.timecrafters.engine.Engine;
 import org.timecrafters.engine.State;
 
 import java.util.List;
 
-public class SkystoneSight extends State {
+public class SkystoneSight extends Drive {
 
     private StateConfiguration StateConfig;
     private String StateConfigID;
     private VuforiaLocalizer Vuforia;
     private TFObjectDetector TensorFlow;
-    private List<Recognition> LastRecognitions;
-    private Recognition SkyStone;
+    private Recognition SkyStone1;
+    private Recognition SkyStone2;
+    private Recognition TargetStone;
     private boolean FirstRun = true;
 
     public SkystoneSight(Engine engine, StateConfiguration stateConfig, String stateConfigID) {
@@ -56,10 +58,34 @@ public class SkystoneSight extends State {
                 FirstRun = false;
             }
 
+            SkyStone1 = null;
+            SkyStone2 = null;
+
             List<Recognition> recognitions = TensorFlow.getRecognitions();
 
+            for (Recognition recognition : recognitions) {
+                if (recognition.getLabel().equals("Skystone") && SkyStone1 == null) {
+                    SkyStone1 = recognition;
+                } else if (recognition.getLabel().equals("Skystone") && SkyStone1 != null) {
+                    SkyStone2 = recognition;
+                }
+            }
+            engine.telemetry.update();
 
+            if (SkyStone1 != null) {
 
+                if (SkyStone2 == null) {
+                    TargetStone = SkyStone1;
+                } else if (SkyStone1.getLeft() > SkyStone2.getLeft()) {
+                    TargetStone = SkyStone1;
+                } else if (SkyStone1.getLeft() < SkyStone2.getLeft()) {
+                    TargetStone = SkyStone2;
+                }
+            }
+
+            if (TargetStone != null) {
+
+            }
 
 
 
@@ -70,5 +96,18 @@ public class SkystoneSight extends State {
             setFinished(true);
         }
 
+    }
+
+    @Override
+    public void telemetry() {
+        if (SkyStone1 != null) {
+            engine.telemetry.addData("Skystone1 Left", SkyStone1.getLeft());
+        }
+        if (SkyStone2 != null) {
+            engine.telemetry.addData("Skystone2 Left", SkyStone2.getLeft());
+        }
+        if (TargetStone != null) {
+            engine.telemetry.addData("Target Left", TargetStone.getLeft());
+        }
     }
 }

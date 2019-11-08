@@ -29,6 +29,9 @@ public class TeleOpState extends Drive {
     private boolean FingerTogglePrevious;
     private boolean GrabberClosed;
     private boolean GrabberTogglePrevious;
+    private double GrabRotateTargetPos;
+    private boolean RightBumpPrevious;
+    private boolean LeftBumpPrevious;
 
     @Override
     public void init() {
@@ -60,8 +63,9 @@ public class TeleOpState extends Drive {
 
         FingerServoLeft.setDirection(Servo.Direction.REVERSE);
 
-        GrabRotateServo.setPosition(0.85);
-        ArmRight.setPosition(0.4);
+        GrabRotateTargetPos = 0.85;
+        GrabRotateServo.setPosition(GrabRotateTargetPos);
+        ArmRight.setPosition(0.5);
         ArmLeft.setPosition(0.5);
     }
 
@@ -78,18 +82,19 @@ public class TeleOpState extends Drive {
 //        } else if (engine.gamepad2.right_bumper) {
 //            FingerServoLeft.setPosition(0);
 //            FingerServoRight.setPosition(0);
-//        }
+//
+        boolean FingerButton = engine.gamepad2.b;
 
-        if (engine.gamepad2.left_bumper && engine.gamepad2.left_bumper != FingerTogglePrevious && FingerDown) {
+        if (FingerButton && FingerButton != FingerTogglePrevious && FingerDown) {
             FingerServoLeft.setPosition(0);
             FingerServoRight.setPosition(0);
             FingerDown = false;
-        } else if (engine.gamepad2.left_bumper && engine.gamepad2.left_bumper != FingerTogglePrevious && !FingerDown) {
+        } else if (FingerButton && FingerButton != FingerTogglePrevious && !FingerDown) {
             FingerServoLeft.setPosition(0.65);
             FingerServoRight.setPosition(0.65);
             FingerDown = true;
         }
-        FingerTogglePrevious = engine.gamepad2.left_bumper;
+        FingerTogglePrevious = FingerButton;
 
 
         //Crane
@@ -102,9 +107,9 @@ public class TeleOpState extends Drive {
             CraneX.setPower(0);
         }
 
-        if (engine.gamepad2.dpad_up) {
+        if (engine.gamepad2.dpad_down) {
             CraneY.setPower(1);
-        } else if (engine.gamepad2.dpad_down) {
+        } else if (engine.gamepad2.dpad_up) {
             CraneY.setPower(-1);
         } else {
             CraneY.setPower(0);
@@ -113,18 +118,18 @@ public class TeleOpState extends Drive {
         //Arms
         //---------------------------------------------------------------------
 
-//
+        boolean ArmButton = engine.gamepad2.x;
 
-        if (engine.gamepad2.x && engine.gamepad2.x != GrabberTogglePrevious && GrabberClosed) {
-            ArmRight.setPosition(0.4);
+        if (ArmButton && ArmButton != GrabberTogglePrevious && GrabberClosed) {
+            ArmRight.setPosition(0.5);
             ArmLeft.setPosition(0.5);
             GrabberClosed = false;
-        } else if (engine.gamepad2.x && engine.gamepad2.x != GrabberTogglePrevious && !GrabberClosed) {
-            ArmRight.setPosition(0.85);
-            ArmLeft.setPosition(0.05);
+        } else if (ArmButton && ArmButton != GrabberTogglePrevious && !GrabberClosed) {
+            ArmRight.setPosition(0.95);
+            ArmLeft.setPosition(0.0);
             GrabberClosed = true;
         }
-        GrabberTogglePrevious = engine.gamepad2.x;
+        GrabberTogglePrevious = ArmButton;
 
         //Grip Rollers
         //--------------------------------------------------------------------------
@@ -145,6 +150,20 @@ public class TeleOpState extends Drive {
 
 //        double wrist_stick_pos = 0.5 + (engine.gamepad2.right_stick_x / 2) ;
 //        GrabRotateServo.setPosition(wrist_stick_pos);
+
+        boolean rightbump = engine.gamepad2.right_bumper;
+        boolean leftbump = engine.gamepad2.left_bumper;
+
+        if (rightbump && rightbump != RightBumpPrevious && GrabRotateTargetPos > 0.15) {
+            GrabRotateTargetPos -= .175;
+        } else if (leftbump && leftbump != LeftBumpPrevious && GrabRotateTargetPos < 0.85) {
+            GrabRotateTargetPos += .175;
+        }
+
+        RightBumpPrevious = rightbump;
+        LeftBumpPrevious = leftbump;
+
+        GrabRotateServo.setPosition(GrabRotateTargetPos);
 
         //Lift
         //--------------------------------------------------------------------------
@@ -173,7 +192,7 @@ public class TeleOpState extends Drive {
 
         //Drive
         //--------------------------------------------------------------------------
-        double powerThrottle = engine.gamepad1.right_trigger;
+        double powerThrottle =  engine.gamepad1.right_trigger;
 
         float robotRotation = getRobotRotation();
 
@@ -181,15 +200,15 @@ public class TeleOpState extends Drive {
 
             //if the right joystick is moved to either side, turn the robot
             if (engine.gamepad1.right_stick_x > 0) {
-                DriveForwardLeft.setPower(powerThrottle);
-                DriveForwardRight.setPower(-powerThrottle);
-                DriveBackLeft.setPower(powerThrottle);
-                DriveBackRight.setPower(-powerThrottle);
+                DriveForwardLeft.setPower(0.25);
+                DriveForwardRight.setPower(-0.25);
+                DriveBackLeft.setPower(0.25);
+                DriveBackRight.setPower(-0.25);
             } else {
-                DriveForwardLeft.setPower(-powerThrottle);
-                DriveForwardRight.setPower(powerThrottle);
-                DriveBackLeft.setPower(-powerThrottle);
-                DriveBackRight.setPower(powerThrottle);
+                DriveForwardLeft.setPower(-0.25);
+                DriveForwardRight.setPower(0.25);
+                DriveBackLeft.setPower(-0.25);
+                DriveBackRight.setPower(0.25);
             }
 
             //If the D pad is pressed, the aline the robot to the appropriate air
@@ -294,6 +313,7 @@ public class TeleOpState extends Drive {
         engine.telemetry.addData("Absolute Degrees", JoystickDegrees + getRobotRotation());
         engine.telemetry.addData("Left Power", getForwardLeftPower(JoystickDegrees + getRobotRotation(), 0.1));
         engine.telemetry.addData("Right Power", getForwardRightPower(JoystickDegrees + getRobotRotation(), 0.1));
+        engine.telemetry.addData("Grabber Rotate", GrabRotateTargetPos);
     }
 }
 

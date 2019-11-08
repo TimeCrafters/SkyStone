@@ -10,14 +10,16 @@ import org.timecrafters.SkyStone_2019_2020.Autonomos.States.LiftZero;
 import org.timecrafters.SkyStone_2019_2020.IMUInit;
 import org.timecrafters.engine.Engine;
 
-@TeleOp(name = "Turn Testing",group = "Testing")
+@TeleOp(name = "Testing",group = "Testing")
 public class Test extends Engine {
     @Override
     public void setProcesses() {
         StateConfiguration stateConfiguration = new StateConfiguration();
         addState(new IMUInit(this));
         addState(new Face(this, stateConfiguration, "Tface"));
+        addState(new Face(this, stateConfiguration, "Tface2"));
         addState(new Fingers(this, stateConfiguration, "Tfinger"));
-        addState(new LiftZero(this, stateConfiguration, "TliftZero"));
+        addState(new Fingers(this, stateConfiguration, "Tfinger2 "));
+        // addState(new LiftZero(this, stateConfiguration, "TliftZero"));
     }
 }

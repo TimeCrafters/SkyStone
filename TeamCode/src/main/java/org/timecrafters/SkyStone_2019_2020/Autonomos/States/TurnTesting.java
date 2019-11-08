@@ -12,9 +12,9 @@ public class TurnTesting extends Drive {
     private String StateConfigID;
     private float TargetDegrees;
     private float DegreeDifference;
-    private double Power = 0.7;
+    private double Power = 0.3;
     private boolean FirstRun = true;
-    private int TargetTicks = 1000;
+    private int TargetTicks = 250;
 
 
     public TurnTesting(Engine engine) {
