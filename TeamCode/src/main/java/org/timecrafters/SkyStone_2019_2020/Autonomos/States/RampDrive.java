@@ -34,8 +34,11 @@ public class RampDrive extends Drive {
         MaxPower = StateConfig.get(StateConfigID).variable("maxPower");
         DirectionDegrees = StateConfig.get(StateConfigID).variable("direction");
         RampFunctionDegree = StateConfig.get(StateConfigID).variable("degree");
-        StartDelay = StateConfig.get(StateConfigID).variable("startDelay");
+        StartDelay = StateConfig.get(StateConfigID).variable("delay");
 
+        engine.telemetry.addData("Initialized", StateConfigID);
+        engine.telemetry.update();
+        sleep(100);
 
     }
 

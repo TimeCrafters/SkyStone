@@ -13,7 +13,7 @@ public class Fingers extends State {
     private Servo FingerServoLeft;
     private Servo FingerServoRight;
     private boolean Clamp;
-    private double FinishTolerance;
+    private long Delay;
 
     public Fingers(Engine engine, StateConfiguration stateConfig, String stateConfigID) {
         this.engine = engine;
@@ -24,35 +24,41 @@ public class Fingers extends State {
     @Override
     public void init() {
 
-        engine.telemetry.addData("Initializing", StateConfigID);
-        engine.telemetry.update();
-        sleep(1000);
-
-        //Clamp = StateConfig.get(StateConfigID).variable("clamp");
-        FinishTolerance = StateConfig.get(StateConfigID).variable("tolerance");
+        Clamp = StateConfig.get(StateConfigID).variable("clamp");
+        Delay = StateConfig.get(StateConfigID).variable("delay");
 
         FingerServoLeft = engine.hardwareMap.servo.get("fingerLeft");
         FingerServoRight = engine.hardwareMap.servo.get("fingerRight");
 
         FingerServoLeft.setDirection(Servo.Direction.REVERSE);
+
+        FingerServoLeft.setPosition(0.1);
+        FingerServoRight.setPosition(0.1);
+
+        engine.telemetry.addData("Initialized", StateConfigID);
+        engine.telemetry.update();
+        sleep(100);
     }
 
     @Override
     public void exec() throws InterruptedException {
         if (StateConfig.allow(StateConfigID)) {
 
-//            if (Clamp) {
-//                FingerServoLeft.setPosition(0.65);
-//                FingerServoRight.setPosition(0.65);
-//
-//                setFinished(FingerServoLeft.getPosition() > 0.65 - FinishTolerance);
-//
-//            } else  {
-//                FingerServoLeft.setPosition(0);
-//                FingerServoRight.setPosition(0);
-//
-//                setFinished(FingerServoLeft.getPosition() < FinishTolerance);
-//            }
+            if (Clamp) {
+                FingerServoLeft.setPosition(0.65);
+                FingerServoRight.setPosition(0.65);
+
+                sleep(Delay);
+                setFinished(true);
+
+
+            } else  {
+                FingerServoLeft.setPosition(0.1);
+                FingerServoRight.setPosition(0.1);
+
+                sleep(Delay);
+                setFinished(true);
+            }
 
             engine.telemetry.addData("Running Step", StateConfigID);
             engine.telemetry.update();

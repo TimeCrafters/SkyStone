@@ -1,5 +1,7 @@
 package org.timecrafters.SkyStone_2019_2020.Autonomos.States;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.cyberarm.NeXT.StateConfiguration;
@@ -35,7 +37,9 @@ public class Face extends Drive {
         TickDegreeRatio = StateConfig.get(StateConfigID).variable("ratio");
         FinishTolerance = StateConfig.get(StateConfigID).variable("tolerance");
 
-
+        engine.telemetry.addData("Initialized", StateConfigID);
+        engine.telemetry.update();
+        sleep(100);
 
     }
 
@@ -45,18 +49,37 @@ public class Face extends Drive {
 
 
             if (FirstRun) {
-
-                TargetTicks = (int) ((TargetDegrees - getRobotRotation()) * TickDegreeRatio);
-
                 DriveForwardLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 DriveForwardRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 DriveBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 DriveBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-                DriveForwardLeft.setTargetPosition(TargetTicks);
-                DriveBackLeft.setTargetPosition(TargetTicks);
-                DriveForwardRight.setTargetPosition(-TargetTicks);
-                DriveBackRight.setTargetPosition(-TargetTicks);
+
+                float degreeDifference = TargetDegrees - getRobotRotation();
+
+
+                if (degreeDifference <= 180 && degreeDifference >= -180) {
+                    TargetTicks = (int) (degreeDifference * TickDegreeRatio);
+
+                    DriveForwardLeft.setTargetPosition(TargetTicks);
+                    DriveBackLeft.setTargetPosition(TargetTicks);
+                    DriveForwardRight.setTargetPosition(-TargetTicks);
+                    DriveBackRight.setTargetPosition(-TargetTicks);
+                } else if (degreeDifference < -180) {
+                    TargetTicks = (int) ( -(degreeDifference + 180) * TickDegreeRatio);
+
+                    DriveForwardLeft.setTargetPosition(TargetTicks);
+                    DriveBackLeft.setTargetPosition(TargetTicks);
+                    DriveForwardRight.setTargetPosition(-TargetTicks);
+                    DriveBackRight.setTargetPosition(-TargetTicks);
+                } else if (degreeDifference > 180) {
+                    TargetTicks = (int) ( -(degreeDifference - 180) * TickDegreeRatio);
+
+                    DriveForwardLeft.setTargetPosition(TargetTicks);
+                    DriveBackLeft.setTargetPosition(TargetTicks);
+                    DriveForwardRight.setTargetPosition(-TargetTicks);
+                    DriveBackRight.setTargetPosition(-TargetTicks);
+                }
 
                 DriveForwardLeft.setPower(Power);
                 DriveForwardRight.setPower(Power);
@@ -71,19 +94,23 @@ public class Face extends Drive {
                 FirstRun = false;
             }
 
-            if (DriveForwardLeft.getCurrentPosition() > TargetTicks - FinishTolerance &&
-                    DriveForwardLeft.getCurrentPosition() < TargetTicks + FinishTolerance) {
+            if ((DriveForwardLeft.getCurrentPosition() > TargetTicks - FinishTolerance &&
+                    DriveForwardLeft.getCurrentPosition() < TargetTicks + FinishTolerance)) {
 
                 DriveForwardLeft.setPower(0);
                 DriveForwardRight.setPower(0);
                 DriveBackLeft.setPower(0);
                 DriveBackRight.setPower(0);
 
+                engine.telemetry.addLine("Done!");
+
                 setFinished(true);
             }
 
 
             engine.telemetry.addData("Running Step", StateConfigID);
+            engine.telemetry.addData("Target Tick", TargetTicks);
+            engine.telemetry.addData("Current Tick", DriveForwardLeft.getCurrentPosition());
             engine.telemetry.update();
 
         } else {
@@ -95,4 +122,6 @@ public class Face extends Drive {
 
 
     }
+
+
 }

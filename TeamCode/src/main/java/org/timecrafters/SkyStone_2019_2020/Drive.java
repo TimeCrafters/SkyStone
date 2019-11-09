@@ -80,7 +80,7 @@ public class Drive extends State {
         Orientation currentOrientation = IMU.getAngularOrientation();
         Orientation startOrientation = StartOrientation;
 
-        return currentOrientation.firstAngle - startOrientation.firstAngle;
+        return startOrientation.firstAngle - currentOrientation.firstAngle;
     }
 
     public int InchesToTicks(double distanceIN, double whealDiameter, double gearRatio) {

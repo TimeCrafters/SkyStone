@@ -192,7 +192,10 @@ public class TeleOpState extends Drive {
 
         //Drive
         //--------------------------------------------------------------------------
-        double powerThrottle =  engine.gamepad1.right_trigger;
+
+        //This exponential function allows for finer control over lower speeds at the expense of
+        //
+        double powerThrottle =  0.1 * Math.pow(10, engine.gamepad1.right_trigger);
 
         float robotRotation = getRobotRotation();
 
@@ -259,8 +262,8 @@ public class TeleOpState extends Drive {
 
             calcJoystickDegrees();
 
-            forwardLeftPower = powerThrottle * getForwardLeftPower(JoystickDegrees + robotRotation, 0.01);
-            forwardRightPower = powerThrottle * getForwardRightPower(JoystickDegrees +  robotRotation, 0.01);
+            forwardLeftPower = powerThrottle * getForwardLeftPower(JoystickDegrees - robotRotation, 0.01);
+            forwardRightPower = powerThrottle * getForwardRightPower(JoystickDegrees -  robotRotation, 0.01);
 
             DriveForwardLeft.setPower(forwardLeftPower);
             DriveForwardRight.setPower(forwardRightPower);
@@ -310,9 +313,11 @@ public class TeleOpState extends Drive {
     @Override
     public void telemetry() {
         engine.telemetry.addData("JoystickDegrees", JoystickDegrees);
-        engine.telemetry.addData("Absolute Degrees", JoystickDegrees + getRobotRotation());
-        engine.telemetry.addData("Left Power", getForwardLeftPower(JoystickDegrees + getRobotRotation(), 0.1));
-        engine.telemetry.addData("Right Power", getForwardRightPower(JoystickDegrees + getRobotRotation(), 0.1));
+        engine.telemetry.addData("Absolute Degrees", JoystickDegrees - getRobotRotation());
+        engine.telemetry.addData("Left Power Function", getForwardLeftPower(JoystickDegrees - getRobotRotation(), 0.1));
+        engine.telemetry.addData("Right Power Function", getForwardRightPower(JoystickDegrees - getRobotRotation(), 0.1));
+        engine.telemetry.addData("Left Power Real", DriveForwardLeft.getPower());
+        engine.telemetry.addData("Right Power Real", DriveForwardRight.getPower());
         engine.telemetry.addData("Grabber Rotate", GrabRotateTargetPos);
     }
 }
