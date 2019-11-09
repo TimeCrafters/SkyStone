@@ -29,7 +29,7 @@ public class StateConfiguration {
       Log.i("TC_CONFIG", "Successfully loaded configuration file.");
 
       for (DataStruct dataStruct : dataStructs) {
-        actions.put(dataStruct.name, dataStruct);
+        actions.put(dataStruct.name.trim(), dataStruct);
       }
 
     } else {
@@ -38,11 +38,11 @@ public class StateConfiguration {
   }
 
   public DataStruct get(String key) throws NullPointerException {
-    return actions.get(key);
+    return actions.get(key.trim());
   }
 
   public boolean allow(String key) throws NullPointerException {
-    return get(key).enabled;
+    return get(key.trim()).enabled;
   }
 
   private boolean loadJSON() {
