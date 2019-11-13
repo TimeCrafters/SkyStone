@@ -14,11 +14,9 @@ public class Arms extends State {
     private Servo GrabRotateServo;
     private Servo ArmRight;
     private Servo ArmLeft;
-    private CRServo ArmGripRight;
-    private CRServo ArmGripLeft;
     private boolean Close;
     private double RotationPosition;
-    private double FinishTolerance;
+    private long Delay;
 
     public Arms(Engine engine, StateConfiguration stateConfig, String stateConfigID) {
         this.engine = engine;
@@ -29,19 +27,21 @@ public class Arms extends State {
     @Override
     public void init() {
         Close = StateConfig.get(StateConfigID).variable("close");
-        RotationPosition = StateConfig.get(StateConfigID).variable("position");
-        FinishTolerance = StateConfig.get(StateConfigID).variable("tolerance");
+        RotationPosition = StateConfig.get(StateConfigID).variable("rotation");
+        Delay = StateConfig.get(StateConfigID).variable("delay");
 
         GrabRotateServo = engine.hardwareMap.servo.get("grabRot");
         ArmRight = engine.hardwareMap.servo.get("armRight");
         ArmLeft = engine.hardwareMap.servo.get("armLeft");
-        ArmGripRight = engine.hardwareMap.crservo.get("armGripRight");
-        ArmGripLeft = engine.hardwareMap.crservo.get("armGripLeft");
-        ArmGripRight.setDirection(CRServo.Direction.REVERSE);
 
-        GrabRotateServo.setPosition(0.15);
-        ArmRight.setPosition(0.4);
-        ArmLeft.setPosition(0.5);
+
+        GrabRotateServo.setPosition(0.85);
+        ArmRight.setPosition(0.95);
+        ArmLeft.setPosition(0.0);
+
+        engine.telemetry.addData("Initialized", StateConfigID);
+        engine.telemetry.update();
+        sleep(100);
     }
 
     @Override
@@ -52,16 +52,15 @@ public class Arms extends State {
             GrabRotateServo.setPosition(RotationPosition);
 
             if (Close) {
-                ArmRight.setPosition(0.85);
-                ArmLeft.setPosition(0.05);
-
-                setFinished(ArmRight.getPosition() > 0.85 - FinishTolerance);
+                ArmRight.setPosition(0.95);
+                ArmLeft.setPosition(0.0);
             } else {
                 ArmRight.setPosition(0.4);
-                ArmLeft.setPosition(0.5);
-
-                setFinished(ArmRight.getPosition() < 0.4 + FinishTolerance);
+                ArmLeft.setPosition(0.65);
             }
+
+            sleep(Delay);
+            setFinished(true);
 
         } else {
             engine.telemetry.addData("Skipping Step", StateConfigID);

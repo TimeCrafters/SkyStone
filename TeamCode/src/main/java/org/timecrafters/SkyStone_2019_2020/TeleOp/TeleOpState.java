@@ -28,7 +28,7 @@ public class TeleOpState extends Drive {
     private boolean FingerDown;
     private boolean FingerTogglePrevious;
     private boolean GrabberClosed;
-    private boolean GrabberTogglePrevious;
+    private boolean ArmTogglePrevious;
     private double GrabRotateTargetPos;
     private boolean RightBumpPrevious;
     private boolean LeftBumpPrevious;
@@ -57,6 +57,8 @@ public class TeleOpState extends Drive {
 
         CraneX = engine.hardwareMap.dcMotor.get("craneX");
         CraneY = engine.hardwareMap.dcMotor.get("craneY");
+
+        CraneY.setDirection(DcMotorSimple.Direction.REVERSE);
 
         FingerServoLeft = engine.hardwareMap.servo.get("fingerLeft");
         FingerServoRight = engine.hardwareMap.servo.get("fingerRight");
@@ -107,9 +109,9 @@ public class TeleOpState extends Drive {
             CraneX.setPower(0);
         }
 
-        if (engine.gamepad2.dpad_down) {
+        if (engine.gamepad2.dpad_up) {
             CraneY.setPower(1);
-        } else if (engine.gamepad2.dpad_up) {
+        } else if (engine.gamepad2.dpad_down) {
             CraneY.setPower(-1);
         } else {
             CraneY.setPower(0);
@@ -120,16 +122,16 @@ public class TeleOpState extends Drive {
 
         boolean ArmButton = engine.gamepad2.x;
 
-        if (ArmButton && ArmButton != GrabberTogglePrevious && GrabberClosed) {
-            ArmRight.setPosition(0.5);
-            ArmLeft.setPosition(0.5);
+        if (ArmButton && ArmButton != ArmTogglePrevious && GrabberClosed) {
+            ArmRight.setPosition(0.4);
+            ArmLeft.setPosition(0.65);
             GrabberClosed = false;
-        } else if (ArmButton && ArmButton != GrabberTogglePrevious && !GrabberClosed) {
+        } else if (ArmButton && ArmButton != ArmTogglePrevious && !GrabberClosed) {
             ArmRight.setPosition(0.95);
             ArmLeft.setPosition(0.0);
             GrabberClosed = true;
         }
-        GrabberTogglePrevious = ArmButton;
+        ArmTogglePrevious = ArmButton;
 
         //Grip Rollers
         //--------------------------------------------------------------------------
@@ -147,9 +149,6 @@ public class TeleOpState extends Drive {
 
         //Grab Rotation Servo
         //--------------------------------------------------------------------------
-
-//        double wrist_stick_pos = 0.5 + (engine.gamepad2.right_stick_x / 2) ;
-//        GrabRotateServo.setPosition(wrist_stick_pos);
 
         boolean rightbump = engine.gamepad2.right_bumper;
         boolean leftbump = engine.gamepad2.left_bumper;
@@ -170,19 +169,12 @@ public class TeleOpState extends Drive {
         double lift_stick_y = -engine.gamepad2.left_stick_y;
         int leftLiftPosition = LiftLeft.getCurrentPosition();
 
-        //If the lift is going down, power is significantly reduced do to gravity.
-//        if (lift_stick_y > 0) {
-//            LiftLeft.setPower(lift_stick_y);
-//            LiftRight.setPower(lift_stick_y);
-//        } else {
-//            LiftLeft.setPower(lift_stick_y * 0.2);
-//            LiftRight.setPower(lift_stick_y * 0.2);
-//        }
+        //If the lift is going down, power is reduced do to gravity.
 
         if (lift_stick_y > 0) {
             LiftRight.setPower(1);
             LiftLeft.setPower(1);
-        } else if (engine.gamepad2.left_stick_y == 0) {
+        } else if (lift_stick_y == 0) {
             LiftRight.setPower(0);
             LiftLeft.setPower(0);
         } else {

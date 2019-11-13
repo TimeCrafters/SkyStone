@@ -48,17 +48,14 @@ public class Fingers extends State {
                 FingerServoLeft.setPosition(0.65);
                 FingerServoRight.setPosition(0.65);
 
-                sleep(Delay);
-                setFinished(true);
-
-
             } else  {
                 FingerServoLeft.setPosition(0.1);
                 FingerServoRight.setPosition(0.1);
-
-                sleep(Delay);
-                setFinished(true);
             }
+
+            sleep(Delay);
+            setFinished(true);
+
 
             engine.telemetry.addData("Running Step", StateConfigID);
             engine.telemetry.update();

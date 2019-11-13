@@ -1,4 +1,4 @@
-package org.timecrafters.SkyStone_2019_2020.Autonomos.States;
+package org.timecrafters.SkyStone_2019_2020.Tests;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 

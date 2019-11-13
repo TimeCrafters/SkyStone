@@ -4,8 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.cyberarm.NeXT.StateConfiguration;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.SkystoneSight;
-import org.timecrafters.SkyStone_2019_2020.Autonomos.States.TurnTesting;
-import org.timecrafters.SkyStone_2019_2020.IMUInit;
 import org.timecrafters.engine.Engine;
 
 @TeleOp (name = "Testing Ground", group = "Testing")

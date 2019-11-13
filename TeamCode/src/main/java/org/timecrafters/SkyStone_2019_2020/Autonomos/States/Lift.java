@@ -27,7 +27,7 @@ public class Lift extends State {
     public void init() {
 
         LiftHight = StateConfig.get(StateConfigID).variable("height");
-
+        FinishTolerance = StateConfig.get(StateConfigID).variable("tolerance");
         Power = StateConfig.get(StateConfigID).variable("power");
 
         LiftRight = engine.hardwareMap.dcMotor.get("liftRight");
@@ -37,7 +37,9 @@ public class Lift extends State {
         LiftRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LiftLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-
+        engine.telemetry.addData("Initialized", StateConfigID);
+        engine.telemetry.update();
+        sleep(100);
     }
 
     @Override
@@ -65,6 +67,13 @@ public class Lift extends State {
 
                 setFinished(true);
             }
+
+            engine.telemetry.addData("Power", LiftLeft.getPower());
+            engine.telemetry.addData("target tick", LiftHight);
+            engine.telemetry.addData("current tick", LiftLeft.getCurrentPosition());
+            engine.telemetry.addData("Finished", LiftLeft.getCurrentPosition() > LiftHight - FinishTolerance &&
+                    LiftLeft.getCurrentPosition() < LiftHight + FinishTolerance) ;
+            engine.telemetry.update();
 
         } else {
             engine.telemetry.addData("Skipping Step", StateConfigID);

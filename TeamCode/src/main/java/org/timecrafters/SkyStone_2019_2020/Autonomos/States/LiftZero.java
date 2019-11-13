@@ -15,8 +15,10 @@ public class LiftZero extends State {
     private String StateConfigID;
     private DcMotor LiftRight;
     private DcMotor LiftLeft;
-    private TouchSensor LimitSwitch;
+    private int LoweringDistance;
     private double LoweringPower;
+    private int FinishTolerance;
+    private boolean FirstRun = true;
 
     public LiftZero(Engine engine, StateConfiguration stateConfig, String stateConfigID) {
         this.engine = engine;
@@ -26,8 +28,9 @@ public class LiftZero extends State {
 
     @Override
     public void init() {
-
-        LimitSwitch = engine.hardwareMap.touchSensor.get("liftLimit");
+        LoweringDistance = StateConfig.get(StateConfigID).variable("ticks");
+        LoweringPower = StateConfig.get(StateConfigID).variable("power");
+        FinishTolerance = StateConfig.get(StateConfigID).variable("tolerance");
 
         LiftRight = engine.hardwareMap.dcMotor.get("liftRight");
         LiftLeft = engine.hardwareMap.dcMotor.get("liftLeft");
@@ -36,22 +39,42 @@ public class LiftZero extends State {
         LiftRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LiftLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        engine.telemetry.addData("Initialized", StateConfigID);
+        engine.telemetry.update();
+        sleep(100);
     }
 
     @Override
     public void exec() throws InterruptedException {
         if (StateConfig.allow(StateConfigID)) {
 
-            if (LimitSwitch.isPressed()) {
+            int correctedDistance = -Math.abs(LoweringDistance);
+
+            if (FirstRun) {
+                FirstRun = false;
+                LiftLeft.setPower(LoweringPower);
+                LiftRight.setPower(LoweringPower);
+                LiftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                LiftRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                LiftLeft.setTargetPosition(correctedDistance);
+                LiftRight.setTargetPosition(correctedDistance);
+                LiftLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                LiftRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+
+            if (LiftLeft.getCurrentPosition() < correctedDistance + FinishTolerance ) {
                 LiftLeft.setPower(0);
                 LiftRight.setPower(0);
                 LiftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 LiftRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
                 setFinished(true);
-            } else {
-                LiftLeft.setPower(LoweringPower);
-                LiftRight.setPower(LoweringPower);
             }
+
+            engine.telemetry.addData("Power", LiftLeft.getPower());
+            engine.telemetry.addData("target tick", correctedDistance);
+            engine.telemetry.addData("current tick", LiftLeft.getCurrentPosition());
+            engine.telemetry.update();
 
         } else {
             engine.telemetry.addData("Skipping Step", StateConfigID);

@@ -1,6 +1,7 @@
 package org.timecrafters.SkyStone_2019_2020.Autonomos.States;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.cyberarm.NeXT.StateConfiguration;
 import org.timecrafters.engine.Engine;
@@ -15,7 +16,8 @@ public class Crane extends State {
     private int Tolerance;
     private int PosY;
     private int PosX;
-    private boolean FirstRun;
+    private double Power;
+    private boolean FirstRun = true;
 
     public Crane(Engine engine, StateConfiguration stateConfig, String stateConfigID) {
         this.engine = engine;
@@ -27,37 +29,55 @@ public class Crane extends State {
     public void init() {
 
         PosX = StateConfig.get(StateConfigID).variable("xPos");
-        PosX = StateConfig.get(StateConfigID).variable("yPos");
+        PosY = StateConfig.get(StateConfigID).variable("yPos");
         Tolerance = StateConfig.get(StateConfigID).variable("tolerance");
+        Power = StateConfig.get(StateConfigID).variable("power");
 
         CraneX = engine.hardwareMap.dcMotor.get("craneX");
         CraneY = engine.hardwareMap.dcMotor.get("craneY");
 
         CraneX.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         CraneY.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        CraneY.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        CraneX.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        CraneY.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        engine.telemetry.addData("Initialized", StateConfigID);
+        engine.telemetry.update();
+        sleep(100);
     }
 
     @Override
     public void exec() throws InterruptedException {
-
-
         if (StateConfig.allow(StateConfigID)) {
 
-            if (CraneX.getCurrentPosition() < PosX + Tolerance && CraneX.getCurrentPosition() > PosX - Tolerance) {
-                CraneX.setPower(0);
-            } else {
+            if (FirstRun) {
+                FirstRun = false;
                 CraneX.setTargetPosition(PosX);
+                CraneY.setTargetPosition(PosY);
+                CraneX.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                CraneY.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                CraneX.setPower(Power);
+                CraneY.setPower(Power);
             }
 
-            if (CraneY.getCurrentPosition() < PosY + Tolerance && CraneY.getCurrentPosition() > PosY - Tolerance) {
-                CraneY.setPower(0);
-            } else {
-                CraneY.setTargetPosition(PosY);
+            boolean Xfinish = (CraneX.getCurrentPosition() < PosX + Tolerance && CraneX.getCurrentPosition() > PosX - Tolerance);
+            boolean Yfinish = (CraneY.getCurrentPosition() < PosY + Tolerance && CraneY.getCurrentPosition() > PosY - Tolerance);
+
+            if (Xfinish) {
+                CraneX.setPower(0);
             }
+
+            if (Yfinish) {
+                CraneY.setPower(0);
+            }
+
+            setFinished(Xfinish && Yfinish);
+
+
+            engine.telemetry.addData("X target", CraneY.getTargetPosition());
+            engine.telemetry.addData("X current", CraneY.getCurrentPosition());
+            engine.telemetry.addData("x Finish", Yfinish);
+            engine.telemetry.update();
 
         } else {
             engine.telemetry.addData("Skipping Step", StateConfigID);
