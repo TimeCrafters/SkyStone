@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.cyberarm.NeXT.StateConfiguration;
 import org.timecrafters.SkyStone_2019_2020.Drive;
 import org.timecrafters.engine.Engine;
 
@@ -14,6 +15,7 @@ public class TeleOpState extends Drive {
     private double JoystickDegrees;
     private double forwardLeftPower;
     private double forwardRightPower;
+    private double robotRotationSpeed;
     private DcMotor LiftRight;
     private DcMotor LiftLeft;
     private Servo GrabRotateServo;
@@ -33,9 +35,14 @@ public class TeleOpState extends Drive {
     private boolean RightBumpPrevious;
     private boolean LeftBumpPrevious;
 
+    private StateConfiguration robotConfig;
+
     @Override
     public void init() {
         super.init();
+        robotConfig = new StateConfiguration();
+        robotRotationSpeed = robotConfig.get("TeleOp").variable("robotRotationSpeed");
+
         LiftRight = engine.hardwareMap.dcMotor.get("liftRight");
         LiftLeft = engine.hardwareMap.dcMotor.get("liftLeft");
         LiftLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -195,15 +202,15 @@ public class TeleOpState extends Drive {
 
             //if the right joystick is moved to either side, turn the robot
             if (engine.gamepad1.right_stick_x > 0) {
-                DriveForwardLeft.setPower(0.25);
-                DriveForwardRight.setPower(-0.25);
-                DriveBackLeft.setPower(0.25);
-                DriveBackRight.setPower(-0.25);
+                DriveForwardLeft.setPower(robotRotationSpeed);
+                DriveForwardRight.setPower(-robotRotationSpeed);
+                DriveBackLeft.setPower(robotRotationSpeed);
+                DriveBackRight.setPower(-robotRotationSpeed);
             } else {
-                DriveForwardLeft.setPower(-0.25);
-                DriveForwardRight.setPower(0.25);
-                DriveBackLeft.setPower(-0.25);
-                DriveBackRight.setPower(0.25);
+                DriveForwardLeft.setPower(-robotRotationSpeed);
+                DriveForwardRight.setPower(robotRotationSpeed);
+                DriveBackLeft.setPower(-robotRotationSpeed);
+                DriveBackRight.setPower(robotRotationSpeed);
             }
 
             //If the D pad is pressed, the aline the robot to the appropriate air
