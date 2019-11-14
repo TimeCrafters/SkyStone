@@ -11,6 +11,10 @@ import org.timecrafters.SkyStone_2019_2020.Autonomos.States.GripRollers;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Lift;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.LiftZero;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.RampDrive;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.States.SkystoneSight;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B2Center;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B2Left;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B2Right;
 import org.timecrafters.SkyStone_2019_2020.IMUInit;
 import org.timecrafters.engine.Engine;
 
@@ -19,10 +23,18 @@ public class B2 extends Engine {
     @Override
     public void setProcesses() {
         StateConfiguration stateConfiguration = new StateConfiguration();
+        SkystoneSight skystoneSight = new SkystoneSight(this, stateConfiguration, "Bstone");
         addState(new IMUInit(this));
+
         addState(new DirectionDrive(this, stateConfiguration, "B2a"));
         addState(new DirectionDrive(this, stateConfiguration, "B2b"));
-        addState(new Crane(this, stateConfiguration, "B2c"));
+
+        addState(skystoneSight);
+        addSubEngine(new B2Left(this, skystoneSight, stateConfiguration));
+        addSubEngine(new B2Center(this, skystoneSight, stateConfiguration));
+        addSubEngine(new B2Right(this, skystoneSight, stateConfiguration));
+
+        //addState(new Crane(this, stateConfiguration, "B2c"));
         addState(new Arms(this, stateConfiguration,"B2d"));
         addState(new DirectionDrive(this, stateConfiguration, "B2e"));
         addState(new LiftZero(this, stateConfiguration, "B2f"));
