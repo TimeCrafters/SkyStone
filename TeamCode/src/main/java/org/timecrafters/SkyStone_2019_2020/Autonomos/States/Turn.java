@@ -1,28 +1,21 @@
 package org.timecrafters.SkyStone_2019_2020.Autonomos.States;
 
-import android.util.Log;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.cyberarm.NeXT.StateConfiguration;
 import org.timecrafters.SkyStone_2019_2020.Drive;
 import org.timecrafters.engine.Engine;
 
-import java.lang.annotation.Target;
-
-public class Face extends Drive {
+public class Turn extends Drive {
 
     private StateConfiguration StateConfig;
     private String StateConfigID;
-    private float TargetDegrees;
     private int TargetTicks;
-    private float TickDegreeRatio;
     private double Power;
-    private boolean FirstRun = true;
     private int FinishTolerance;
+    private boolean FirstRun = true;
 
-
-    public Face(Engine engine, StateConfiguration stateConfig, String stateConfigID) {
+    public Turn(Engine engine, StateConfiguration stateConfig, String stateConfigID) {
         this.engine = engine;
         StateConfig = stateConfig;
         StateConfigID = stateConfigID;
@@ -32,21 +25,18 @@ public class Face extends Drive {
     public void init() {
         super.init();
 
-        TargetDegrees = StateConfig.get(StateConfigID).variable("degrees");
+        TargetTicks = StateConfig.get(StateConfigID).variable("ticks");
         Power = StateConfig.get(StateConfigID).variable("power");
-        TickDegreeRatio = StateConfig.get(StateConfigID).variable("ratio");
         FinishTolerance = StateConfig.get(StateConfigID).variable("tolerance");
 
         engine.telemetry.addData("Initialized", StateConfigID);
         engine.telemetry.update();
         sleep(100);
-
     }
 
     @Override
     public void exec() throws InterruptedException {
         if (StateConfig.allow(StateConfigID)) {
-
 
             if (FirstRun) {
                 DriveForwardLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -54,32 +44,10 @@ public class Face extends Drive {
                 DriveBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 DriveBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-
-                float degreeDifference = TargetDegrees - getRobotRotation();
-
-
-                if (degreeDifference <= 180 && degreeDifference >= -180) {
-                    TargetTicks = (int) (degreeDifference * TickDegreeRatio);
-
-                    DriveForwardLeft.setTargetPosition(TargetTicks);
-                    DriveBackLeft.setTargetPosition(TargetTicks);
-                    DriveForwardRight.setTargetPosition(-TargetTicks);
-                    DriveBackRight.setTargetPosition(-TargetTicks);
-                } else if (degreeDifference < -180) {
-                    TargetTicks = (int) ( -(degreeDifference + 180) * TickDegreeRatio);
-
-                    DriveForwardLeft.setTargetPosition(TargetTicks);
-                    DriveBackLeft.setTargetPosition(TargetTicks);
-                    DriveForwardRight.setTargetPosition(-TargetTicks);
-                    DriveBackRight.setTargetPosition(-TargetTicks);
-                } else if (degreeDifference > 180) {
-                    TargetTicks = (int) ( -(degreeDifference - 180) * TickDegreeRatio);
-
-                    DriveForwardLeft.setTargetPosition(TargetTicks);
-                    DriveBackLeft.setTargetPosition(TargetTicks);
-                    DriveForwardRight.setTargetPosition(-TargetTicks);
-                    DriveBackRight.setTargetPosition(-TargetTicks);
-                }
+                DriveForwardLeft.setTargetPosition(TargetTicks);
+                DriveBackLeft.setTargetPosition(TargetTicks);
+                DriveForwardRight.setTargetPosition(-TargetTicks);
+                DriveBackRight.setTargetPosition(-TargetTicks);
 
                 DriveForwardLeft.setPower(Power);
                 DriveForwardRight.setPower(Power);
@@ -107,12 +75,6 @@ public class Face extends Drive {
                 setFinished(true);
             }
 
-
-            engine.telemetry.addData("Running Step", StateConfigID);
-            engine.telemetry.addData("Target Tick", TargetTicks);
-            engine.telemetry.addData("Current Tick", DriveForwardLeft.getCurrentPosition());
-            engine.telemetry.update();
-
         } else {
             engine.telemetry.addData("Skipping Step", StateConfigID);
             engine.telemetry.update();
@@ -120,8 +82,5 @@ public class Face extends Drive {
             setFinished(true);
         }
 
-
     }
-
-
 }
