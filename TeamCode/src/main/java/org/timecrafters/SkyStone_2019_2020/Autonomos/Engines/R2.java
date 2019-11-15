@@ -54,6 +54,7 @@ public class R2 extends Engine {
         addState(new Arms(this, stateConfiguration, "R2q"));
         addState(new DirectionDrive(this, stateConfiguration, "R2r"));
         addState(new Face(this, stateConfiguration, "R2s"));
+        addState(new Lift(this, stateConfiguration, "R2s_lower"));
         addState(new DirectionDrive(this, stateConfiguration, "R2t"));
         addState(new DirectionDrive(this, stateConfiguration, "R2u"));
     }
