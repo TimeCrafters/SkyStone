@@ -4,6 +4,7 @@ import org.cyberarm.NeXT.StateConfiguration;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Crane;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Face;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.SkystoneSight;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Turn;
 import org.timecrafters.engine.Engine;
 import org.timecrafters.engine.SubEngine;
 
@@ -21,7 +22,7 @@ public class R2Right extends SubEngine {
 
     @Override
     public void setProcesses() {
-        addState(new Face(engine, stateConfiguration, "R2Ra"));
+        addState(new Turn(engine, stateConfiguration, "R2Ra"));
         addThreadedState(new Crane(engine, stateConfiguration, "R2Rb"));
     }
 

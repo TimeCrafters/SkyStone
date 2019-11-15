@@ -1,5 +1,7 @@
 package org.timecrafters.SkyStone_2019_2020.Autonomos.States;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.cyberarm.NeXT.StateConfiguration;
@@ -27,6 +29,9 @@ public class DirectionDrive extends Drive {
     public void init() {
         super.init();
 
+        Log.i("B2Tag", StateConfigID);
+        Log.i("B2Tag", StateConfig.get(StateConfigID).variables().toString());
+
         Inches = StateConfig.get(StateConfigID).variable("distance");
         Power = StateConfig.get(StateConfigID).variable("maxPower");
         DirectionDegrees = StateConfig.get(StateConfigID).variable("direction");
@@ -34,7 +39,7 @@ public class DirectionDrive extends Drive {
 
         engine.telemetry.addData("Initialized", StateConfigID);
         engine.telemetry.update();
-        sleep(100);
+
 
     }
 

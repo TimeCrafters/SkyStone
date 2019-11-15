@@ -34,7 +34,7 @@ public class GripRollers extends State {
 
         engine.telemetry.addData("Initialized", StateConfigID);
         engine.telemetry.update();
-        sleep(100);
+
     }
 
     @Override

@@ -4,13 +4,14 @@ import org.cyberarm.NeXT.StateConfiguration;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Crane;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Face;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.SkystoneSight;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Turn;
 import org.timecrafters.engine.Engine;
 import org.timecrafters.engine.SubEngine;
 
 public class R2Center extends SubEngine {
 
     private SkystoneSight skystoneSight;
-    private Engine engine;
+    Engine engine;
     private StateConfiguration stateConfiguration;
 
     public R2Center(Engine engine, SkystoneSight skystoneSight, StateConfiguration stateConfiguration) {
@@ -21,7 +22,7 @@ public class R2Center extends SubEngine {
 
     @Override
     public void setProcesses() {
-        addState(new Face(engine, stateConfiguration, "R2Ca"));
+        addState(new Turn(engine, stateConfiguration, "R2Ca"));
         addState(new Crane(engine, stateConfiguration, "R2Cb"));
     }
 
