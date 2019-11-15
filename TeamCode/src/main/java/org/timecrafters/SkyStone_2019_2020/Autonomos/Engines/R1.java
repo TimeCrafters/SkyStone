@@ -16,6 +16,7 @@ public class R1 extends Engine {
         addState(new DirectionDrive(this, stateConfiguration, "R1a"));
         addState(new DirectionDrive(this, stateConfiguration, "R1b"));
         addState(new Fingers(this, stateConfiguration, "R1c"));
+        addState(new DirectionDrive(this, stateConfiguration, "R1c_move"));
         addState(new Face(this, stateConfiguration, "R1d"));
         addState(new DirectionDrive(this, stateConfiguration, "R1e"));
         addState(new Fingers(this, stateConfiguration, "R1f"));
