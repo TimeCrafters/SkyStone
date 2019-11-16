@@ -36,6 +36,7 @@ public class B2 extends Engine {
 
         //addState(new Crane(this, stateConfiguration, "B2c"));
         addState(new Arms(this, stateConfiguration,"B2d"));
+        addState(new Crane(this, stateConfiguration, "B2d_crane"));
         addState(new DirectionDrive(this, stateConfiguration, "B2e"));
         addState(new LiftZero(this, stateConfiguration, "B2f"));
         addState(new Arms(this, stateConfiguration, "B2g"));
@@ -43,6 +44,7 @@ public class B2 extends Engine {
         addState(new DirectionDrive(this, stateConfiguration, "B2i"));
         addState(new Face(this, stateConfiguration, "B2j"));
         addState(new DirectionDrive(this, stateConfiguration, "B2k"));
+        addInLineProcess(new Crane(this, stateConfiguration, "B2k_crane"), false);
         addState(new Face(this, stateConfiguration, "B2l"));
         addState(new Lift(this, stateConfiguration, "B2m"));
         addState(new DirectionDrive(this, stateConfiguration, "B2n"));
@@ -51,6 +53,7 @@ public class B2 extends Engine {
         addState(new Arms(this, stateConfiguration, "B2q"));
         addState(new DirectionDrive(this, stateConfiguration, "B2r"));
         addState(new Face(this, stateConfiguration, "B2s"));
+        addState(new Lift(this, stateConfiguration, "B2s_lower"));
         addState(new DirectionDrive(this, stateConfiguration, "B2t"));
         addState(new DirectionDrive(this, stateConfiguration, "B2u"));
     }
