@@ -1,5 +1,11 @@
 package org.timecrafters.SkyStone_2019_2020.Autonomos.States;
 
+/**********************************************************************************************
+ * Name: SkystoneSight
+ * Description: Observes stones with Tensor Flow Object detection and sets SkystonePosition to -1,0
+ * or 1 to enable different drive paths.
+ **********************************************************************************************/
+
 import org.cyberarm.NeXT.StateConfiguration;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -12,7 +18,7 @@ import org.timecrafters.engine.State;
 
 import java.util.List;
 
-public class SkystoneSight extends Drive {
+public class SkystoneSight extends State {
 
     private StateConfiguration StateConfig;
     private String StateConfigID;
@@ -25,6 +31,8 @@ public class SkystoneSight extends Drive {
     private double RightBoundary = 15;
     private double LeftBoundary = -10;
     private Recognition TargetStone;
+    private long StartTime;
+    private long EndTime;
     private double MinimumConfidence;
     private int ClippingMarginLeft;
     private int ClippingMarginRight;
@@ -42,13 +50,13 @@ public class SkystoneSight extends Drive {
 
     @Override
     public void init() {
-        super.init();
 
         MinimumConfidence = StateConfig.get(StateConfigID).variable("minConfidence");
         ClippingMarginLeft = StateConfig.get(StateConfigID).variable("marginLeft");
         ClippingMarginRight = StateConfig.get(StateConfigID).variable("marginRight");
         ClippingMarginTop = StateConfig.get(StateConfigID).variable("marginTop");
         ClippingMarginBottom = StateConfig.get(StateConfigID).variable("marginBottom");
+        EndTime = StateConfig.get(StateConfigID).variable("time");
 
         //Vuforia Init
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
@@ -77,6 +85,7 @@ public class SkystoneSight extends Drive {
 
             if (FirstRun) {
                 TensorFlow.activate();
+                StartTime = System.currentTimeMillis();
                 FirstRun = false;
             }
 
@@ -85,6 +94,7 @@ public class SkystoneSight extends Drive {
             Stone1 = null;
             Stone2 = null;
 
+            //Sorts Recognitions into Stones and Skystones
             List<Recognition> recognitions = TensorFlow.getRecognitions();
             engine.telemetry.addData("recognitions", recognitions.size());
             for (Recognition recognition : recognitions) {
@@ -101,6 +111,7 @@ public class SkystoneSight extends Drive {
             }
             engine.telemetry.update();
 
+            //If there happen to be multiple skystones, the robot selects the one on the left.
             if (SkyStone1 != null) {
 
                 if (SkyStone2 == null) {
@@ -112,6 +123,9 @@ public class SkystoneSight extends Drive {
                 }
             }
 
+            //If the robot recognizes two ordinary stones, it uses there positions to deduce the
+            //position of the third. The camera proved better at Identifying ordinary stones than
+            //skystones, so this strategy is prioritized
             if (Stone1 != null && Stone2 != null) {
                 double stone1Angle = Stone1.estimateAngleToObject(AngleUnit.DEGREES);
                 double stone2Angle = Stone2.estimateAngleToObject(AngleUnit.DEGREES);
@@ -126,7 +140,7 @@ public class SkystoneSight extends Drive {
                     SkystonePosition = 0;
                 }
             } else if (TargetStone != null) {
-
+            //
                 double skystoneAngle = TargetStone.estimateAngleToObject(AngleUnit.DEGREES);
                 if (skystoneAngle != 0) {
                     if (skystoneAngle > RightBoundary) {
@@ -148,7 +162,7 @@ public class SkystoneSight extends Drive {
                 SkystonePosition = 1;
             }
 
-            setFinished(true);
+            setFinished(System.currentTimeMillis() - StartTime > EndTime);
 
 
         } else {

@@ -24,6 +24,8 @@ import org.timecrafters.engine.Engine;
 public class R2 extends Engine {
     @Override
     public void setProcesses() {
+
+        //the stateConfiguration is what reads the file kept on the phone
         StateConfiguration stateConfiguration = new StateConfiguration();
         SkystoneSight skystoneSight = new SkystoneSight(this, stateConfiguration, "Rstone");
 

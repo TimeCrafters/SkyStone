@@ -1,5 +1,10 @@
 package org.timecrafters.SkyStone_2019_2020;
 
+/**********************************************************************************************
+ * Name: Drive
+ * Description: Contains all drive initialization and useful functions for Autonomous and TeleOp
+ **********************************************************************************************/
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -17,7 +22,6 @@ public class Drive extends State {
     private Orientation StartOrientation;
 
     public void init() {
-
 
         DriveForwardLeft = engine.hardwareMap.dcMotor.get("forwardLeftDrive");
         DriveForwardRight = engine.hardwareMap.dcMotor.get("forwardRightDrive");
@@ -60,6 +64,7 @@ public class Drive extends State {
 
     }
 
+    //See Theory Page for full explanation of this function.
     private double degreesToPower(int translation, double directionDegrees, double zeroPowerThreshold) {
 
         double power = 1.415 * (Math.sin(Math.toRadians(directionDegrees + translation)));
@@ -83,6 +88,8 @@ public class Drive extends State {
         return startOrientation.firstAngle - currentOrientation.firstAngle;
     }
 
+    //Uses the number of ticks in a rotation and the circumference of the wheel to convert encoder ticks
+    //into Inches traveled.
     public int InchesToTicks(double distanceIN, double whealDiameter, double gearRatio) {
         int ticks = (int) (((distanceIN * 288) / (whealDiameter * Math.PI)) / gearRatio);
         return ticks;

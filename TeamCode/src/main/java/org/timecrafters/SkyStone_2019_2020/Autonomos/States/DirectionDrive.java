@@ -27,11 +27,11 @@ public class DirectionDrive extends Drive {
 
     @Override
     public void init() {
+        //Init things from drive class
         super.init();
 
-        Log.i("B2Tag", StateConfigID);
-        Log.i("B2Tag", StateConfig.get(StateConfigID).variables().toString());
-
+        //The State Config reads a file on the phone that contains the variables for our different
+        //steps. This file can be modified to edit variables on the fly
         Inches = StateConfig.get(StateConfigID).variable("distance");
         Power = StateConfig.get(StateConfigID).variable("maxPower");
         DirectionDegrees = StateConfig.get(StateConfigID).variable("direction");

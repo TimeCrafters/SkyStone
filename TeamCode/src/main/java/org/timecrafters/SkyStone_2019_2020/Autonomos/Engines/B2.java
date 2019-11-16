@@ -1,5 +1,11 @@
 package org.timecrafters.SkyStone_2019_2020.Autonomos.Engines;
 
+/**********************************************************************************************
+ * Name: B2
+ * Description: Grabs and Places Skystone for Blue Aliance
+ **********************************************************************************************/
+
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.cyberarm.NeXT.StateConfiguration;
@@ -26,15 +32,17 @@ public class B2 extends Engine {
         SkystoneSight skystoneSight = new SkystoneSight(this, stateConfiguration, "Bstone");
         addState(new IMUInit(this));
 
+        //Positions robot in front of the first set of stones.
         addState(new DirectionDrive(this, stateConfiguration, "B2a"));
         addState(new DirectionDrive(this, stateConfiguration, "B2b"));
 
+        //Identifies the Position
         addState(skystoneSight);
         addSubEngine(new B2Left(this, skystoneSight, stateConfiguration));
         addSubEngine(new B2Center(this, skystoneSight, stateConfiguration));
         addSubEngine(new B2Right(this, skystoneSight, stateConfiguration));
 
-        //addState(new Crane(this, stateConfiguration, "B2c"));
+
         addState(new Arms(this, stateConfiguration,"B2d"));
         addState(new Crane(this, stateConfiguration, "B2d_crane"));
         addState(new DirectionDrive(this, stateConfiguration, "B2e"));
@@ -44,7 +52,7 @@ public class B2 extends Engine {
         addState(new DirectionDrive(this, stateConfiguration, "B2i"));
         addState(new Face(this, stateConfiguration, "B2j"));
         addState(new DirectionDrive(this, stateConfiguration, "B2k"));
-        addInLineProcess(new Crane(this, stateConfiguration, "B2k_crane"), false);
+        addThreadedState(new Crane(this, stateConfiguration, "B2k_crane"));
         addState(new Face(this, stateConfiguration, "B2l"));
         addState(new Lift(this, stateConfiguration, "B2m"));
         addState(new DirectionDrive(this, stateConfiguration, "B2n"));
