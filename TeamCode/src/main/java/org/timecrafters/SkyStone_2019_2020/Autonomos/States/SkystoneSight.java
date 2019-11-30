@@ -64,8 +64,6 @@ public class SkystoneSight extends State {
         parameters.vuforiaLicenseKey = "AcU+kbn/////AAAAGWDmHA7mS0gCoiMy9pA5e1AVyLZeqKejLOtP9c3COfi9g9m4Cs1XuVQVdqRFhyrFkNUynXwrhQyV65hPnPkGgRky9MjHlLLCWuqdpHzDLJonuOSBh5zVO11PleXH+2utK1lCnbBxvOM+/OrB9EAHUBrcB0ItRxjzFQOe8TXrjGGe1IyjC/Ljke3lZf/LVVinej3zjGNqwsNQoZ0+ahxYNPCJOdzRFkXjyMDXJVDQYMtVQcWKpbEM6dJ9jQ9f0UFIVXANJ7CC8ZDyrl2DQ8o4sOX981OktCKWW0d4PH0IwAw/c2nGgt1t2V/7PwTwysBYM1N+SjVpMNRg52u9gNl9os4ulF6AZw+U2LcVj4kqGZDi";
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
 
-
-
         Vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
         //Tensor Flow
@@ -140,7 +138,7 @@ public class SkystoneSight extends State {
                     SkystonePosition = 0;
                 }
             } else if (TargetStone != null) {
-            //
+            //if the robot recognizes a Skystone, it determines it's position based on the angle to it.
                 double skystoneAngle = TargetStone.estimateAngleToObject(AngleUnit.DEGREES);
                 if (skystoneAngle != 0) {
                     if (skystoneAngle > RightBoundary) {
@@ -159,9 +157,12 @@ public class SkystoneSight extends State {
                 engine.telemetry.update();
 
             } else {
+                //if nothing else, just select the rightward path
                 SkystonePosition = 1;
             }
 
+            //finish state after X amount of time. the result at this point will be used for the
+            //rest of the program.
             setFinished(System.currentTimeMillis() - StartTime > EndTime);
 
 
@@ -172,18 +173,5 @@ public class SkystoneSight extends State {
             setFinished(true);
         }
 
-    }
-
-    @Override
-    public void telemetry() {
-//        if (SkyStone1 != null) {
-//            engine.telemetry.addData("Skystone1 Left", SkyStone1.getLeft());
-//        }
-//        if (SkyStone2 != null) {
-//            engine.telemetry.addData("Skystone2 Left", SkyStone2.getLeft());
-//        }
-//        if (TargetStone != null) {
-//            engine.telemetry.addData("Target Left", TargetStone.getLeft());
-//        }
     }
 }

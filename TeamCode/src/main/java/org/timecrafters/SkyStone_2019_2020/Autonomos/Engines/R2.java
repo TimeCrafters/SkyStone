@@ -39,7 +39,6 @@ public class R2 extends Engine {
         addSubEngine(new R2Center(this, skystoneSight, stateConfiguration));
         addSubEngine(new R2Right(this, skystoneSight, stateConfiguration));
 
-        //addState(new Crane(this, stateConfiguration, "R2c"));
         addState(new Arms(this, stateConfiguration,"R2d"));
         addState(new DirectionDrive(this, stateConfiguration, "R2e"));
         addState(new LiftZero(this, stateConfiguration, "R2f"));

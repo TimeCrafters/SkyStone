@@ -36,7 +36,7 @@ public class B2 extends Engine {
         addState(new DirectionDrive(this, stateConfiguration, "B2a"));
         addState(new DirectionDrive(this, stateConfiguration, "B2b"));
 
-        //Identifies the Position
+        //Identifies the Position of Skystone and moves into position to grab it
         addState(skystoneSight);
         addSubEngine(new B2Left(this, skystoneSight, stateConfiguration));
         addSubEngine(new B2Center(this, skystoneSight, stateConfiguration));

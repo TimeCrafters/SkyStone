@@ -1,5 +1,12 @@
 package org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines;
 
+/**********************************************************************************************
+ * Name: R2Right
+ * Description: contains drive path for right positioned skystone. Enabled and disabled by
+ * SkystonePosition
+ **********************************************************************************************/
+
+
 import org.cyberarm.NeXT.StateConfiguration;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Crane;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Face;

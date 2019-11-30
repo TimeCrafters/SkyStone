@@ -1,5 +1,10 @@
 package org.timecrafters.SkyStone_2019_2020.Autonomos.States;
 
+/**********************************************************************************************
+ * Name: DirectionDrive
+ * Description: basic drive state without power ramping
+ **********************************************************************************************/
+
 import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -57,6 +62,7 @@ public class DirectionDrive extends Drive {
                 DriveBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 DriveBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+                //optional delay for alliance partner strategy
                 sleep(StartDelay);
 
                 FirstRun = false;
@@ -65,6 +71,8 @@ public class DirectionDrive extends Drive {
             int RightTick = DriveForwardRight.getCurrentPosition();
             int LeftTick = DriveForwardLeft.getCurrentPosition();
 
+            //since the power of the motors in certain situations may be zero, select whichever side
+            //is larger for determine when to finish.
             if (LeftTick > RightTick) {
                 CurrentTick = Math.abs(LeftTick);
             } else {
