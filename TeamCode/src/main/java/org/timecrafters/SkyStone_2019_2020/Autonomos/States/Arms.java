@@ -26,6 +26,7 @@ public class Arms extends State {
 
     @Override
     public void init() {
+        //The StateConfig reads a file on the phone and looks for a set of varia
         Close = StateConfig.get(StateConfigID).variable("close");
         RotationPosition = StateConfig.get(StateConfigID).variable("rotation");
         Delay = StateConfig.get(StateConfigID).variable("delay");

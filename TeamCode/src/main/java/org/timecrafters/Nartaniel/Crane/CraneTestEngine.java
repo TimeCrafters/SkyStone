@@ -9,6 +9,8 @@ public class CraneTestEngine extends Engine {
 
     @Override
     public void setProcesses() {
-        addState(new CraneTestState(this));
+        addState(new Lift(this, 1, 5000));
+        addState(new Lift(this, -1, 1000));
+        addState(new Lift(this, 0.5, 2000));
     }
 }
