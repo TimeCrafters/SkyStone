@@ -1,6 +1,5 @@
 package org.timecrafters.Faith;
 
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
@@ -13,8 +12,8 @@ public class Minibotchallenge2state extends State {
 private DcMotor BackRight;
 private DcMotor BackLeft;
 private double Power;
-private boolean PowerChange;
-private long Time;
+private boolean ButtonPressed;
+
 
 
     @Override
@@ -23,7 +22,7 @@ BackRight = engine.hardwareMap.dcMotor.get("Right");
 BackLeft = engine.hardwareMap.dcMotor.get("Left");
 BackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 Power = .5;
-PowerChange = false;
+ButtonPressed = false;
     }
 
     @Override
@@ -32,31 +31,23 @@ PowerChange = false;
         BackRight.setPower (Power * engine.gamepad1.right_stick_y);
 
         if (engine.gamepad1.left_bumper){
-            if (PowerChange == true){
-                if (System.currentTimeMillis() - Time >=250){
-                    PowerChange = false;
-                }
 
-            } else {
-                if (engine.gamepad1.a) {
-                    Time = System.currentTimeMillis();
+                if (engine.gamepad1.a && ButtonPressed == false) {
                     Power -= .1;
-                    PowerChange = true;
+                    ButtonPressed = true;
                     if (Power < 0){
                         Power = 0;
                     }
-                }
-                if (engine.gamepad1.y){
-                    Time = System.currentTimeMillis();
+                } else if (engine.gamepad1.y && ButtonPressed == false){
                    Power += .1;
-                   PowerChange = true;
+                   ButtonPressed = true;
                    if (Power > 1){
                        Power=1;
                    }
-                }
-            }
-
+                } else if (engine.gamepad1.a == false && engine.gamepad1.y == false ){ ButtonPressed = false;}
         }
+
+
 
 
     }
