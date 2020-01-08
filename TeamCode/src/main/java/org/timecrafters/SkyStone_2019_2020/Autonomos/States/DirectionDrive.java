@@ -72,7 +72,7 @@ public class DirectionDrive extends Drive {
             int LeftTick = DriveForwardLeft.getCurrentPosition();
 
             //since the power of the motors in certain situations may be zero, select whichever side
-            //is larger for determine when to finish.
+            //is larger for determining when to finish.
             if (LeftTick > RightTick) {
                 CurrentTick = Math.abs(LeftTick);
             } else {

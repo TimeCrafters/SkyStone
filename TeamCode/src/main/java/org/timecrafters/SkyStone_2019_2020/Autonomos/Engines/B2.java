@@ -24,7 +24,7 @@ import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B2Right;
 import org.timecrafters.SkyStone_2019_2020.IMUInit;
 import org.timecrafters.engine.Engine;
 
-@Autonomous (name = "B2", group = "B")
+@Autonomous (name = "B2", group = "Blue")
 public class B2 extends Engine {
     @Override
     public void setProcesses() {
@@ -42,13 +42,15 @@ public class B2 extends Engine {
         addSubEngine(new B2Center(this, skystoneSight, stateConfiguration));
         addSubEngine(new B2Right(this, skystoneSight, stateConfiguration));
 
-
+        //Grabs Stone
         addState(new Arms(this, stateConfiguration,"B2d"));
         addState(new Crane(this, stateConfiguration, "B2d_crane"));
         addState(new DirectionDrive(this, stateConfiguration, "B2e"));
         addState(new LiftZero(this, stateConfiguration, "B2f"));
         addState(new Arms(this, stateConfiguration, "B2g"));
         addState(new GripRollers(this, stateConfiguration, "B2h"));
+
+
         addState(new DirectionDrive(this, stateConfiguration, "B2i"));
         addState(new Face(this, stateConfiguration, "B2j"));
         addState(new DirectionDrive(this, stateConfiguration, "B2k"));

@@ -6,7 +6,7 @@ import org.cyberarm.NeXT.StateConfiguration;
 import org.timecrafters.engine.Engine;
 import org.timecrafters.engine.State;
 
-public class Fingers extends State {
+public class FoundationClamp extends State {
 
     private StateConfiguration StateConfig;
     private String StateConfigID;
@@ -15,7 +15,7 @@ public class Fingers extends State {
     private boolean Clamp;
     private long Delay;
 
-    public Fingers(Engine engine, StateConfiguration stateConfig, String stateConfigID) {
+    public FoundationClamp(Engine engine, StateConfiguration stateConfig, String stateConfigID) {
         this.engine = engine;
         StateConfig = stateConfig;
         StateConfigID = stateConfigID;

@@ -163,7 +163,7 @@ public class SkystoneSight extends State {
 
             //finish state after X amount of time. the result at this point will be used for the
             //rest of the program.
-            setFinished(System.currentTimeMillis() - StartTime > EndTime);
+            setFinished(System.currentTimeMillis() - StartTime > EndTime)  ;
 
 
         } else {

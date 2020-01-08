@@ -20,7 +20,7 @@ import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.R2Right;
 import org.timecrafters.SkyStone_2019_2020.IMUInit;
 import org.timecrafters.engine.Engine;
 
-@Autonomous (name = "R2", group = "R ")
+@Autonomous (name = "R2", group = "Red")
 public class R2 extends Engine {
     @Override
     public void setProcesses() {
