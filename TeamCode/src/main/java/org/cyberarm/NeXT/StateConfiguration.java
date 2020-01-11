@@ -38,10 +38,18 @@ public class StateConfiguration {
   }
 
   public DataStruct get(String key) throws NullPointerException {
+    if (actions.get(key.trim()) == null) {
+      throw(new NullPointerException("Config has no Action called \""+ key.trim() +"\""));
+    }
+
     return actions.get(key.trim());
   }
 
   public boolean allow(String key) throws NullPointerException {
+    if (get(key.trim()) == null) {
+      throw(new NullPointerException("Config has no Action called \""+ key.trim() +"\""));
+    }
+
     return get(key.trim()).enabled;
   }
 
