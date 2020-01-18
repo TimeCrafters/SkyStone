@@ -1,6 +1,5 @@
 package org.timecrafters.SkyStone_2019_2020.TeleOp;
 
-import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -38,17 +37,19 @@ public class TeleOpState extends Drive {
     private boolean RightBumpPrevious;
     private boolean LeftBumpPrevious;
     private AutoPlaceX autoPlaceX;
-    private AutoPlaceY autoPlaceY;
     private AutoPlaceZ autoPlaceZ;
+    private AutoPlaceY autoPlaceY;
     private boolean AutoPlaceTogglePrevious;
     private int AutoPlaceStep = 0;
     private boolean RunAutoPlace;
 
     @Override
     public void init() {
-        super.init();
         StateConfig = new StateConfiguration();
         robotRotationSpeed = StateConfig.get(StateConfigID).variable("robotRotationSpeed");
+        StartRotationDisplacement = StateConfig.get(StateConfigID).variable("rotDisplace");
+
+        super.init();
 
         LiftRight = engine.hardwareMap.dcMotor.get("liftRight");
         LiftLeft = engine.hardwareMap.dcMotor.get("liftLeft");
@@ -84,10 +85,12 @@ public class TeleOpState extends Drive {
         ArmRight.setPosition(0.5);
         ArmLeft.setPosition(0.5);
 
-        autoPlaceX = new AutoPlaceX(engine, StateConfig);
-        autoPlaceY = new AutoPlaceY(engine, StateConfig);
-        autoPlaceZ = new AutoPlaceZ(engine, StateConfig);
-
+//        autoPlaceX = new AutoPlaceX(engine, StateConfig);
+//        autoPlaceY = new AutoPlaceY(engine, StateConfig);
+//        autoPlaceZ = new AutoPlaceZ(engine, StateConfig);
+//        autoPlaceX.init();
+//        autoPlaceY.init();
+//        autoPlaceZ.init();
 
     }
 
@@ -102,7 +105,7 @@ public class TeleOpState extends Drive {
         //Foundation Clamp
         //-------------------------------------------------------------------
 
-        boolean FingerButton = engine.gamepad2.b;
+        boolean FingerButton = engine.gamepad1.a;
 
         if (FingerButton && FingerButton != FingerTogglePrevious && FingerDown) {
             FingerServoLeft.setPosition(0);
@@ -203,21 +206,39 @@ public class TeleOpState extends Drive {
         //--------------------------------------------------------------------------
 
         //Toggle control
-        boolean AutoPlaceButton = engine.gamepad1.a;
-        if (AutoPlaceButton && AutoPlaceButton != AutoPlaceTogglePrevious) {
-            if (RunAutoPlace) {
-                RunAutoPlace = false;
-            } else {
-                RunAutoPlace = true;
-                AutoPlaceStep = 0;
-            }
-        }
-        AutoPlaceTogglePrevious = AutoPlaceButton;
-
-        //Run sequence
-        if (AutoPlaceStep == 1) {
-
-        }
+//        boolean AutoPlaceButton = engine.gamepad2.b;
+//        if (AutoPlaceButton && AutoPlaceButton != AutoPlaceTogglePrevious) {
+//            if (AutoPlaceStep == 1) {
+//                AutoPlaceStep = 0;
+//            } else {
+//                AutoPlaceStep = 1;
+//            }
+//        }
+//        AutoPlaceTogglePrevious = AutoPlaceButton;
+//
+//
+//
+//        //Run sequence
+//        if (AutoPlaceStep == 1) {
+//            autoPlaceX.exec();
+//            if (autoPlaceX.getIsFinished()) {
+//                AutoPlaceStep = 2;
+//            }
+//        }
+//
+//        if (AutoPlaceStep == 2) {
+//            autoPlaceZ.exec();
+//            if (autoPlaceZ.getIsFinished()) {
+//                AutoPlaceStep = 3;
+//            }
+//        }
+//
+//        if (AutoPlaceStep == 3) {
+//            autoPlaceY.exec();
+//            if (autoPlaceY.getIsFinished()) {
+//                AutoPlaceStep = 0;
+//            }
+//        }
 
         //Drive
         //--------------------------------------------------------------------------

@@ -6,7 +6,7 @@ import org.cyberarm.NeXT.StateConfiguration;
 import org.timecrafters.SkyStone_2019_2020.IMUInit;
 import org.timecrafters.engine.Engine;
 
-@TeleOp (name = "TeleOp", group = "SkyStone")
+@TeleOp (name = "RedTeleOp", group = "SkyStone")
 public class RTeleOp extends Engine {
 
     @Override
