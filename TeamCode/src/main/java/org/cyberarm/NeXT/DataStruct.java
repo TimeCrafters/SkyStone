@@ -49,7 +49,11 @@ public class DataStruct {
   }
 
   public <T> T variable(String key) throws NullPointerException {
-    return valueOf(variables.get(key));
+    if (variables.get(key.trim()) == null) {
+      throw(new NullPointerException("Action \""+ name +"\" has no Variable called \""+ key.trim() +"\""));
+    }
+
+    return valueOf(variables.get(key.trim()));
   }
 
   @SuppressWarnings("unchecked")
