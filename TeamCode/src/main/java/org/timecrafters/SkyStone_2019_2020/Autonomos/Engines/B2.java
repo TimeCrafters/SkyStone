@@ -29,7 +29,7 @@ public class B2 extends Engine {
     @Override
     public void setProcesses() {
         StateConfiguration stateConfiguration = new StateConfiguration();
-        SkystoneSight skystoneSight = new SkystoneSight(this, stateConfiguration, "Bstone");
+        SkystoneSight skystoneSight = new SkystoneSight(this, stateConfiguration, "B2b_stone");
         addState(new IMUInit(this));
 
         //Positions robot in front of the first set of stones.

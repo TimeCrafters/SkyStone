@@ -21,8 +21,8 @@ public class B3Right extends SubEngine {
 
     @Override
     public void setProcesses() {
-        addState(new Turn(engine, stateConfiguration, "B3Ra"));
-        addState(new Crane(engine, stateConfiguration, "B3Rb"));
+        addState(new Turn(engine, stateConfiguration, "B3b_Ra"));
+        addState(new Crane(engine, stateConfiguration, "B3b_Rb"));
     }
 
     @Override

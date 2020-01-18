@@ -22,8 +22,8 @@ public class R2Center extends SubEngine {
 
     @Override
     public void setProcesses() {
-        addState(new Turn(engine, stateConfiguration, "R2Ca"));
-        addState(new Crane(engine, stateConfiguration, "R2Cb"));
+        addState(new Turn(engine, stateConfiguration, "R2b_Ca"));
+        addState(new Crane(engine, stateConfiguration, "R2b_Cb"));
     }
 
     @Override

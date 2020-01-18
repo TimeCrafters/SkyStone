@@ -28,8 +28,8 @@ public class R3Right extends SubEngine {
 
     @Override
     public void setProcesses() {
-        addState(new Turn(engine, stateConfiguration, "R3Ra"));
-        addThreadedState(new Crane(engine, stateConfiguration, "R3Rb"));
+        addState(new Turn(engine, stateConfiguration, "R3b_Ra"));
+        addThreadedState(new Crane(engine, stateConfiguration, "R3b_Rb"));
     }
 
     @Override

@@ -29,8 +29,8 @@ public class R2Right extends SubEngine {
 
     @Override
     public void setProcesses() {
-        addState(new Turn(engine, stateConfiguration, "R2Ra"));
-        addThreadedState(new Crane(engine, stateConfiguration, "R2Rb"));
+        addState(new Turn(engine, stateConfiguration, "R2b_Ra"));
+        addThreadedState(new Crane(engine, stateConfiguration, "R2b_Rb"));
     }
 
     @Override

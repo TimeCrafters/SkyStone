@@ -21,8 +21,8 @@ public class B3Center extends SubEngine {
 
     @Override
     public void setProcesses() {
-        addState(new Turn(engine, stateConfiguration, "B3Ca"));
-        addThreadedState(new Crane(engine, stateConfiguration, "B3Cb"));
+        addState(new Turn(engine, stateConfiguration, "B3b_Ca"));
+        addThreadedState(new Crane(engine, stateConfiguration, "B3b_Cb"));
     }
 
     @Override

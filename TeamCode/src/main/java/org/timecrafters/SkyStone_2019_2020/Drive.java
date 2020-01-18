@@ -20,6 +20,7 @@ public class Drive extends State {
     public DcMotor DriveBackRight;
     private BNO055IMU IMU;
     private Orientation StartOrientation;
+    public float StartRotationDisplacement = 0;
 
     public void init() {
 
@@ -85,7 +86,7 @@ public class Drive extends State {
         Orientation currentOrientation = IMU.getAngularOrientation();
         Orientation startOrientation = StartOrientation;
 
-        return startOrientation.firstAngle - currentOrientation.firstAngle;
+        return startOrientation.firstAngle - currentOrientation.firstAngle + StartRotationDisplacement;
     }
 
     //Uses the number of ticks in a rotation and the circumference of the wheel to convert encoder ticks

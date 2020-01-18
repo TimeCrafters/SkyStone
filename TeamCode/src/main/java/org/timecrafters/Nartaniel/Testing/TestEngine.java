@@ -12,10 +12,7 @@ import org.timecrafters.engine.Engine;
 public class TestEngine extends Engine {
     @Override
     public void setProcesses() {
-        StateConfiguration stateConfiguration = new StateConfiguration();
-        //addState(new IMUInit(this));
-        SkystoneSight skystoneSight = new SkystoneSight(this, stateConfiguration, "Exist");
-        addState(skystoneSight);
+        addState(new LazerTest(this));
 
     }
 }

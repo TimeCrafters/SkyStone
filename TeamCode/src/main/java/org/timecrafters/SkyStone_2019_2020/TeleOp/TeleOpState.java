@@ -1,5 +1,6 @@
 package org.timecrafters.SkyStone_2019_2020.TeleOp;
 
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -12,6 +13,8 @@ import org.timecrafters.engine.Engine;
 
 public class TeleOpState extends Drive {
 
+    private StateConfiguration StateConfig;
+    private String StateConfigID;
     private double JoystickDegrees;
     private double forwardLeftPower;
     private double forwardRightPower;
@@ -34,14 +37,18 @@ public class TeleOpState extends Drive {
     private double GrabRotateTargetPos;
     private boolean RightBumpPrevious;
     private boolean LeftBumpPrevious;
-
-    private StateConfiguration robotConfig;
+    private AutoPlaceX autoPlaceX;
+    private AutoPlaceY autoPlaceY;
+    private AutoPlaceZ autoPlaceZ;
+    private boolean AutoPlaceTogglePrevious;
+    private int AutoPlaceStep = 0;
+    private boolean RunAutoPlace;
 
     @Override
     public void init() {
         super.init();
-        robotConfig = new StateConfiguration();
-        robotRotationSpeed = robotConfig.get("TeleOp").variable("robotRotationSpeed");
+        StateConfig = new StateConfiguration();
+        robotRotationSpeed = StateConfig.get(StateConfigID).variable("robotRotationSpeed");
 
         LiftRight = engine.hardwareMap.dcMotor.get("liftRight");
         LiftLeft = engine.hardwareMap.dcMotor.get("liftLeft");
@@ -76,22 +83,25 @@ public class TeleOpState extends Drive {
         GrabRotateServo.setPosition(GrabRotateTargetPos);
         ArmRight.setPosition(0.5);
         ArmLeft.setPosition(0.5);
+
+        autoPlaceX = new AutoPlaceX(engine, StateConfig);
+        autoPlaceY = new AutoPlaceY(engine, StateConfig);
+        autoPlaceZ = new AutoPlaceZ(engine, StateConfig);
+
+
     }
 
-    public TeleOpState(Engine engine) {
+    public TeleOpState(Engine engine, String stateConfigID) {
         this.engine = engine;
+        StateConfigID = stateConfigID;
     }
 
     @Override
     public void exec() throws InterruptedException {
 
-//        if (engine.gamepad2.left_bumper) {
-//            FingerServoLeft.setPosition(0.65);
-//            FingerServoRight.setPosition(0.65);
-//        } else if (engine.gamepad2.right_bumper) {
-//            FingerServoLeft.setPosition(0);
-//            FingerServoRight.setPosition(0);
-//
+        //Foundation Clamp
+        //-------------------------------------------------------------------
+
         boolean FingerButton = engine.gamepad2.b;
 
         if (FingerButton && FingerButton != FingerTogglePrevious && FingerDown) {
@@ -107,7 +117,7 @@ public class TeleOpState extends Drive {
 
 
         //Crane
-        //-----------------------------------------------------------
+        //------------------------------------------------------------------
         if (engine.gamepad2.dpad_right) {
             CraneX.setPower(1);
         } else if (engine.gamepad2.dpad_left) {
@@ -187,6 +197,26 @@ public class TeleOpState extends Drive {
         } else {
             LiftRight.setPower(-0.7);
             LiftLeft.setPower(-0.7);
+        }
+
+        //Auto Block Align
+        //--------------------------------------------------------------------------
+
+        //Toggle control
+        boolean AutoPlaceButton = engine.gamepad1.a;
+        if (AutoPlaceButton && AutoPlaceButton != AutoPlaceTogglePrevious) {
+            if (RunAutoPlace) {
+                RunAutoPlace = false;
+            } else {
+                RunAutoPlace = true;
+                AutoPlaceStep = 0;
+            }
+        }
+        AutoPlaceTogglePrevious = AutoPlaceButton;
+
+        //Run sequence
+        if (AutoPlaceStep == 1) {
+
         }
 
         //Drive
