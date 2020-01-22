@@ -36,9 +36,9 @@ public class Arms extends State {
         ArmLeft = engine.hardwareMap.servo.get("armLeft");
 
 
-        GrabRotateServo.setPosition(0.85);
-        ArmRight.setPosition(0.5);
-        ArmLeft.setPosition(0.0);
+        GrabRotateServo.setPosition(1);
+        ArmRight.setPosition(0.4);
+        ArmLeft.setPosition(0.1);
 
         engine.telemetry.addData("Initialized", StateConfigID);
         engine.telemetry.update();

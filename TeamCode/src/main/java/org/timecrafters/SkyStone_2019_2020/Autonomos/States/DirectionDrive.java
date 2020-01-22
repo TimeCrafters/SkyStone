@@ -83,11 +83,11 @@ public class DirectionDrive extends Drive {
 
             if (CurrentTick < tickDistance) {
 
-                DriveForwardLeft.setPower(Power * getForwardLeftPower(DirectionDegrees, 0.1));
-                DriveBackRight.setPower(Power * getForwardLeftPower(DirectionDegrees, 0.1));
+                DriveForwardLeft.setPower(Power * getForwardLeftPower(DirectionDegrees, 0.01));
+                DriveBackRight.setPower(Power * getForwardLeftPower(DirectionDegrees, 0.01));
 
-                DriveForwardRight.setPower(Power * getForwardRightPower(DirectionDegrees, 0.1));
-                DriveBackLeft.setPower(Power * getForwardRightPower(DirectionDegrees, 0.1));
+                DriveForwardRight.setPower(Power * getForwardRightPower(DirectionDegrees, 0.01));
+                DriveBackLeft.setPower(Power * getForwardRightPower(DirectionDegrees, 0.01));
             } else {
                 DriveForwardLeft.setPower(0);
                 DriveForwardRight.setPower(0);
@@ -99,8 +99,8 @@ public class DirectionDrive extends Drive {
             engine.telemetry.addData("Power", Power);
             engine.telemetry.addData("TargetTicks", tickDistance);
             engine.telemetry.addData("CurrentTick", CurrentTick);
-            engine.telemetry.addData("Left power", getForwardLeftPower(DirectionDegrees, 0.1));
-            engine.telemetry.addData("Right  power", getForwardRightPower(DirectionDegrees, 0.1));
+            engine.telemetry.addData("Left power", getForwardLeftPower(DirectionDegrees, 0.01));
+            engine.telemetry.addData("Right  power", getForwardRightPower(DirectionDegrees, 0.01));
 
         } else {
             engine.telemetry.addData("Skipping Step", StateConfigID);

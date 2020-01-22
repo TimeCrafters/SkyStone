@@ -48,12 +48,12 @@ public class LiftZero extends State {
     public void exec() throws InterruptedException {
         if (StateConfig.allow(StateConfigID)) {
 
-            int correctedDistance = -Math.abs(LoweringDistance);
+            int correctedDistance = Math.abs(LoweringDistance);
 
             if (FirstRun) {
                 FirstRun = false;
-                LiftLeft.setPower(LoweringPower);
-                LiftRight.setPower(LoweringPower);
+                LiftLeft.setPower(-LoweringPower);
+                LiftRight.setPower(-LoweringPower);
                 LiftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 LiftRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 LiftLeft.setTargetPosition(correctedDistance);
@@ -62,7 +62,7 @@ public class LiftZero extends State {
                 LiftRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             }
 
-            if (LiftLeft.getCurrentPosition() < correctedDistance + FinishTolerance ) {
+            if (LiftLeft.getCurrentPosition() > correctedDistance - FinishTolerance ) {
                 LiftLeft.setPower(0);
                 LiftRight.setPower(0);
                 LiftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

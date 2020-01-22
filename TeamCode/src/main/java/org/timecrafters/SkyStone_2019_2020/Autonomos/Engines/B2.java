@@ -35,35 +35,39 @@ public class B2 extends Engine {
         //Positions robot in front of the first set of stones.
         addState(new DirectionDrive(this, stateConfiguration, "B2a"));
         addState(new DirectionDrive(this, stateConfiguration, "B2b"));
+        addThreadedState(new Arms(this, stateConfiguration,"B2d"));
 
         //Identifies the Position of Skystone and moves into position to grab it
         addState(skystoneSight);
+
+
+
+
         addSubEngine(new B2Left(this, skystoneSight, stateConfiguration));
         addSubEngine(new B2Center(this, skystoneSight, stateConfiguration));
         addSubEngine(new B2Right(this, skystoneSight, stateConfiguration));
 
         //Grabs Stone
-        addState(new Arms(this, stateConfiguration,"B2d"));
-        addState(new Crane(this, stateConfiguration, "B2d_crane"));
-        addState(new DirectionDrive(this, stateConfiguration, "B2e"));
-        addState(new LiftZero(this, stateConfiguration, "B2f"));
+
+
+
+
         addState(new Arms(this, stateConfiguration, "B2g"));
         addState(new GripRollers(this, stateConfiguration, "B2h"));
-
-
-        addState(new DirectionDrive(this, stateConfiguration, "B2i"));
+        addThreadedState(new DirectionDrive(this, stateConfiguration, "B2i"));
         addState(new Face(this, stateConfiguration, "B2j"));
         addState(new DirectionDrive(this, stateConfiguration, "B2k"));
         addThreadedState(new Crane(this, stateConfiguration, "B2k_crane"));
         addState(new Face(this, stateConfiguration, "B2l"));
-        addState(new Lift(this, stateConfiguration, "B2m"));
+        addThreadedState(new Lift(this, stateConfiguration, "B2m"));
         addState(new DirectionDrive(this, stateConfiguration, "B2n"));
-        addState(new Arms(this, stateConfiguration, "B2o"));
-        addState(new Lift(this, stateConfiguration, "B2p"));
+        //Possible spot for threaded crane
+        //addState(new Arms(this, stateConfiguration, "B2o"));
+        //addState(new Lift(this, stateConfiguration, "B2p"));
         addState(new Arms(this, stateConfiguration, "B2q"));
         addState(new DirectionDrive(this, stateConfiguration, "B2r"));
         addState(new Face(this, stateConfiguration, "B2s"));
-        addState(new Lift(this, stateConfiguration, "B2s_lower"));
+        addThreadedState(new Lift(this, stateConfiguration, "B2s_lower"));
         addState(new DirectionDrive(this, stateConfiguration, "B2t"));
         addState(new DirectionDrive(this, stateConfiguration, "B2u"));
     }

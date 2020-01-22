@@ -1,5 +1,6 @@
 package org.timecrafters.SkyStone_2019_2020.TeleOp;
 
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -36,6 +37,8 @@ public class TeleOpState extends Drive {
     private double GrabRotateTargetPos;
     private boolean RightBumpPrevious;
     private boolean LeftBumpPrevious;
+    private Rev2mDistanceSensor LeftDistanceSensor;
+    private Rev2mDistanceSensor RightDistanceSensor;
     private AutoPlaceX autoPlaceX;
     private AutoPlaceZ autoPlaceZ;
     private AutoPlaceY autoPlaceY;
@@ -47,6 +50,7 @@ public class TeleOpState extends Drive {
     public void init() {
         StateConfig = new StateConfiguration();
         robotRotationSpeed = StateConfig.get(StateConfigID).variable("robotRotationSpeed");
+        //based on the end rotation of autonomous
         StartRotationDisplacement = StateConfig.get(StateConfigID).variable("rotDisplace");
 
         super.init();
@@ -80,12 +84,15 @@ public class TeleOpState extends Drive {
 
         FingerServoLeft.setDirection(Servo.Direction.REVERSE);
 
-        GrabRotateTargetPos = 0.85;
+        GrabRotateTargetPos = 1;
         GrabRotateServo.setPosition(GrabRotateTargetPos);
         ArmRight.setPosition(0.5);
         ArmLeft.setPosition(0.5);
 
-//        autoPlaceX = new AutoPlaceX(engine, StateConfig);
+//        RightDistanceSensor = engine.hardwareMap.get(Rev2mDistanceSensor.class, "distanceRight");
+//        LeftDistanceSensor = engine.hardwareMap.get(Rev2mDistanceSensor.class, "distanceLeft");
+
+//        autoPlaceX = new AutoPlaceX(engine, StateConfig, "TPa");
 //        autoPlaceY = new AutoPlaceY(engine, StateConfig);
 //        autoPlaceZ = new AutoPlaceZ(engine, StateConfig);
 //        autoPlaceX.init();
@@ -122,16 +129,16 @@ public class TeleOpState extends Drive {
         //Crane
         //------------------------------------------------------------------
         if (engine.gamepad2.dpad_right) {
-            CraneX.setPower(1);
+            CraneX.setPower(0.6);
         } else if (engine.gamepad2.dpad_left) {
-            CraneX.setPower(-1);
+            CraneX.setPower(-0.6);
         } else {
             CraneX.setPower(0);
         }
 
         if (engine.gamepad2.dpad_up) {
             CraneY.setPower(1);
-        } else if (engine.gamepad2.dpad_down) {
+        } else if (engine.gamepad2.dpad_down)  {
             CraneY.setPower(-1);
         } else {
             CraneY.setPower(0);
@@ -173,10 +180,10 @@ public class TeleOpState extends Drive {
         boolean rightbump = engine.gamepad2.right_bumper;
         boolean leftbump = engine.gamepad2.left_bumper;
 
-        if (rightbump && rightbump != RightBumpPrevious && GrabRotateTargetPos > 0.15) {
-            GrabRotateTargetPos -= .175;
-        } else if (leftbump && leftbump != LeftBumpPrevious && GrabRotateTargetPos < 0.85) {
-            GrabRotateTargetPos += .175;
+        if (rightbump && rightbump != RightBumpPrevious && GrabRotateTargetPos > 0.5) {
+            GrabRotateTargetPos -= .125;
+        } else if (leftbump && leftbump != LeftBumpPrevious && GrabRotateTargetPos < 1) {
+            GrabRotateTargetPos += .125;
         }
 
         RightBumpPrevious = rightbump;
@@ -192,14 +199,14 @@ public class TeleOpState extends Drive {
         //If the lift is going down, power is reduced do to gravity.
 
         if (lift_stick_y > 0) {
-            LiftRight.setPower(1);
-            LiftLeft.setPower(1);
+            LiftRight.setPower(-1);
+            LiftLeft.setPower(-1);
         } else if (lift_stick_y == 0) {
             LiftRight.setPower(0);
             LiftLeft.setPower(0);
         } else {
-            LiftRight.setPower(-0.7);
-            LiftLeft.setPower(-0.7);
+            LiftRight.setPower(0.2);
+            LiftLeft.setPower(0.2);
         }
 
         //Auto Block Align

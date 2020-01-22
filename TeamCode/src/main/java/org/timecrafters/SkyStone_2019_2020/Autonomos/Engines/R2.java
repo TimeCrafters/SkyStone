@@ -33,29 +33,33 @@ public class R2 extends Engine {
         addState(new IMUInit(this));
         addState(new DirectionDrive(this, stateConfiguration, "R2a"));
         addState(new DirectionDrive(this, stateConfiguration, "R2b"));
+        addThreadedState(new Arms(this, stateConfiguration,"R2d"));
 
         addState(skystoneSight);
+
         addSubEngine(new R2Left(this, skystoneSight, stateConfiguration));
         addSubEngine(new R2Center(this, skystoneSight, stateConfiguration));
         addSubEngine(new R2Right(this, skystoneSight, stateConfiguration));
 
-        addState(new Arms(this, stateConfiguration,"R2d"));
-        addState(new DirectionDrive(this, stateConfiguration, "R2e"));
-        addState(new LiftZero(this, stateConfiguration, "R2f"));
+
+
+
         addState(new Arms(this, stateConfiguration, "R2g"));
         addState(new GripRollers(this, stateConfiguration, "R2h"));
-        addState(new DirectionDrive(this, stateConfiguration, "R2i"));
+        addThreadedState(new DirectionDrive(this, stateConfiguration, "R2i"));
         addState(new Face(this, stateConfiguration, "R2j"));
         addState(new DirectionDrive(this, stateConfiguration, "R2k"));
         addState(new Face(this, stateConfiguration, "R2l"));
-        addState(new Lift(this, stateConfiguration, "R2m"));
+        addThreadedState(new Lift(this, stateConfiguration, "R2m"));
+
         addState(new DirectionDrive(this, stateConfiguration, "R2n"));
-        addState(new Arms(this, stateConfiguration, "R2o"));
-        addState(new Lift(this, stateConfiguration, "R2p"));
+        // rotating block not necessary, removed for speed.
+        // addState(new Arms(this, stateConfiguration, "R2o"));
+        // addState(new Lift(this, stateConfiguration, "R2p"));
         addState(new Arms(this, stateConfiguration, "R2q"));
         addState(new DirectionDrive(this, stateConfiguration, "R2r"));
         addState(new Face(this, stateConfiguration, "R2s"));
-        addState(new Lift(this, stateConfiguration, "R2s_lower"));
+        addThreadedState(new Lift(this, stateConfiguration, "R2s_lower"));
         addState(new DirectionDrive(this, stateConfiguration, "R2t"));
         addState(new DirectionDrive(this, stateConfiguration, "R2u"));
     }

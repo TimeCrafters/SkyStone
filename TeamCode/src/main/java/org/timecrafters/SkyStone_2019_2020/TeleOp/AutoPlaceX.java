@@ -11,7 +11,7 @@ import org.timecrafters.engine.State;
 public class AutoPlaceX extends State {
 
     private StateConfiguration StateConfig;
-
+    private String StateConfigID;
     private DcMotor CraneX;
     private Rev2mDistanceSensor LeftDistanceSensor;
     private Rev2mDistanceSensor RightDistanceSensor;
@@ -21,14 +21,16 @@ public class AutoPlaceX extends State {
 
 
 
-    public AutoPlaceX(Engine engine, StateConfiguration stateConfiguration) {
+    public AutoPlaceX(Engine engine, StateConfiguration stateConfiguration, String stateConfigID) {
         this.engine = engine;
         StateConfig = stateConfiguration;
+        StateConfigID = stateConfigID;
     }
 
     @Override
     public void init() {
-        //PowerX = StateConfig.get("").variable("placePowerX");
+        PowerX = StateConfig.get(StateConfigID).variable("power");
+        Threshhold = StateConfig.get(StateConfigID).variable("threshold");
 
         CraneX = engine.hardwareMap.dcMotor.get("craneX");
         RightDistanceSensor = engine.hardwareMap.get(Rev2mDistanceSensor.class, "distanceRight");

@@ -39,6 +39,7 @@ public class SkystoneSight extends State {
     private int ClippingMarginTop;
     private int ClippingMarginBottom;
 
+
     public int SkystonePosition;
     private boolean FirstRun = true;
 
@@ -64,7 +65,10 @@ public class SkystoneSight extends State {
         parameters.vuforiaLicenseKey = "AcU+kbn/////AAAAGWDmHA7mS0gCoiMy9pA5e1AVyLZeqKejLOtP9c3COfi9g9m4Cs1XuVQVdqRFhyrFkNUynXwrhQyV65hPnPkGgRky9MjHlLLCWuqdpHzDLJonuOSBh5zVO11PleXH+2utK1lCnbBxvOM+/OrB9EAHUBrcB0ItRxjzFQOe8TXrjGGe1IyjC/Ljke3lZf/LVVinej3zjGNqwsNQoZ0+ahxYNPCJOdzRFkXjyMDXJVDQYMtVQcWKpbEM6dJ9jQ9f0UFIVXANJ7CC8ZDyrl2DQ8o4sOX981OktCKWW0d4PH0IwAw/c2nGgt1t2V/7PwTwysBYM1N+SjVpMNRg52u9gNl9os4ulF6AZw+U2LcVj4kqGZDi";
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
 
+
         Vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+
 
         //Tensor Flow
         int tfodMonitorViewId = engine.hardwareMap.appContext.getResources().getIdentifier(
@@ -92,6 +96,8 @@ public class SkystoneSight extends State {
             Stone1 = null;
             Stone2 = null;
 
+
+
             //Sorts Recognitions into Stones and Skystones
             List<Recognition> recognitions = TensorFlow.getRecognitions();
             engine.telemetry.addData("recognitions", recognitions.size());
@@ -114,9 +120,13 @@ public class SkystoneSight extends State {
 
                 if (SkyStone2 == null) {
                     TargetStone = SkyStone1;
-                } else if (SkyStone1.getLeft() < SkyStone2.getLeft()) {
+                } else if (SkyStone1.getLeft() < SkyStone2.getLeft() && StateConfigID.startsWith("R")) {
                     TargetStone = SkyStone1;
-                } else if (SkyStone1.getLeft() > SkyStone2.getLeft()) {
+                } else if (SkyStone1.getLeft() > SkyStone2.getLeft() && StateConfigID.startsWith("R")) {
+                    TargetStone = SkyStone2;
+                } else if (SkyStone1.getLeft() > SkyStone2.getLeft() && StateConfigID.startsWith("B")) {
+                    TargetStone = SkyStone1;
+                } else if (SkyStone1.getLeft() <  SkyStone2.getLeft() && StateConfigID.startsWith("B")) {
                     TargetStone = SkyStone2;
                 }
             }
@@ -133,7 +143,7 @@ public class SkystoneSight extends State {
                 } else if ((stone1Angle < RightBoundary && stone2Angle < LeftBoundary)||(stone2Angle < RightBoundary && stone1Angle < LeftBoundary)) {
                     engine.telemetry.addLine("Right");
                     SkystonePosition = 1;
-                } else if ((stone1Angle > RightBoundary && stone2Angle < LeftBoundary)||(stone2Angle > RightBoundary && stone1Angle < LeftBoundary)) {
+                } else if ((stone1Angle > RightBoundary &&  stone2Angle < LeftBoundary)||(stone2Angle > RightBoundary && stone1Angle < LeftBoundary)) {
                     engine.telemetry.addLine("Center");
                     SkystonePosition = 0;
                 }
@@ -169,6 +179,7 @@ public class SkystoneSight extends State {
         } else {
             engine.telemetry.addData("Skipping Step", StateConfigID);
             engine.telemetry.update();
+            SkystonePosition = StateConfig.get(StateConfigID).variable("ifSkip");
             sleep(1000);
             setFinished(true);
         }

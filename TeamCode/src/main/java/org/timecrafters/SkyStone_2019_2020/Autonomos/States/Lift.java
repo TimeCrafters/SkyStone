@@ -47,20 +47,20 @@ public class Lift extends State {
         if (StateConfig.allow(StateConfigID)) {
 
         if (FirstRun) {
-            LiftRight.setTargetPosition(LiftHight);
-            LiftLeft.setTargetPosition(LiftHight);
+            LiftRight.setTargetPosition(-LiftHight);
+            LiftLeft.setTargetPosition(-LiftHight);
 
             LiftRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             LiftLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            LiftRight.setPower(Power);
-            LiftLeft.setPower(Power);
+            LiftRight.setPower(-Power);
+            LiftLeft.setPower(-Power);
 
             FirstRun = false;
         }
 
-            if (LiftLeft.getCurrentPosition() > LiftHight - FinishTolerance &&
-                    LiftLeft.getCurrentPosition() < LiftHight + FinishTolerance) {
+            if (LiftLeft.getCurrentPosition() > -LiftHight - FinishTolerance &&
+                    LiftLeft.getCurrentPosition() < -LiftHight + FinishTolerance) {
 
                 LiftLeft.setPower(0);
                 LiftRight.setPower(0);
