@@ -68,16 +68,12 @@ public class DirectionDrive extends Drive {
                 FirstRun = false;
             }
 
-            int RightTick = DriveForwardRight.getCurrentPosition();
-            int LeftTick = DriveForwardLeft.getCurrentPosition();
 
-            //since the power of the motors in certain situations may be zero, select whichever side
-            //is larger for determining when to finish.
-            if (LeftTick > RightTick) {
-                CurrentTick = Math.abs(LeftTick);
-            } else {
-                CurrentTick = Math.abs(RightTick);
-            }
+            //since the power of the motors in certain situations may be zero, select whichever motor position
+            //is largest for determining when to finish.
+
+            //CurrentTick = Math.max( Math.max( Math.abs(DriveBackRight.getCurrentPosition()), Math.abs( DriveBackLeft.getCurrentPosition())), Math.max(Math.abs(DriveForwardLeft.getCurrentPosition()), Math.abs( DriveForwardRight.getCurrentPosition())));
+            CurrentTick = Math.max(Math.abs(DriveForwardLeft.getCurrentPosition()), Math.abs( DriveForwardRight.getCurrentPosition()));
 
             int tickDistance = InchesToTicks(Inches, 4, 2);
 

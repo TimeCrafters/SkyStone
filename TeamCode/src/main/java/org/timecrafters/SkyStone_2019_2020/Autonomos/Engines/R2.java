@@ -9,11 +9,7 @@ import org.timecrafters.SkyStone_2019_2020.Autonomos.States.DirectionDrive;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Face;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.GripRollers;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Lift;
-import org.timecrafters.SkyStone_2019_2020.Autonomos.States.LiftZero;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.SkystoneSight;
-import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B2Center;
-import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B2Left;
-import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B2Right;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.R2Center;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.R2Left;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.R2Right;
@@ -33,6 +29,7 @@ public class R2 extends Engine {
         addState(new IMUInit(this));
         addState(new DirectionDrive(this, stateConfiguration, "R2a"));
         addState(new DirectionDrive(this, stateConfiguration, "R2b"));
+        addThreadedState(new Lift(this, stateConfiguration,"R2b_lift"));
         addThreadedState(new Arms(this, stateConfiguration,"R2d"));
 
         addState(skystoneSight);
@@ -49,6 +46,7 @@ public class R2 extends Engine {
         addThreadedState(new DirectionDrive(this, stateConfiguration, "R2i"));
         addState(new Face(this, stateConfiguration, "R2j"));
         addState(new DirectionDrive(this, stateConfiguration, "R2k"));
+        addThreadedState(new Crane(this, stateConfiguration, "R2k_crane"));
         addState(new Face(this, stateConfiguration, "R2l"));
         addThreadedState(new Lift(this, stateConfiguration, "R2m"));
 
@@ -58,7 +56,7 @@ public class R2 extends Engine {
         // addState(new Lift(this, stateConfiguration, "R2p"));
         addState(new Arms(this, stateConfiguration, "R2q"));
         addState(new DirectionDrive(this, stateConfiguration, "R2r"));
-        addState(new Face(this, stateConfiguration, "R2s"));
+        addState( new Face(this, stateConfiguration, "R2s"));
         addThreadedState(new Lift(this, stateConfiguration, "R2s_lower"));
         addState(new DirectionDrive(this, stateConfiguration, "R2t"));
         addState(new DirectionDrive(this, stateConfiguration, "R2u"));

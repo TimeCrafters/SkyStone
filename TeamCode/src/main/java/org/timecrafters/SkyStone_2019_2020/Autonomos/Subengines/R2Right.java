@@ -34,7 +34,7 @@ public class R2Right extends SubEngine {
         addState(new DirectionDrive(engine, stateConfiguration, "R2e"));
         addThreadedState(new Crane(engine, stateConfiguration, "R2b_Rb"));
         addState(new LiftZero(engine, stateConfiguration, "R2f"));
-        addThreadedState(new Turn(engine, stateConfiguration, "R2b_Ra"));
+        addThreadedState(new Face(engine, stateConfiguration, "R2b_Ra"));
     }
 
     @Override

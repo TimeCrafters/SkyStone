@@ -34,6 +34,9 @@ public class Lift extends State {
         LiftLeft = engine.hardwareMap.dcMotor.get("liftLeft");
         LiftLeft.setDirection(DcMotor.Direction.REVERSE);
 
+        LiftRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LiftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         LiftRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LiftLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 

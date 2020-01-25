@@ -27,7 +27,7 @@ public class B2Left extends SubEngine {
         addState(new DirectionDrive(engine, stateConfiguration, "B2e"));
         addThreadedState(new Crane(engine, stateConfiguration, "B2b_Lb"));
         addState(new LiftZero(engine, stateConfiguration, "B2f"));
-        addThreadedState(new Turn(engine, stateConfiguration, "B2b_La"));
+        addThreadedState(new Face(engine, stateConfiguration, "B2b_La"));
     }
 
     @Override
