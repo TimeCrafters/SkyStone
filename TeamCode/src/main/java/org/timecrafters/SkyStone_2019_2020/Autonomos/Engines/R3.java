@@ -65,8 +65,8 @@ public class R3 extends Engine {
         addState(new Arms(this, stateConfiguration, "R3s"));
 
         //Turn Around and back into Foundation
-        addState(new Face(this, stateConfiguration, "R3t "));
-        addThreadedState(new Crane(this, stateConfiguration, "R3t_crane"));
+        addState(new Face(this, stateConfiguration, "R3t"));
+        addState(new Crane(this, stateConfiguration, "R3t_crane"));
         addState(new DirectionDrive(this, stateConfiguration, "R3u"));
 
         //Grabs Foundation and moves it into position

@@ -104,15 +104,12 @@ public class Face extends Drive {
                 DriveBackRight.setPower(0);
 
                 engine.telemetry.addLine("Done!");
+                sleep(1000);
 
                 setFinished(true);
             }
 
 
-            engine.telemetry.addData("Running Step", StateConfigID);
-            engine.telemetry.addData("Target Tick", TargetTicks);
-            engine.telemetry.addData("Current Tick", DriveForwardLeft.getCurrentPosition());
-            engine.telemetry.update();
 
         } else {
             engine.telemetry.addData("Skipping Step", StateConfigID);
@@ -124,5 +121,11 @@ public class Face extends Drive {
 
     }
 
-
+    @Override
+    public void telemetry() {
+        engine.telemetry.addData("Running Step", StateConfigID);
+        engine.telemetry.addData("Robot Rotation", getRobotRotation());
+        engine.telemetry.addData("Target Tick", TargetTicks);
+        engine.telemetry.addData("Current Tick", DriveForwardLeft.getCurrentPosition());
+    }
 }
