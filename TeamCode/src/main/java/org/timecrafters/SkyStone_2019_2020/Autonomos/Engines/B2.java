@@ -40,24 +40,20 @@ public class B2 extends Engine {
         //Identifies the Position of Skystone and moves into position to grab it
         addState(skystoneSight);
 
-
-
-
         addSubEngine(new B2Left(this, skystoneSight, stateConfiguration));
         addSubEngine(new B2Center(this, skystoneSight, stateConfiguration));
         addSubEngine(new B2Right(this, skystoneSight, stateConfiguration));
 
         //Grabs Stone
 
-
-
-
         addState(new Arms(this, stateConfiguration, "B2g"));
         addState(new GripRollers(this, stateConfiguration, "B2h"));
         addThreadedState(new DirectionDrive(this, stateConfiguration, "B2i"));
         addState(new Face(this, stateConfiguration, "B2j"));
+
         addState(new DirectionDrive(this, stateConfiguration, "B2k"));
         addThreadedState(new Crane(this, stateConfiguration, "B2k_crane"));
+
         addState(new Face(this, stateConfiguration, "B2l"));
         addThreadedState(new Lift(this, stateConfiguration, "B2m"));
         addState(new DirectionDrive(this, stateConfiguration, "B2n"));

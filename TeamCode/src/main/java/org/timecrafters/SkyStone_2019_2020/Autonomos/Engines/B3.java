@@ -28,8 +28,9 @@ public class B3 extends Engine {
         addState(new IMUInit(this));
 
         //Positions robot in front of the first set of stones.
-        addState(new DirectionDrive(this, stateConfiguration, "B3a"));
-        addState(new DirectionDrive(this, stateConfiguration, "B3b"));
+        addState(new DirectionDrive(this, stateConfiguration, "B2a"));
+        addState(new DirectionDrive(this, stateConfiguration, "B2b"));
+        addThreadedState(new Arms(this, stateConfiguration, "B2d"));
 
         //Identifies the Position of Skystone and moves into position to grab it
         addState(skystoneSight);
@@ -37,21 +38,19 @@ public class B3 extends Engine {
         addSubEngine(new B3Center(this, skystoneSight, stateConfiguration));
         addSubEngine(new B3Right(this, skystoneSight, stateConfiguration));
 
-        addState(new Arms(this, stateConfiguration, "B3c"));
-        addState(new Crane(this, stateConfiguration, "B3d"));
-        addState(new DirectionDrive(this, stateConfiguration, "B3e"));
-        addState(new LiftZero(this, stateConfiguration, "B3f"));
-        addState(new Arms(this, stateConfiguration, "B3g"));
-        addState(new GripRollers(this, stateConfiguration, "B3h"));
+
+        addState(new Arms(this, stateConfiguration, "B2g"));
+        addState(new GripRollers(this, stateConfiguration, "B2h"));
 
         //back up and turn towards build site
-        addState(new DirectionDrive(this, stateConfiguration, "B3i"));
-        addState(new Face(this, stateConfiguration, "B3j"));
+        addThreadedState(new DirectionDrive(this, stateConfiguration, "B2i"));
+        addState(new Face(this, stateConfiguration, "B2j"));
 
         //drive at varying speeds to end of the build site, then face the foundation
         addState(new DirectionDrive(this, stateConfiguration, "B3k"));
-        addState(new DirectionDrive(this, stateConfiguration, "B3l"));
-        addState(new DirectionDrive(this, stateConfiguration, "B3m"));
+        addThreadedState(new Crane(this, stateConfiguration, "B2k_crane"));
+//        addState(new DirectionDrive(this, stateConfiguration, "B3l"));
+//        addState(new DirectionDrive(this, stateConfiguration, "B3m"));
         addState(new Face(this, stateConfiguration, "B3n"));
 
         addState(new Lift(this, stateConfiguration, "B3o"));

@@ -45,6 +45,8 @@ public class R2 extends Engine {
         addState(new GripRollers(this, stateConfiguration, "R2h"));
         addThreadedState(new DirectionDrive(this, stateConfiguration, "R2i"));
         addState(new Face(this, stateConfiguration, "R2j"));
+
+        //Drive to build area
         addState(new DirectionDrive(this, stateConfiguration, "R2k"));
         addThreadedState(new Crane(this, stateConfiguration, "R2k_crane"));
         addState(new Face(this, stateConfiguration, "R2l"));

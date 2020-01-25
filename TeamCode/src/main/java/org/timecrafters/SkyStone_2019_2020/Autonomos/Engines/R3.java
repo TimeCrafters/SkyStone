@@ -28,8 +28,11 @@ public class R3 extends Engine {
         addState(new IMUInit(this));
 
         //Positions robot in front of the first set of stones.
-        addState(new DirectionDrive(this, stateConfiguration, "R3a"));
-        addState(new DirectionDrive(this, stateConfiguration, "R3b"));
+        addState(new DirectionDrive(this, stateConfiguration, "R2a"));
+        addState(new DirectionDrive(this, stateConfiguration, "R2b"));
+        addThreadedState(new Lift(this, stateConfiguration, "R2b_lift"));
+        addThreadedState(new Arms(this, stateConfiguration, "R2d"));
+
 
         //Identifies the Position of Skystone and moves into position to grab it
         addState(skystoneSight);
@@ -37,31 +40,33 @@ public class R3 extends Engine {
         addSubEngine(new R3Center(this, skystoneSight, stateConfiguration));
         addSubEngine(new R3Right(this, skystoneSight, stateConfiguration));
 
-        addState(new Arms(this, stateConfiguration, "R3c"));
-        addState(new Crane(this, stateConfiguration, "R3d"));
-        addState(new DirectionDrive(this, stateConfiguration, "R3e"));
-        addState(new LiftZero(this, stateConfiguration, "R3f"));
-        addState(new Arms(this, stateConfiguration, "R3g"));
-        addState(new GripRollers(this, stateConfiguration, "R3h"));
+
+        //addState(new Crane(this, stateConfiguration, "R3d"));
+
+
+        addState(new Arms(this, stateConfiguration, "R2g"));
+        addState(new GripRollers(this, stateConfiguration, "R2h"));
 
         //back up and turn towards build site
-        addState(new DirectionDrive(this, stateConfiguration, "R3i"));
-        addState(new Face(this, stateConfiguration, "R3j"));
+        addThreadedState(new DirectionDrive(this, stateConfiguration, "R2i"));
+        addState(new Face(this, stateConfiguration, "R2j"));
 
         //drive at varying speeds to end of the build site, then face the foundation
         addState(new DirectionDrive(this, stateConfiguration, "R3k"));
-        addState(new DirectionDrive(this, stateConfiguration, "R3l"));
+        addThreadedState(new Crane(this, stateConfiguration, "R2k_crane"));
+//        addState(new DirectionDrive(this, stateConfiguration, "R3l"));
         addState(new DirectionDrive(this, stateConfiguration, "R3m"));
         addState(new Face(this, stateConfiguration, "R3n"));
 
-        addState(new Lift(this, stateConfiguration, "R3o"));
+        addThreadedState(new Lift(this, stateConfiguration, "R3o"));
         addState(new DirectionDrive(this, stateConfiguration, "R3p"));
-        addState(new Arms(this, stateConfiguration, "R3q"));
-        addState(new Lift(this, stateConfiguration, "R3r"));
+//        addState(new Arms(this, stateConfiguration, "R3q"));
+//        addState(new Lift(this, stateConfiguration, "R3r"));
         addState(new Arms(this, stateConfiguration, "R3s"));
 
         //Turn Around and back into Foundation
-        addState(new Face(this, stateConfiguration, "R3t"));
+        addState(new Face(this, stateConfiguration, "R3t "));
+        addThreadedState(new Crane(this, stateConfiguration, "R3t_crane"));
         addState(new DirectionDrive(this, stateConfiguration, "R3u"));
 
         //Grabs Foundation and moves it into position

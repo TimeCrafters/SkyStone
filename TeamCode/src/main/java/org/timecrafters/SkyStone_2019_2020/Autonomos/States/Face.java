@@ -93,8 +93,10 @@ public class Face extends Drive {
                 FirstRun = false;
             }
 
-            if ((DriveForwardLeft.getCurrentPosition() > TargetTicks - FinishTolerance &&
-                    DriveForwardLeft.getCurrentPosition() < TargetTicks + FinishTolerance)) {
+            int currentPosition = Math.abs(DriveForwardLeft.getCurrentPosition());
+
+            if ((currentPosition > Math.abs(TargetTicks) - FinishTolerance &&
+                   currentPosition < Math.abs(TargetTicks) + FinishTolerance)) {
 
                 DriveForwardLeft.setPower(0);
                 DriveForwardRight.setPower(0);

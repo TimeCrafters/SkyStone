@@ -2,6 +2,8 @@ package org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines;
 
 import org.cyberarm.NeXT.StateConfiguration;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Crane;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.States.DirectionDrive;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.States.LiftZero;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.SkystoneSight;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Turn;
 import org.timecrafters.engine.Engine;
@@ -21,8 +23,10 @@ public class B3Center extends SubEngine {
 
     @Override
     public void setProcesses() {
-        addState(new Turn(engine, stateConfiguration, "B3b_Ca"));
-        addThreadedState(new Crane(engine, stateConfiguration, "B3b_Cb"));
+        addState(new DirectionDrive(engine, stateConfiguration, "B2e"));
+        addThreadedState(new Crane(engine, stateConfiguration, "B2b_Cb"));
+        addState(new LiftZero(engine, stateConfiguration, "B2f"));
+        addThreadedState(new Turn(engine, stateConfiguration, "B2b_Ca"));
     }
 
     @Override
