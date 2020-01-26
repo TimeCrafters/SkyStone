@@ -66,19 +66,21 @@ public class R3 extends Engine {
 
         //Turn Around and back into Foundation
         addState(new Face(this, stateConfiguration, "R3t"));
-        addState(new Crane(this, stateConfiguration, "R3t_crane"));
+        addThreadedState(new Crane(this, stateConfiguration, "R3t_crane"));
         addState(new DirectionDrive(this, stateConfiguration, "R3u"));
 
         //Grabs Foundation and moves it into position
         addState(new FoundationClamp(this, stateConfiguration, "R3v"));
         addState(new DirectionDrive(this, stateConfiguration, "R3w"));
         addState(new Face(this, stateConfiguration, "R3x"));
+        addThreadedState(new Crane(this, stateConfiguration, "R3w_crane"));
         addState(new DirectionDrive(this, stateConfiguration, "R3y"));
-        addState(new Lift(this, stateConfiguration, "R3z"));
+        addThreadedState(new Lift(this, stateConfiguration, "R3z"));
 
         //Releases Foundation and drives toward Bridge.
         addState(new FoundationClamp(this, stateConfiguration, "R3aa"));
         addState(new DirectionDrive(this, stateConfiguration, "R3ab"));
+        addState(new Face(this, stateConfiguration, "R3ab_face"));
 
         //Use Distance Sensor to check for the presence of another robot in parking position.
         //If another robot is present, move to the other side of the bridge before parking.

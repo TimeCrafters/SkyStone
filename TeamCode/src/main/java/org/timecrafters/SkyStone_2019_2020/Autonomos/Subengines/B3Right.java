@@ -27,7 +27,7 @@ public class B3Right extends SubEngine {
         addState(new DirectionDrive(engine, stateConfiguration, "B2e"));
         addThreadedState(new Crane(engine, stateConfiguration, "B2b_Rb"));
         addState(new LiftZero(engine, stateConfiguration, "B2f"));
-        addThreadedState(new Face(engine, stateConfiguration, "B3_Ra"));
+        addThreadedState(new Face(engine, stateConfiguration, "B3b_Ra"));
     }
 
     @Override

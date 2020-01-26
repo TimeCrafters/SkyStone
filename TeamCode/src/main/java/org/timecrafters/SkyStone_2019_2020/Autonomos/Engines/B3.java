@@ -30,6 +30,7 @@ public class B3 extends Engine {
         //Positions robot in front of the first set of stones.
         addState(new DirectionDrive(this, stateConfiguration, "B2a"));
         addState(new DirectionDrive(this, stateConfiguration, "B2b"));
+        addThreadedState(new Lift(this, stateConfiguration, "R2b_lift"));
         addThreadedState(new Arms(this, stateConfiguration, "B2d"));
 
         //Identifies the Position of Skystone and moves into position to grab it
@@ -53,26 +54,29 @@ public class B3 extends Engine {
 //        addState(new DirectionDrive(this, stateConfiguration, "B3m"));
         addState(new Face(this, stateConfiguration, "B3n"));
 
-        addState(new Lift(this, stateConfiguration, "B3o"));
+        addThreadedState(new Lift(this, stateConfiguration, "B3o"));
         addState(new DirectionDrive(this, stateConfiguration, "B3p"));
-        addState(new Arms(this, stateConfiguration, "B3q"));
-        addState(new Lift(this, stateConfiguration, "B3r"));
+//        addState(new Arms(this, stateConfiguration, "B3q"));
+//        addState(new Lift(this, stateConfiguration, "B3r"));
         addState(new Arms(this, stateConfiguration, "B3s"));
 
         //Turn Around and back into Foundation
         addState(new Face(this, stateConfiguration, "B3t"));
+        addThreadedState(new Crane(this, stateConfiguration, "R3t_crane"));
         addState(new DirectionDrive(this, stateConfiguration, "B3u"));
 
         //Grabs Foundation and moves it into position
         addState(new FoundationClamp(this, stateConfiguration, "B3v"));
         addState(new DirectionDrive(this, stateConfiguration, "B3w"));
         addState(new Face(this, stateConfiguration, "B3x"));
+        addThreadedState(new Crane(this, stateConfiguration, "R3w_crane"));
         addState(new DirectionDrive(this, stateConfiguration, "B3y"));
         addState(new Lift(this, stateConfiguration, "B3z"));
 
         //Releases Foundation and drives toward Bridge.
         addState(new FoundationClamp(this, stateConfiguration, "B3aa"));
         addState(new DirectionDrive(this, stateConfiguration, "B3ab"));
+        addState(new Face(this, stateConfiguration, "B3ab_face"));
 
         //Use Distance Sensor to check for the presence of another robot in parking position.
         //If another robot is present, move to the other side of the bridge before parking.

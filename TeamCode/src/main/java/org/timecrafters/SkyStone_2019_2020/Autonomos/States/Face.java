@@ -56,8 +56,13 @@ public class Face extends Drive {
 
                 float degreeDifference = TargetDegrees - getRobotRotation();
 
+                Log.i("STATE_DEBUG", "Degree difference is " + degreeDifference + " robotRotation is " + getRobotRotation());
 
-                if (degreeDifference <= 180 && degreeDifference >= -180) {
+
+
+                if (degreeDifference <= 260 && degreeDifference >= -260) {
+                    Log.i("STATE_DEBUG", "In range");
+
                     TargetTicks = (int) (degreeDifference * TickDegreeRatio);
 
                     DriveForwardLeft.setTargetPosition(TargetTicks);
@@ -65,6 +70,8 @@ public class Face extends Drive {
                     DriveForwardRight.setTargetPosition(-TargetTicks);
                     DriveBackRight.setTargetPosition(-TargetTicks);
                 } else if (degreeDifference < -180) {
+                    Log.i("STATE_DEBUG", "In < -180");
+
                     TargetTicks = (int) ( -(degreeDifference + 180) * TickDegreeRatio);
 
                     DriveForwardLeft.setTargetPosition(TargetTicks);
@@ -72,13 +79,19 @@ public class Face extends Drive {
                     DriveForwardRight.setTargetPosition(-TargetTicks);
                     DriveBackRight.setTargetPosition(-TargetTicks);
                 } else if (degreeDifference > 180) {
+                    Log.i("STATE_DEBUG", "In > 180");
+
                     TargetTicks = (int) ( -(degreeDifference - 180) * TickDegreeRatio);
 
                     DriveForwardLeft.setTargetPosition(TargetTicks);
                     DriveBackLeft.setTargetPosition(TargetTicks);
                     DriveForwardRight.setTargetPosition(-TargetTicks);
                     DriveBackRight.setTargetPosition(-TargetTicks);
+                } else {
+                    Log.i("STATE_DEBUG", "Failed to set TargetTicks!!!");
                 }
+
+                Log.i("STATE_DEBUG", "TargetTicks set to " + TargetTicks + " from " + TargetDegrees + " degrees");
 
                 DriveForwardLeft.setPower(Power);
                 DriveForwardRight.setPower(Power);
@@ -98,13 +111,15 @@ public class Face extends Drive {
             if ((currentPosition > Math.abs(TargetTicks) - FinishTolerance &&
                    currentPosition < Math.abs(TargetTicks) + FinishTolerance)) {
 
+                Log.i("STATE_DEBUG", "Reached Goal, stopping...");
+
                 DriveForwardLeft.setPower(0);
                 DriveForwardRight.setPower(0);
                 DriveBackLeft.setPower(0);
                 DriveBackRight.setPower(0);
 
                 engine.telemetry.addLine("Done!");
-                sleep(1000);
+//                sleep(1000);
 
                 setFinished(true);
             }
