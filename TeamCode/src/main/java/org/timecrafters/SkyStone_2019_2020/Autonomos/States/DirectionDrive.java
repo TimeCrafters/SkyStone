@@ -23,6 +23,8 @@ public class DirectionDrive extends Drive {
     private float DirectionDegrees;
     private int CurrentTick;
     private long StartDelay;
+    private long StartTime;
+    private long InterruptTime;
 
     public DirectionDrive(Engine engine, StateConfiguration stateConfig, String stateConfigID) {
         this.engine = engine;
@@ -42,6 +44,12 @@ public class DirectionDrive extends Drive {
         DirectionDegrees = StateConfig.get(StateConfigID).variable("direction");
         StartDelay = StateConfig.get(StateConfigID).variable("delay");
 
+        try  {
+            InterruptTime = StateConfig.get(StateConfigID).variable("stopTime");
+        } catch (NullPointerException e) {
+            InterruptTime = 30000;
+        }
+
         engine.telemetry.addData("Initialized", StateConfigID);
         engine.telemetry.update();
 
@@ -51,8 +59,11 @@ public class DirectionDrive extends Drive {
     @Override
     public void exec() throws InterruptedException {
         if (StateConfig.allow(StateConfigID)) {
+            long currentTime = System.currentTimeMillis();
 
             if (FirstRun) {
+                StartTime = currentTime;
+
                 DriveForwardLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 DriveForwardRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 DriveBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -77,19 +88,19 @@ public class DirectionDrive extends Drive {
 
             int tickDistance = InchesToTicks(Inches, 4, 2);
 
-            if (CurrentTick < tickDistance) {
+            if (CurrentTick >= tickDistance || currentTime - StartTime >= InterruptTime) {
 
-                DriveForwardLeft.setPower(Power * getForwardLeftPower(DirectionDegrees, 0.01));
-                DriveBackRight.setPower(Power * getForwardLeftPower(DirectionDegrees, 0.01));
-
-                DriveForwardRight.setPower(Power * getForwardRightPower(DirectionDegrees, 0.01));
-                DriveBackLeft.setPower(Power * getForwardRightPower(DirectionDegrees, 0.01));
-            } else {
                 DriveForwardLeft.setPower(0);
                 DriveForwardRight.setPower(0);
                 DriveBackLeft.setPower(0);
                 DriveBackRight.setPower(0);
                 setFinished(true);
+            } else {
+                DriveForwardLeft.setPower(Power * getForwardLeftPower(DirectionDegrees, 0.01));
+                DriveBackRight.setPower(Power * getForwardLeftPower(DirectionDegrees, 0.01));
+
+                DriveForwardRight.setPower(Power * getForwardRightPower(DirectionDegrees, 0.01));
+                DriveBackLeft.setPower(Power * getForwardRightPower(DirectionDegrees, 0.01));
             }
 
             engine.telemetry.addData("Power", Power);

@@ -6,6 +6,8 @@ import org.cyberarm.NeXT.StateConfiguration;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Arms;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Crane;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.DirectionDrive;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.States.FaceActveCheck;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.States.FaceExplicit;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.FoundationClamp;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.RobotDodge;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Face;
@@ -67,10 +69,10 @@ public class B3 extends Engine {
 
         //Grabs Foundation and moves it into position
         addState(new FoundationClamp(this, stateConfiguration, "B3v"));
-        addState(new DirectionDrive(this, stateConfiguration, "B3w"));
-        addState(new Face(this, stateConfiguration, "B3x"));
+        //addState(new DirectionDrive(this, stateConfiguration, "B3w"));
+        addState(new FaceActveCheck(this, stateConfiguration, "B3x"));
         addThreadedState(new Crane(this, stateConfiguration, "R3w_crane"));
-        addState(new DirectionDrive(this, stateConfiguration, "B3y"));
+        //addState(new DirectionDrive(this, stateConfiguration, "B3y"));
         addState(new Lift(this, stateConfiguration, "B3z"));
 
         //Releases Foundation and drives toward Bridge.

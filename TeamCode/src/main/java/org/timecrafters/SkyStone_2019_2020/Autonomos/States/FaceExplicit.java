@@ -5,10 +5,11 @@ import android.util.Log;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.cyberarm.NeXT.StateConfiguration;
+import org.cyberarm.plotter.TCPServer.Client;
 import org.timecrafters.SkyStone_2019_2020.Drive;
 import org.timecrafters.engine.Engine;
 
-public class Face extends Drive {
+public class FaceExplicit extends Drive {
 
     private StateConfiguration StateConfig;
     private String StateConfigID;
@@ -20,12 +21,10 @@ public class Face extends Drive {
     private int FinishTolerance;
     private long StartTime;
     private long InterruptTime;
-    private int Direction;
-    float DegreeDifference;
+    private boolean Clockwise;
 
 
-
-    public Face(Engine engine, StateConfiguration stateConfig, String stateConfigID) {
+    public FaceExplicit(Engine engine, StateConfiguration stateConfig, String stateConfigID) {
         this.engine = engine;
         StateConfig = stateConfig;
         StateConfigID = stateConfigID;
@@ -39,12 +38,8 @@ public class Face extends Drive {
         Power = StateConfig.get(StateConfigID).variable("power");
         TickDegreeRatio = StateConfig.get(StateConfigID).variable("ratio");
         FinishTolerance = StateConfig.get(StateConfigID).variable("tolerance");
+        Clockwise = StateConfig.get(StateConfigID).variable("clockwise");
 
-        try {
-            Direction = StateConfig.get(StateConfigID).variable("direction");
-        } catch (NullPointerException e) {
-            Direction = 0;
-        }
 
         try  {
             InterruptTime = StateConfig.get(StateConfigID).variable("stopTime");
@@ -70,63 +65,29 @@ public class Face extends Drive {
                 DriveBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 DriveBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-
                 float robotRotation = getRobotRotation();
 
-                Log.i("STATE_DEBUG", "Degree difference is " + DegreeDifference + " robotRotation is " + getRobotRotation());
-
-                //if the direction variable is zero, turn in whichever direction will get to the target angle faster.
-                //Used to be our only option before we realised that the shortest rout wasn't always the best.
-                if (Direction == 0) {
-
-                    DegreeDifference = TargetDegrees - robotRotation;
-
-                    //if the degree difference is within the expected range, run the conversion with
-                    //the Degree diference unchanged.
-                    if (DegreeDifference <= 180 && DegreeDifference >= -180) {
-                        Log.i("STATE_DEBUG", "In range");
-
-                        TargetTicks = (int) (DegreeDifference * TickDegreeRatio);
-
-                        //if the Degree difference is outside the expected range, adjust it before running
-                        //the conversion.
-                    } else if (DegreeDifference < -180) {
-                        Log.i("STATE_DEBUG", "In < -180");
-
-                        TargetTicks = (int) (-(DegreeDifference + 360) * TickDegreeRatio);
-
-                    } else if (DegreeDifference > 180) {
-                        Log.i("STATE_DEBUG", "In > 180");
-
-                        TargetTicks = (int) (-(DegreeDifference - 360) * TickDegreeRatio);
-
-                    } else {
-                        Log.i("STATE_DEBUG", "Failed to set TargetTicks!!!");
-                    }
-                } else {
-
-                    if (robotRotation < 0) {
-                        robotRotation += 360;
-                    }
-
-                    DegreeDifference = TargetDegrees - robotRotation;
-
-                    if (Direction == 1 && DegreeDifference < 0) {
-                        DegreeDifference += 360;
-                    }
-                    if (Direction == -1 && DegreeDifference > 0) {
-                        DegreeDifference -=360;
-                    }
-
-                    TargetTicks = (int) (DegreeDifference * TickDegreeRatio);
+                if (robotRotation < 0) {
+                    robotRotation += 360;
                 }
 
-                Log.i("STATE_DEBUG", "TargetTicks set to " + TargetTicks + " from " + TargetDegrees + " degrees");
+                float degreeDifference = TargetDegrees - robotRotation;
+
+                if (Clockwise && degreeDifference < 0) {
+                    degreeDifference += 360;
+                }
+                if (!Clockwise && degreeDifference > 0) {
+                    degreeDifference -=360;
+                }
+
+                TargetTicks = (int) (degreeDifference * TickDegreeRatio);
 
                 DriveForwardLeft.setTargetPosition(TargetTicks);
                 DriveBackLeft.setTargetPosition(TargetTicks);
                 DriveForwardRight.setTargetPosition(-TargetTicks);
                 DriveBackRight.setTargetPosition(-TargetTicks);
+
+                Log.i("STATE_DEBUG", "TargetTicks set to " + TargetTicks + " from " + TargetDegrees + " degrees");
 
                 DriveForwardLeft.setPower(Power);
                 DriveForwardRight.setPower(Power);
@@ -160,8 +121,6 @@ public class Face extends Drive {
                 setFinished(true);
             }
 
-            engine.telemetry.addData("Robot Rotation", getRobotRotation());
-            engine.telemetry.update();
 
         } else {
             engine.telemetry.addData("Skipping Step", StateConfigID);
@@ -175,9 +134,9 @@ public class Face extends Drive {
 
     @Override
     public void telemetry() {
-        //engine.telemetry.addData("Running Step", StateConfigID);
-
-//        engine.telemetry.addData("Target Tick", TargetTicks);
-//        engine.telemetry.addData("Current Tick", DriveForwardLeft.getCurrentPosition());
+        engine.telemetry.addData("Running Step", StateConfigID);
+        engine.telemetry.addData("Robot Rotation", getRobotRotation());
+        engine.telemetry.addData("Target Tick", TargetTicks);
+        engine.telemetry.addData("Current Tick", DriveForwardLeft.getCurrentPosition());
     }
 }
