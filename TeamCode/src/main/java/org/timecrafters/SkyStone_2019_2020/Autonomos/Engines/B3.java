@@ -72,17 +72,21 @@ public class B3 extends Engine {
         //addState(new DirectionDrive(this, stateConfiguration, "B3w"));
         addState(new FaceActveCheck(this, stateConfiguration, "B3x"));
         addThreadedState(new Crane(this, stateConfiguration, "R3w_crane"));
-        //addState(new DirectionDrive(this, stateConfiguration, "B3y"));
-        addState(new Lift(this, stateConfiguration, "B3z"));
+        addState(new DirectionDrive(this, stateConfiguration, "B3y"));
+        addThreadedState(new Lift(this, stateConfiguration, "B3z"));
 
         //Releases Foundation and drives toward Bridge.
         addState(new FoundationClamp(this, stateConfiguration, "B3aa"));
+        addState(new DirectionDrive(this, stateConfiguration, "B3y_back"));
+        addState(new FaceActveCheck(this,stateConfiguration, "B3z_face"));
+
         addState(new DirectionDrive(this, stateConfiguration, "B3ab"));
         addState(new Face(this, stateConfiguration, "B3ab_face"));
 
         //Use Distance Sensor to check for the presence of another robot in parking position.
         //If another robot is present, move to the other side of the bridge before parking.
         addState(new RobotDodge(this, stateConfiguration, "B3ac"));
+        addState(new DirectionDrive(this, stateConfiguration, "B3ac_manual"));
         addState(new DirectionDrive(this, stateConfiguration, "B3ad"));
     }
 }

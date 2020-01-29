@@ -180,7 +180,7 @@ public class SkystoneSight extends State {
             engine.telemetry.addData("Skipping Step", StateConfigID);
             engine.telemetry.update();
             SkystonePosition = StateConfig.get(StateConfigID).variable("ifSkip");
-            sleep(1000);
+            sleep(EndTime);
             setFinished(true);
         }
 

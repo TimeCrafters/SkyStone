@@ -81,7 +81,9 @@ public class Lift extends State {
         } else {
             engine.telemetry.addData("Skipping Step", StateConfigID);
             engine.telemetry.update();
-            sleep(1000);
+            if (StateConfig.allow("AddSkipDelays")) {
+                sleep(1000);
+            }
             setFinished(true);
         }
     }

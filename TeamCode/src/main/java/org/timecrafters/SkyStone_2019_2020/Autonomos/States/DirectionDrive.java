@@ -42,7 +42,7 @@ public class DirectionDrive extends Drive {
         Inches = StateConfig.get(StateConfigID).variable("distance");
         Power = StateConfig.get(StateConfigID).variable("maxPower");
         DirectionDegrees = StateConfig.get(StateConfigID).variable("direction");
-        StartDelay = StateConfig.get(StateConfigID).variable("delay");
+         StartDelay = StateConfig.get(StateConfigID).variable("delay");
 
         try  {
             InterruptTime = StateConfig.get(StateConfigID).variable("stopTime");
@@ -112,7 +112,9 @@ public class DirectionDrive extends Drive {
         } else {
             engine.telemetry.addData("Skipping Step", StateConfigID);
             engine.telemetry.update();
-            sleep(1000);
+            if (StateConfig.allow("AddSkipDelays")) {
+                sleep(1000);
+            }
             setFinished(true);
         }
     }
