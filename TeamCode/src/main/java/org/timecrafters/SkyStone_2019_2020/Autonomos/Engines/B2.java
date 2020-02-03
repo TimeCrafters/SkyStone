@@ -12,12 +12,15 @@ import org.cyberarm.NeXT.StateConfiguration;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Arms;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Crane;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.DirectionDrive;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.States.DirectionDriveAbsoute;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Face;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.States.FaceActveCheck;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.GripRollers;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Lift;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.LiftZero;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.RampDrive;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.SkystoneSight;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.States.SkystoneSightBlue;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B2Center;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B2Left;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B2Right;
@@ -29,13 +32,16 @@ public class B2 extends Engine {
     @Override
     public void setProcesses() {
         StateConfiguration stateConfiguration = new StateConfiguration();
-        SkystoneSight skystoneSight = new SkystoneSight(this, stateConfiguration, "B2b_stone");
+        SkystoneSightBlue skystoneSight = new SkystoneSightBlue(this, stateConfiguration, "B2b_stone");
         addState(new IMUInit(this));
 
         //Positions robot in front of the first set of stones.
         addState(new DirectionDrive(this, stateConfiguration, "B2a"));
+        addThreadedState(new Lift(this, stateConfiguration, "R2b_lift"));
         addState(new DirectionDrive(this, stateConfiguration, "B2b"));
         addThreadedState(new Arms(this, stateConfiguration,"B2d"));
+        addState(new FaceActveCheck(this, stateConfiguration, "B2b_face"));
+
 
         //Identifies the Position of Skystone and moves into position to grab it
         addState(skystoneSight);
@@ -45,10 +51,6 @@ public class B2 extends Engine {
         addSubEngine(new B2Right(this, skystoneSight, stateConfiguration));
 
         //Grabs Stone
-
-        addState(new Arms(this, stateConfiguration, "B2g"));
-        addState(new GripRollers(this, stateConfiguration, "B2h"));
-        addThreadedState(new DirectionDrive(this, stateConfiguration, "B2i"));
         addState(new Face(this, stateConfiguration, "B2j"));
 
         addState(new DirectionDrive(this, stateConfiguration, "B2k"));

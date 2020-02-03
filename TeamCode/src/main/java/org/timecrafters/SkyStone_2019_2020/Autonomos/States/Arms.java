@@ -37,7 +37,7 @@ public class Arms extends State {
 
 
         GrabRotateServo.setPosition(1);
-        ArmRight.setPosition(0.4);
+        ArmRight.setPosition(0.3);
         ArmLeft.setPosition(0.1);
 
         engine.telemetry.addData("Initialized", StateConfigID);
@@ -53,11 +53,12 @@ public class Arms extends State {
             GrabRotateServo.setPosition(RotationPosition);
 
             if (Close) {
-                ArmRight.setPosition(0.95);
-                ArmLeft.setPosition(0.0);
+
+                ArmRight.setPosition(0.3);
+                ArmLeft.setPosition(0.7);
             } else {
-                ArmRight.setPosition(0.4);
-                ArmLeft.setPosition(0.65);
+                ArmRight.setPosition(0.8);
+                ArmLeft.setPosition(0.2);
             }
 
             sleep(Delay);

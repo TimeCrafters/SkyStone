@@ -37,6 +37,7 @@ public class TeleOpState extends Drive {
     private double GrabRotateTargetPos;
     private boolean RightBumpPrevious;
     private boolean LeftBumpPrevious;
+    private boolean ResetOrientationBumpPrevious;
     private Rev2mDistanceSensor LeftDistanceSensor;
     private Rev2mDistanceSensor RightDistanceSensor;
     private AutoPlaceX autoPlaceX;
@@ -45,6 +46,9 @@ public class TeleOpState extends Drive {
     private boolean AutoPlaceTogglePrevious;
     private int AutoPlaceStep = 0;
     private boolean RunAutoPlace;
+    private int LiftUpperLimit;
+    private boolean DisableLiftLimits;
+
 
     @Override
     public void init() {
@@ -52,6 +56,7 @@ public class TeleOpState extends Drive {
         robotRotationSpeed = StateConfig.get(StateConfigID).variable("robotRotationSpeed");
         //based on the end rotation of autonomous
         StartRotationDisplacement = StateConfig.get(StateConfigID).variable("rotDisplace");
+        LiftUpperLimit = StateConfig.get(StateConfigID).variable("liftLimit");
 
         super.init();
 
@@ -150,12 +155,12 @@ public class TeleOpState extends Drive {
         boolean ArmButton = engine.gamepad2.x;
 
         if (ArmButton && ArmButton != ArmTogglePrevious && GrabberClosed) {
-            ArmRight.setPosition(0.4);
-            ArmLeft.setPosition(0.65);
+            ArmRight.setPosition(0.3);
+            ArmLeft.setPosition(0.7);
             GrabberClosed = false;
         } else if (ArmButton && ArmButton != ArmTogglePrevious && !GrabberClosed) {
-            ArmRight.setPosition(0.95);
-            ArmLeft.setPosition(0.0);
+            ArmRight.setPosition(0.8);
+            ArmLeft.setPosition(0.2);
             GrabberClosed = true;
         }
         ArmTogglePrevious = ArmButton;
@@ -178,36 +183,74 @@ public class TeleOpState extends Drive {
         //--------------------------------------------------------------------------
 
         boolean rightbump = engine.gamepad2.right_bumper;
-        boolean leftbump = engine.gamepad2.left_bumper;
 
-        if (rightbump && rightbump != RightBumpPrevious && GrabRotateTargetPos > 0.5) {
-            GrabRotateTargetPos -= .125;
-        } else if (leftbump && leftbump != LeftBumpPrevious && GrabRotateTargetPos < 1) {
-            GrabRotateTargetPos += .125;
+        if (rightbump && rightbump != RightBumpPrevious) {
+            if (GrabRotateTargetPos == 0.75) {
+                GrabRotateTargetPos = 1;
+            } else {
+                GrabRotateTargetPos = 0.75;
+            }
         }
-
         RightBumpPrevious = rightbump;
-        LeftBumpPrevious = leftbump;
+
+//
+//        if (rightbump && rightbump != RightBumpPrevious && GrabRotateTargetPos > 0.75) {
+//            GrabRotateTargetPos -= .125;
+//        } else if (leftbump && leftbump != LeftBumpPrevious && GrabRotateTargetPos < 1) {
+//            GrabRotateTargetPos += .125;
+//        }
+
 
         GrabRotateServo.setPosition(GrabRotateTargetPos);
+
+        //Emergency Disable Lift Limits
+        //--------------------------------------------------------------------------
+
+        //Should the robot crash durring teleOp and the lift be reinitialized in a non-zero position,
+        //this can be used to turn off the limits on the lift, allowing the lift to be moved freely.
+
+        boolean leftBumper = engine.gamepad2.left_bumper;
+
+        if (leftBumper && leftBumper != LeftBumpPrevious) {
+            DisableLiftLimits = !DisableLiftLimits;
+        }
+
 
         //Lift
         //--------------------------------------------------------------------------
         double lift_stick_y = -engine.gamepad2.left_stick_y;
-        int leftLiftPosition = LiftLeft.getCurrentPosition();
+        int liftPosition = -LiftLeft.getCurrentPosition();
 
+        engine.telemetry.addData("Lift Stick", liftPosition);
         //If the lift is going down, power is reduced do to gravity.
 
-        if (lift_stick_y > 0) {
+        if (lift_stick_y > 0 && (liftPosition < LiftUpperLimit || DisableLiftLimits)) {
             LiftRight.setPower(-1);
             LiftLeft.setPower(-1);
-        } else if (lift_stick_y == 0) {
+        } else if (lift_stick_y < 0 && (liftPosition > 0 || DisableLiftLimits)){
+            LiftRight.setPower(0.5);
+            LiftLeft.setPower(0.5);
+        } else {
             LiftRight.setPower(0);
             LiftLeft.setPower(0);
-        } else {
-            LiftRight.setPower(0.2);
-            LiftLeft.setPower(0.2);
         }
+
+        //Emrgency robot orientation reset
+        //--------------------------------------------------------------------------
+
+        //If the robot is forced to re-initialize during teleOp, the driver relative controls may be
+        //thrown off by the unpredictable starting conditions. This button grabs a new starting orientation
+        //for the IMU, allowing the drivers to realign the robot with their perspective.
+
+        //We can not have this trigger accidentally, so both bumpers need to be pressed at the same time to
+        //activate the reset.
+        boolean resetOrientationBump = (engine.gamepad1.left_bumper && engine.gamepad1.right_bumper);
+
+        if (resetOrientationBump && resetOrientationBump != ResetOrientationBumpPrevious) {
+            StartRotationDisplacement = 0;
+            setStartOrientation();
+        }
+        ResetOrientationBumpPrevious = resetOrientationBump;
 
         //Auto Block Align
         //--------------------------------------------------------------------------
@@ -369,13 +412,13 @@ public class TeleOpState extends Drive {
 
     @Override
     public void telemetry() {
-        engine.telemetry.addData("JoystickDegrees", JoystickDegrees);
-        engine.telemetry.addData("Absolute Degrees", JoystickDegrees - getRobotRotation());
-        engine.telemetry.addData("Left Power Function", getForwardLeftPower(JoystickDegrees - getRobotRotation(), 0.1));
-        engine.telemetry.addData("Right Power Function", getForwardRightPower(JoystickDegrees - getRobotRotation(), 0.1));
-        engine.telemetry.addData("Left Power Real", DriveForwardLeft.getPower());
-        engine.telemetry.addData("Right Power Real", DriveForwardRight.getPower());
-        engine.telemetry.addData("Grabber Rotate", GrabRotateTargetPos);
+//        engine.telemetry.addData("JoystickDegrees", JoystickDegrees);
+//        engine.telemetry.addData("Absolute Degrees", JoystickDegrees - getRobotRotation());
+//        engine.telemetry.addData("Left Power Function", getForwardLeftPower(JoystickDegrees - getRobotRotation(), 0.1));
+//        engine.telemetry.addData("Right Power Function", getForwardRightPower(JoystickDegrees - getRobotRotation(), 0.1));
+//        engine.telemetry.addData("Left Power Real", DriveForwardLeft.getPower());
+//        engine.telemetry.addData("Right Power Real", DriveForwardRight.getPower());
+//        engine.telemetry.addData("Grabber Rotate", GrabRotateTargetPos);
     }
 }
 

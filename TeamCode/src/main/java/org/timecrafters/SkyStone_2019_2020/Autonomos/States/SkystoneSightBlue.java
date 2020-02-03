@@ -6,10 +6,7 @@ package org.timecrafters.SkyStone_2019_2020.Autonomos.States;
  * or 1 to enable different drive paths.
  **********************************************************************************************/
 
-import android.drm.DrmStore;
 import android.util.Log;
-
-import com.vuforia.CameraDevice;
 
 import org.cyberarm.NeXT.StateConfiguration;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -17,13 +14,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.timecrafters.SkyStone_2019_2020.Drive;
 import org.timecrafters.engine.Engine;
 import org.timecrafters.engine.State;
 
 import java.util.List;
 
-public class SkystoneSight extends State {
+public class SkystoneSightBlue extends State {
 
     private StateConfiguration StateConfig;
     private String StateConfigID;
@@ -33,8 +29,8 @@ public class SkystoneSight extends State {
     private Recognition SkyStone2;
     private Recognition Stone1;
     private Recognition Stone2;
-    private double RightBoundary = 20;
-    private double LeftBoundary = 0;
+    private double RightBoundary = 0;
+    private double LeftBoundary = -20;
     private Recognition TargetStone;
     private long StartTime;
     private long EndTime;
@@ -50,7 +46,7 @@ public class SkystoneSight extends State {
     public int SkystonePosition;
     private boolean FirstRun = true;
 
-    public SkystoneSight(Engine engine, StateConfiguration stateConfig, String stateConfigID) {
+    public SkystoneSightBlue(Engine engine, StateConfiguration stateConfig, String stateConfigID) {
         this.engine = engine;
         StateConfig = stateConfig;
         StateConfigID = stateConfigID;
@@ -178,7 +174,7 @@ public class SkystoneSight extends State {
                     } else if ((stone1Angle < RightBoundary && stone2Angle < LeftBoundary) || (stone2Angle < RightBoundary && stone1Angle < LeftBoundary)) {
                         engine.telemetry.addLine("Right");
                         SkystonePosition = 1;
-                    } else if ((stone1Angle > RightBoundary && stone2Angle < LeftBoundary) || (stone2Angle > RightBoundary && stone1Angle < LeftBoundary)) {
+                    } else if ((stone1Angle < RightBoundary && stone2Angle > LeftBoundary) || (stone2Angle < RightBoundary && stone1Angle > LeftBoundary)) {
                         engine.telemetry.addLine("Center");
                         SkystonePosition = 0;
                     }
@@ -208,7 +204,7 @@ public class SkystoneSight extends State {
 
                 } else {
                     //if nothing else, just select the rightward path
-                    SkystonePosition = 1;
+                    SkystonePosition = -1;
                 }
             }
             //finish state after X amount of time. the result at this point will be used for the

@@ -20,6 +20,7 @@ public class FaceActveCheck extends Drive {
     private long StartTime;
     private long InterruptTime;
     private int Direction;
+    private int SuggestedDirection;
     float DegreeDifference;
 
 
@@ -36,13 +37,12 @@ public class FaceActveCheck extends Drive {
 
         TargetDegrees = StateConfig.get(StateConfigID).variable("degrees");
         Power = StateConfig.get(StateConfigID).variable("power");
-        TickDegreeRatio = StateConfig.get(StateConfigID).variable("ratio");
         FinishTolerance = StateConfig.get(StateConfigID).variable("tolerance");
 
         try {
-            Direction = StateConfig.get(StateConfigID).variable("direction");
+            SuggestedDirection = StateConfig.get(StateConfigID).variable("direction");
         } catch (NullPointerException e) {
-            Direction = 1;
+            SuggestedDirection = 0;
         }
 
         try  {
@@ -72,25 +72,40 @@ public class FaceActveCheck extends Drive {
                 DriveBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
-                if (Direction == 1) {
-                    DriveForwardLeft.setPower(Power);
-                    DriveBackLeft.setPower(Power);
-                    DriveForwardRight.setPower(-Power);
-                    DriveBackRight.setPower(-Power);
-                } else if (Direction == -1) {
-                    DriveForwardLeft.setPower(-Power);
-                    DriveBackLeft.setPower(-Power);
-                    DriveForwardRight.setPower(Power);
-                    DriveBackRight.setPower(Power);
-                }
-
-
                 DriveForwardLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 DriveForwardRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 DriveBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 DriveBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
                 FirstRun = false;
+            }
+
+            //If the direction is unspecified, select whichever direction will complete the turn
+            //in the shortest distance.
+            if (SuggestedDirection == 0) {
+                float adjustedRotation = robotRotation;
+                if (adjustedRotation < 0) {
+                    adjustedRotation += 360;
+                }
+                if (((360 + (adjustedRotation - TargetDegrees)) % 360) < 180) {
+                    Direction = -1;
+                } else {
+                    Direction = 1;
+                }
+            } else {
+                Direction = SuggestedDirection;
+            }
+
+            if (Direction == 1) {
+                DriveForwardLeft.setPower(Power);
+                DriveBackLeft.setPower(Power);
+                DriveForwardRight.setPower(-Power);
+                DriveBackRight.setPower(-Power);
+            } else if (Direction == -1) {
+                DriveForwardLeft.setPower(-Power);
+                DriveBackLeft.setPower(-Power);
+                DriveForwardRight.setPower(Power);
+                DriveBackRight.setPower(Power);
             }
 
 

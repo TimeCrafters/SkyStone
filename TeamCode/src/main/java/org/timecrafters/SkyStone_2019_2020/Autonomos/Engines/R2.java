@@ -7,6 +7,7 @@ import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Arms;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Crane;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.DirectionDrive;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Face;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.States.FaceActveCheck;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.GripRollers;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Lift;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.SkystoneSight;
@@ -28,7 +29,9 @@ public class R2 extends Engine {
 
         addState(new IMUInit(this));
         addState(new DirectionDrive(this, stateConfiguration, "R2a"));
+        addThreadedState(new Lift(this, stateConfiguration, "R2b_lift"));
         addState(new DirectionDrive(this, stateConfiguration, "R2b"));
+        addState(new FaceActveCheck(this,stateConfiguration,"R2b_face"));
         addThreadedState(new Lift(this, stateConfiguration,"R2b_lift"));
         addThreadedState(new Arms(this, stateConfiguration,"R2d"));
 
