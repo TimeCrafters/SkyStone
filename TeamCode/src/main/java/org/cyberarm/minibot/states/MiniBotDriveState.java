@@ -1,5 +1,7 @@
 package org.cyberarm.minibot.states;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
@@ -7,11 +9,11 @@ import com.qualcomm.robotcore.util.Range;
 import org.cyberarm.engine.V2.CyberarmStateV2;
 
 public class MiniBotDriveState extends CyberarmStateV2 {
-  private DcMotor left, right;
-  private int leftWheelMMDistance, rightWheelMMDistance;
-  private double leftPower, rightPower;
-  private int leftDelta, rightDelta;
-  private int lastLeftPosition, lastRightPosition;
+  protected DcMotor leftDrive, rightDrive;
+  protected int leftWheelMMDistance, rightWheelMMDistance;
+  protected double leftPower, rightPower;
+  protected int leftDelta, rightDelta;
+  protected int lastLeftPosition, lastRightPosition;
 
   public MiniBotDriveState(int leftWheelMMDistance, int rightWheelMMDistance, double leftPower, double rightPower) {
     this.leftWheelMMDistance = leftWheelMMDistance;
@@ -22,60 +24,72 @@ public class MiniBotDriveState extends CyberarmStateV2 {
   }
 
   public void init() {
-    left = cyberarmEngine.hardwareMap.dcMotor.get("LeftMotor");
-    right = cyberarmEngine.hardwareMap.dcMotor.get("RightMotor");
-
-    left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-    left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-    left.setDirection(DcMotorSimple.Direction.FORWARD);
-    right.setDirection(DcMotorSimple.Direction.REVERSE);
-
-    left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-    right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-
-    left.setPower(0);
-    right.setPower(0);
+    leftDrive = cyberarmEngine.hardwareMap.dcMotor.get("leftDrive");
+    rightDrive = cyberarmEngine.hardwareMap.dcMotor.get("rightDrive");
   }
 
+  public void start() {
+    leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+    leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+    leftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+    rightDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+
+    leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+    rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+    leftDrive.setPower(0);
+    rightDrive.setPower(0);
+  }
 
 
   @Override
   public void exec() {
-    if (isAtOrNearDestination(left, convertMMToTicks(leftWheelMMDistance), leftDelta) || leftPower == 0.0) {
-      left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-      left.setPower(0);
+    Log.i("Autonomous", "Running...");
+    if (isAtOrNearDestination(leftDrive, convertMMToTicks(leftWheelMMDistance), leftDelta)) {
+//      leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+      leftDrive.setPower(0);
     } else {
-      revUpMotor(left, Range.clip(leftWheelMMDistance / 4, 50, 250), convertMMToTicks(leftWheelMMDistance), 0.1, leftPower);
+//      revUpMotor(leftDrive, Range.clip(leftWheelMMDistance / 4, 50, 250), convertMMToTicks(leftWheelMMDistance), 0.1, leftPower);
+      setMotorPower(leftDrive, leftPower, leftWheelMMDistance);
     }
 
-    if (isAtOrNearDestination(right, convertMMToTicks(rightWheelMMDistance), rightDelta) || rightPower == 0.0) {
-      right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-      right.setPower(0);
+    if (isAtOrNearDestination(rightDrive, convertMMToTicks(rightWheelMMDistance), rightDelta)) {
+//      rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+      rightDrive.setPower(0);
     } else {
-      revUpMotor(right, Range.clip(rightWheelMMDistance / 4, 50, 250), convertMMToTicks(rightWheelMMDistance), 0.1, rightPower);
+//      revUpMotor(rightDrive, Range.clip(rightWheelMMDistance / 4, 50, 250), convertMMToTicks(rightWheelMMDistance), 0.1, rightPower);
+      setMotorPower(rightDrive, rightPower, rightWheelMMDistance);
     }
 
-    if (isAtOrNearDestination(left, convertMMToTicks(leftWheelMMDistance), leftDelta) &&
-        isAtOrNearDestination(right, convertMMToTicks(rightWheelMMDistance), rightDelta)) {
+    if (isAtOrNearDestination(leftDrive, convertMMToTicks(leftWheelMMDistance), leftDelta) &&
+        isAtOrNearDestination(rightDrive, convertMMToTicks(rightWheelMMDistance), rightDelta)) {
       setHasFinished(true);
     }
 
-    leftDelta = calculateDelta(left, lastLeftPosition);
-    rightDelta = calculateDelta(right, lastRightPosition);
-    lastLeftPosition = left.getCurrentPosition();
-    lastRightPosition = right.getCurrentPosition();
+    leftDelta = calculateDelta(leftDrive, lastLeftPosition);
+    rightDelta = calculateDelta(rightDrive, lastRightPosition);
+    lastLeftPosition = leftDrive.getCurrentPosition();
+    lastRightPosition = rightDrive.getCurrentPosition();
+  }
+
+
+
+  @Override
+  public void stop() {
+    Log.i(TAG, "Stopping...");
+    leftDrive.setPower(0.0);
+    rightDrive.setPower(0.0);
   }
 
 
 
 
   public void revUpMotor(DcMotor motor, int revThrough, int targetPosition, double basePower, double maxPower) {
-    double power = Range.clip(revThrough / motor.getCurrentPosition(), basePower, maxPower);
+    double power = Range.clip((int) ((double) revThrough / (double) motor.getCurrentPosition()), basePower, maxPower);
 
     setMotorPower(motor, power, targetPosition);
   }
@@ -97,17 +111,13 @@ public class MiniBotDriveState extends CyberarmStateV2 {
   }
 
   public boolean isAtDestination(DcMotor motor, int targetPosition) {
-    if (motor.getPower() <= 0) {
-      return motor.getCurrentPosition() <= targetPosition;
-    } else {
-      return motor.getCurrentPosition() >= targetPosition;
-    }
+    return Math.abs(motor.getCurrentPosition()) >= Math.abs(targetPosition);
   }
 
   // TODO: Verify maths
   public int convertMMToTicks(int distanceInMM) {
-    int wheelFullRotationTicks = 140;
-    double wheelFullRotationMM = 317.5;
+    int wheelFullRotationTicks = 540;// 140;
+    double wheelFullRotationMM = 319.024; // MM
 
     return (int)(Math.round((wheelFullRotationMM / wheelFullRotationTicks) * distanceInMM));
   }
@@ -115,16 +125,24 @@ public class MiniBotDriveState extends CyberarmStateV2 {
   @Override
   public void telemetry() {
     cyberarmEngine.telemetry.addLine("Left Motor");
-    progressBar(20, left.getCurrentPosition() / leftWheelMMDistance);
-    cyberarmEngine.telemetry.addData("Position", left.getCurrentPosition());
-    cyberarmEngine.telemetry.addData("Power", left.getPower());
+    cyberarmEngine.telemetry.addData(
+            "Progress",
+            progressBar(20, (double) leftDrive.getCurrentPosition() / (double) convertMMToTicks(leftWheelMMDistance) * 100.0)
+    );
+    cyberarmEngine.telemetry.addData("Position", leftDrive.getCurrentPosition());
+    cyberarmEngine.telemetry.addData("Target Position", convertMMToTicks(leftWheelMMDistance));
+    cyberarmEngine.telemetry.addData("Power", leftDrive.getPower());
 
 
     cyberarmEngine.telemetry.addLine("");
 
     cyberarmEngine.telemetry.addLine("Right Motor");
-    progressBar(20, right.getCurrentPosition() / rightWheelMMDistance);
-    cyberarmEngine.telemetry.addData("Position", right.getCurrentPosition());
-    cyberarmEngine.telemetry.addData("Power", right.getPower());
+    cyberarmEngine.telemetry.addData(
+            "Progress",
+            progressBar(20, (double) rightDrive.getCurrentPosition() / (double) convertMMToTicks(rightWheelMMDistance)  * 100.0)
+    );
+    cyberarmEngine.telemetry.addData("Position", rightDrive.getCurrentPosition());
+    cyberarmEngine.telemetry.addData("Target Position", convertMMToTicks(rightWheelMMDistance));
+    cyberarmEngine.telemetry.addData("Power", rightDrive.getPower());
   }
 }
