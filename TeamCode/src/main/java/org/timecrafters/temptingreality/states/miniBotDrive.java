@@ -12,10 +12,17 @@ public class miniBotDrive extends State {
     private boolean lock;
     private boolean toggle;
     private boolean toggleDivisor;
+    private boolean lastButtonState = false;
+
+    public miniBotDrive(Engine engine) {
+        this.engine = engine;
+    }
+
     @Override
     public void init() {
         leftDrive = engine.hardwareMap.dcMotor.get("leftDrive");
         rightDrive = engine.hardwareMap.dcMotor.get("rightDrive");
+
         rightDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         divisor = 1;
     }
@@ -23,25 +30,31 @@ public class miniBotDrive extends State {
     @Override
     public void exec() throws InterruptedException {
 
-        leftDrive.setPower(engine.gamepad1.left_stick_y/divisor);
-        rightDrive.setPower(engine.gamepad1.right_stick_y/divisor);
+
+
+        leftDrive.setPower(-engine.gamepad1.left_stick_y*divisor);
+        rightDrive.setPower(-engine.gamepad1.right_stick_y*divisor);
+
 
         if (toggle == true && engine.gamepad1.left_bumper == true && engine.gamepad1.right_bumper == true){
 
             lock = !lock;
 
             toggle = false;
-        }else {
+
+        }else if (engine.gamepad1.right_bumper == false && engine.gamepad1.left_bumper == false){
             toggle = true;
+
         }
 
-        if (lock == false && engine.gamepad1.a == true && divisor < 1 && toggleDivisor == true){
-            divisor = divisor + 0.1;
-            toggleDivisor = false;
-        }else if (lock == false && engine.gamepad1.y == true && divisor > 0 && toggleDivisor == true){
+
+        if (lock == false && engine.gamepad1.a == true && divisor > 0 && toggleDivisor == true){
             divisor = divisor - 0.1;
             toggleDivisor = false;
-        }else{
+        }else if (lock == false && engine.gamepad1.y == true && divisor < 1 && toggleDivisor == true){
+            divisor = divisor + 0.1;
+            toggleDivisor = false;
+        }else if (engine.gamepad1.a == false && engine.gamepad1.y == false && toggleDivisor == false){
             toggleDivisor = true;
         }
 
