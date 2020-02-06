@@ -143,6 +143,7 @@ public abstract class CyberarmEngineV2 extends OpMode {
    * @param state State to stop
    */
   private void stopState(CyberarmStateV2 state) {
+    state.setHasFinished(true);
     state.stop();
 
     for(CyberarmStateV2 childState : state.children) {
@@ -154,7 +155,7 @@ public abstract class CyberarmEngineV2 extends OpMode {
    * Recursively start up states
    * @param state State to run
    */
-  private void runState(CyberarmStateV2 state) {
+  protected void runState(CyberarmStateV2 state) {
     final CyberarmStateV2 finalState = state;
 //    if (state.isRunning()) { return; } // Assume that we have already started running this state
 
@@ -176,11 +177,13 @@ public abstract class CyberarmEngineV2 extends OpMode {
    * Add state to queue, will call init() on state if engine is running
    * @param state State to add to queue
    */
-  public void addState(CyberarmStateV2 state) {
+  public CyberarmStateV2 addState(CyberarmStateV2 state) {
     Log.i(TAG, "Adding cyberarmState "+ state.getClass());
     cyberarmStates.add(state);
 
     if (isRunning()) { state.init(); }
+
+    return state;
   }
 
   /**

@@ -12,17 +12,8 @@ public abstract class CyberarmStateV2 implements Runnable {
   private volatile boolean isRunning, hasFinished;
   public static String TAG = "PROGRAM.STATE";
   public org.cyberarm.engine.V2.CyberarmEngineV2 cyberarmEngine = CyberarmEngineV2.instance;
-  public ArrayList<CyberarmStateV2> children;
-  public long startTime;
-
-  protected CyberarmStateV2() {
-    startTime   = 0;
-    isRunning   = false;
-    hasFinished = false;
-
-    children   = new ArrayList<>();
-  }
-
+  public ArrayList<CyberarmStateV2> children = new ArrayList<>();
+  public long startTime = 0;
 
   /**
    * Called when INIT button on Driver Station is pushed
@@ -70,9 +61,13 @@ public abstract class CyberarmStateV2 implements Runnable {
   /**
    * Add a state which runs in parallel with this one
    */
-  public void addParallelState(CyberarmStateV2 state) {
+  public CyberarmStateV2 addParallelState(CyberarmStateV2 state) {
     Log.i(TAG, "Adding " + state.getClass() + " to " + this.getClass());
     children.add(state);
+
+    if (isRunning()) { state.init(); cyberarmEngine.runState(state); }
+
+    return state;
   }
 
   /**
