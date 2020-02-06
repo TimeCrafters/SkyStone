@@ -19,6 +19,9 @@ import org.timecrafters.SkyStone_2019_2020.Autonomos.States.SkystoneSightBlue;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B2Center;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B2Left;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B2Right;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B2iCenter;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B2iLeft;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B2iRight;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B3Center;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B3Left;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B3Right;
@@ -47,16 +50,19 @@ public class B3 extends Engine {
         addSubEngine(new B2Right(this, skystoneSight, stateConfiguration));
 
 
-//        addState(new Arms(this, stateConfiguration, "B2g"));
+        addState(new Arms(this, stateConfiguration, "B2g"));
 //        addState(new GripRollers(this, stateConfiguration, "B2h"));
-//
-//        //back up and turn towards build site
-//        addThreadedState(new DirectionDrive(this, stateConfiguration, "B2i"));
-        addState(new Face(this, stateConfiguration, "B2j"));
 
-        //drive at varying speeds to end of the build site, then face the foundation
-        addState(new DirectionDrive(this, stateConfiguration, "B3k"));
+        //back up and turn towards build site
+        addSubEngine(new B2iLeft(this, skystoneSight, stateConfiguration));
+        addSubEngine(new B2iCenter(this, skystoneSight, stateConfiguration));
+        addSubEngine(new B2iRight(this, skystoneSight, stateConfiguration));
+
+        addState(new FaceActveCheck(this, stateConfiguration, "B2j"));
         addThreadedState(new Crane(this, stateConfiguration, "B2k_crane"));
+
+        //drive to end of the build site, then face the foundation
+        addState(new DirectionDrive(this, stateConfiguration, "B3k"));
 //        addState(new DirectionDrive(this, stateConfiguration, "B3l"));
 //        addState(new DirectionDrive(this, stateConfiguration, "B3m"));
         addState(new FaceActveCheck(this, stateConfiguration, "B3n"));

@@ -26,7 +26,7 @@ public class DirectionDrive extends Drive {
     private long StartTime;
     private long InterruptTime;
 
-    public DirectionDrive(Engine engine, StateConfiguration stateConfig, String stateConfigID) {
+    public   DirectionDrive(Engine engine, StateConfiguration stateConfig, String stateConfigID) {
         this.engine = engine;
         StateConfig = stateConfig;
         StateConfigID = stateConfigID;

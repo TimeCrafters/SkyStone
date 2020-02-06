@@ -14,6 +14,9 @@ import org.timecrafters.SkyStone_2019_2020.Autonomos.States.SkystoneSight;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.R2Center;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.R2Left;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.R2Right;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.R2iCenter;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.R2iLeft;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.R2iRight;
 import org.timecrafters.SkyStone_2019_2020.IMUInit;
 import org.timecrafters.engine.Engine;
 
@@ -45,9 +48,12 @@ public class R2 extends Engine {
 
 
         addState(new Arms(this, stateConfiguration, "R2g"));
-        addState(new GripRollers(this, stateConfiguration, "R2h"));
-        addThreadedState(new DirectionDrive(this, stateConfiguration, "R2i"));
-        addState(new Face(this, stateConfiguration, "R2j"));
+
+        addSubEngine(new R2iLeft(this, skystoneSight, stateConfiguration));
+        addSubEngine(new R2iCenter(this, skystoneSight, stateConfiguration));
+        addSubEngine(new R2iRight(this, skystoneSight, stateConfiguration));
+
+        addState(new FaceActveCheck(this, stateConfiguration, "R2j"));
 
         //Drive to build area
         addState(new DirectionDrive(this, stateConfiguration, "R2k"));

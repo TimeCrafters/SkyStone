@@ -14,6 +14,12 @@ import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Lift;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.LiftZero;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.RobotDodge;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.SkystoneSight;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.R2Center;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.R2Left;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.R2Right;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.R2iCenter;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.R2iLeft;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.R2iRight;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.R3Center;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.R3Left;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.R3Right;
@@ -38,20 +44,23 @@ public class R3 extends Engine {
 
         //Identifies the Position of Skystone and moves into position to grab it
         addState(skystoneSight);
-        addSubEngine(new R3Left(this, skystoneSight, stateConfiguration));
-        addSubEngine(new R3Center(this, skystoneSight, stateConfiguration));
-        addSubEngine(new R3Right(this, skystoneSight, stateConfiguration));
+        addSubEngine(new R2Left(this, skystoneSight, stateConfiguration));
+        addSubEngine(new R2Center(this, skystoneSight, stateConfiguration));
+        addSubEngine(new R2Right(this, skystoneSight, stateConfiguration));
 
 
         //addState(new Crane(this, stateConfiguration, "R3d"));
 
 
         addState(new Arms(this, stateConfiguration, "R2g"));
-        addState(new GripRollers(this, stateConfiguration, "R2h"));
 
         //back up and turn towards build site
-        addThreadedState(new DirectionDrive(this, stateConfiguration, "R2i"));
-        addState(new Face(this, stateConfiguration, "R2j"));
+
+        addSubEngine(new R2iLeft(this, skystoneSight, stateConfiguration));
+        addSubEngine(new R2iCenter(this, skystoneSight, stateConfiguration));
+        addSubEngine(new R2iRight(this, skystoneSight, stateConfiguration));
+
+        addState(new FaceActveCheck( this, stateConfiguration, "R2j"));
 
         //drive at varying speeds to end of the build site, then face the foundation
         addState(new DirectionDrive(this, stateConfiguration, "R3k"));

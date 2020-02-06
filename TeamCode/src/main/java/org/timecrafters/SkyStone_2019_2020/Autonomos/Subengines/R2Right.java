@@ -11,6 +11,7 @@ import org.cyberarm.NeXT.StateConfiguration;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Crane;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.DirectionDrive;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Face;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.States.FaceActveCheck;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.LiftZero;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.SkystoneSight;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.States.Turn;
@@ -34,7 +35,7 @@ public class R2Right extends SubEngine {
         addState(new DirectionDrive(engine, stateConfiguration, "R2e"));
         addThreadedState(new Crane(engine, stateConfiguration, "R2b_Rb"));
         addState(new LiftZero(engine, stateConfiguration, "R2f"));
-        addThreadedState(new Face(engine, stateConfiguration, "R2b_Ra"));
+        addThreadedState(new FaceActveCheck(engine, stateConfiguration, "R2b_Ra"));
     }
 
     @Override

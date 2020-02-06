@@ -303,15 +303,15 @@ public class TeleOpState extends Drive {
 
             //if the right joystick is moved to either side, turn the robot
             if (engine.gamepad1.right_stick_x > 0) {
-                DriveForwardLeft.setPower(robotRotationSpeed);
-                DriveForwardRight.setPower(-robotRotationSpeed);
-                DriveBackLeft.setPower(robotRotationSpeed);
-                DriveBackRight.setPower(-robotRotationSpeed);
+                DriveForwardLeft.setPower(powerThrottle);
+                DriveForwardRight.setPower(-powerThrottle);
+                DriveBackLeft.setPower(powerThrottle);
+                DriveBackRight.setPower(-powerThrottle);
             } else {
-                DriveForwardLeft.setPower(-robotRotationSpeed);
-                DriveForwardRight.setPower(robotRotationSpeed);
-                DriveBackLeft.setPower(-robotRotationSpeed);
-                DriveBackRight.setPower(robotRotationSpeed);
+                DriveForwardLeft.setPower(-powerThrottle);
+                DriveForwardRight.setPower(powerThrottle);
+                DriveBackLeft.setPower(-powerThrottle);
+                DriveBackRight.setPower(powerThrottle);
             }
 
             //If the D pad is pressed, the aline the robot to the appropriate air
@@ -412,13 +412,13 @@ public class TeleOpState extends Drive {
 
     @Override
     public void telemetry() {
-//        engine.telemetry.addData("JoystickDegrees", JoystickDegrees);
-//        engine.telemetry.addData("Absolute Degrees", JoystickDegrees - getRobotRotation());
-//        engine.telemetry.addData("Left Power Function", getForwardLeftPower(JoystickDegrees - getRobotRotation(), 0.1));
-//        engine.telemetry.addData("Right Power Function", getForwardRightPower(JoystickDegrees - getRobotRotation(), 0.1));
-//        engine.telemetry.addData("Left Power Real", DriveForwardLeft.getPower());
-//        engine.telemetry.addData("Right Power Real", DriveForwardRight.getPower());
-//        engine.telemetry.addData("Grabber Rotate", GrabRotateTargetPos);
+        engine.telemetry.addData("JoystickDegrees", JoystickDegrees);
+        engine.telemetry.addData("Absolute Degrees", JoystickDegrees - getRobotRotation());
+        engine.telemetry.addData("Left Power Function", getForwardLeftPower(JoystickDegrees - getRobotRotation(), 0.1));
+        engine.telemetry.addData("Right Power Function", getForwardRightPower(JoystickDegrees - getRobotRotation(), 0.1));
+        engine.telemetry.addData("Left Power Real", DriveForwardLeft.getPower());
+        engine.telemetry.addData("Right Power Real", DriveForwardRight.getPower());
+        engine.telemetry.addData("Grabber Rotate", GrabRotateTargetPos);
     }
 }
 

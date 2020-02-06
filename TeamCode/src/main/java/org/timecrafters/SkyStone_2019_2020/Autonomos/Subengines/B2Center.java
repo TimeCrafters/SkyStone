@@ -32,9 +32,7 @@ public class B2Center extends SubEngine {
         addThreadedState(new Crane(engine, stateConfiguration, "B2b_Cb"));
         addState(new LiftZero(engine, stateConfiguration, "B2f"));
         addThreadedState(new Turn(engine, stateConfiguration, "B2b_Ca"));
-        addState(new Arms(engine, stateConfiguration, "B2g"));
-        addState(new GripRollers(engine, stateConfiguration, "B2h"));
-        addThreadedState(new DirectionDrive(engine, stateConfiguration, "B2i_C"));
+
     }
 
     @Override

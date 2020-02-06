@@ -27,15 +27,15 @@ public class B2Left extends SubEngine {
         this.stateConfiguration = stateConfiguration;
     }
 
+
     @Override
     public void setProcesses() {
         addState(new DirectionDrive(engine, stateConfiguration, "B2e"));
         addThreadedState(new Crane(engine, stateConfiguration, "B2b_Lb"));
         addState(new LiftZero(engine, stateConfiguration, "B2f"));
         addThreadedState(new FaceActveCheck(engine, stateConfiguration, "B2b_La"));
-        addState(new Arms(engine, stateConfiguration, "B2g"));
-        addState(new GripRollers(engine, stateConfiguration, "B2h"));
-        addThreadedState(new DirectionDrive(engine, stateConfiguration, "B2i_L"));
+        //addState(new Arms(engine, stateConfiguration, "B2g"));
+
     }
 
     @Override

@@ -24,6 +24,9 @@ import org.timecrafters.SkyStone_2019_2020.Autonomos.States.SkystoneSightBlue;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B2Center;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B2Left;
 import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B2Right;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B2iCenter;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B2iLeft;
+import org.timecrafters.SkyStone_2019_2020.Autonomos.Subengines.B2iRight;
 import org.timecrafters.SkyStone_2019_2020.IMUInit;
 import org.timecrafters.engine.Engine;
 
@@ -50,13 +53,21 @@ public class B2 extends Engine {
         addSubEngine(new B2Center(this, skystoneSight, stateConfiguration));
         addSubEngine(new B2Right(this, skystoneSight, stateConfiguration));
 
+
+        addState(new Arms(this, stateConfiguration, "B2g"));
+
+        //back up and turn towards build site
+        addSubEngine(new B2iLeft(this, skystoneSight, stateConfiguration));
+        addSubEngine(new B2iCenter(this, skystoneSight, stateConfiguration));
+        addSubEngine(new B2iRight(this, skystoneSight, stateConfiguration));
+
         //Grabs Stone
-        addState(new Face(this, stateConfiguration, "B2j"));
+        addState(new FaceActveCheck(  this, stateConfiguration, "B2j"));
 
         addState(new DirectionDrive(this, stateConfiguration, "B2k"));
         addThreadedState(new Crane(this, stateConfiguration, "B2k_crane"));
 
-        addState(new Face(this, stateConfiguration, "B2l"));
+        addState(new FaceActveCheck( this, stateConfiguration, "B2l"));
         addThreadedState(new Lift(this, stateConfiguration, "B2m"));
         addState(new DirectionDrive(this, stateConfiguration, "B2n"));
         //Possible spot for threaded crane
