@@ -21,8 +21,8 @@ public class B1 extends Engine {
         addState(new IMUInit(this));
         addState(new DirectionDrive(this, stateConfiguration, "B1a"));
         addState(new DirectionDrive(this, stateConfiguration, "B1b"));
+        addState(new DirectionDrive(this, stateConfiguration, "B1c_move"));
         addState(new FoundationClamp(this, stateConfiguration, "B1c"));
-//        addState(new DirectionDrive(this, stateConfiguration, "B1c_move"));
         addState(new FaceActveCheck(this, stateConfiguration, "B1d"));
         addState(new DirectionDrive(this, stateConfiguration, "B1e"));
         addState(new FoundationClamp(this, stateConfiguration, "B1f"));
