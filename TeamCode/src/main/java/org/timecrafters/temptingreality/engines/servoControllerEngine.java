@@ -8,7 +8,7 @@ import org.timecrafters.temptingreality.states.servoController;
 /**
  * Created by t420-1 on 10/23/2018.
  */
-@TeleOp (name = "\"name\"... seriously...", group = "Testing")
+//@TeleOp (name = "\"name\"... seriously...", group = "Testing")
 public class servoControllerEngine extends Engine {
     @Override
     public void setProcesses() { addState(new servoController(this));
