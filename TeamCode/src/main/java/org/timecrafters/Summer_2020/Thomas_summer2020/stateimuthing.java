@@ -2,11 +2,16 @@ package org.timecrafters.Summer_2020.Thomas_summer2020;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
+import org.timecrafters.engine.Engine;
 import org.timecrafters.engine.State;
 
 public class stateimuthing extends State {
 
     private BNO055IMU IMU;
+
+    public stateimuthing(Engine engine) {
+        this.engine = engine;
+    }
 
     @Override
     public void init() {
