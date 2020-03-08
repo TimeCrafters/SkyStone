@@ -34,16 +34,16 @@ BackwardRightWheelDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 
         @Override
     public void exec() throws InterruptedException {
-if (engine.gamepad1.y){
-    targetdirecd=0;
-}
-else if ( engine.gamepad1.b){ targetdirecd=90;}
 
-            else if (engine.gamepad1.x){targetdirecd=-90;}
-
-            else if ( engine.gamepad1.a){targetdirecd=180;}
-
-
+        if (engine.gamepad1.y){
+            targetdirecd=0;
+        } else if ( engine.gamepad1.b){
+            targetdirecd=90;
+        } else if (engine.gamepad1.x){
+            targetdirecd=-90;
+        } else if ( engine.gamepad1.a){
+            targetdirecd=180;
+        }
 
     if (targetdirecd>=-45 &&  targetdirecd <=45) { ;
         ForwardRightWheelDrive. setPower(Power);

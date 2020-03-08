@@ -96,7 +96,7 @@ public class MiniBotTesting extends State {
                 relativeRotation -= 360;
             }
 
-            double bacePower = ((HighPower - LowPower)*(Math.pow(1.2, -Math.abs(relativeRotation)))) + LowPower;
+            double bacePower = ((HighPower - LowPower)*(Math.pow(1.05, -Math.abs(relativeRotation)))) + LowPower;
 
             //Adjusts power based on degrees off from target.
             double leftPower = bacePower - (relativeRotation * .01);
