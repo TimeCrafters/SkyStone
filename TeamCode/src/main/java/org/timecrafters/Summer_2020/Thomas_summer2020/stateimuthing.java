@@ -1,12 +1,18 @@
 package org.timecrafters.Summer_2020.Thomas_summer2020;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 
+import org.timecrafters.engine.Engine;
 import org.timecrafters.engine.State;
 
 public class stateimuthing extends State {
 
     private BNO055IMU IMU;
+
+
+    public stateimuthing(Engine engine) {
+   this.engine=engine; }
 
     @Override
     public void init() {
@@ -19,6 +25,7 @@ public class stateimuthing extends State {
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.loggingEnabled = false;
 
+
         IMU.initialize(parameters);
 
 
@@ -30,8 +37,10 @@ public class stateimuthing extends State {
         engine.telemetry .addData("rotation Z", IMU.getAngularOrientation().firstAngle);
         engine.telemetry .addData("rotation Y", IMU.getAngularOrientation().firstAngle);
 
-        @Override
+
     }
+
+    @Override
     public void exec() throws InterruptedException {
 
     }

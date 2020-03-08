@@ -8,6 +8,7 @@ import org.timecrafters.engine.Engine;
 public class DisplacementTestEngine extends Engine {
     @Override
     public void setProcesses() {
-        addState(new MiniBotTesting(this, 0.5, 0.25, 100,40 , 1000));
+        //addState(new MiniBotTesting(this, 1, 0.3 , 100,40 , 1000));
+        addState(new DisplacementTest(this));
     }
 }

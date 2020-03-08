@@ -110,7 +110,7 @@ public class MiniBotTesting extends State {
 
             long currentTime = System.currentTimeMillis();
 
-            if (distanceToObject < avoidThreshold && distanceToObject > reverseThreshold && !HasChangedDirection && currentTime > lastTurnTime + 500) {
+            if (distanceToObject < avoidThreshold && distanceToObject > reverseThreshold && !HasChangedDirection && currentTime > lastTurnTime + 1500) {
             targetRotation = randomDirection(targetRotation);
 
                 lastTurnTime = currentTime;
@@ -151,6 +151,9 @@ public class MiniBotTesting extends State {
 
     @Override
     public void telemetry() {
+        engine.telemetry.addData("Rotaion X", IMU.getAngularOrientation().firstAngle);
+        engine.telemetry.addData("Rotaion Y", IMU.getAngularOrientation().secondAngle);
+        engine.telemetry.addData("Rotaion Z", IMU.getAngularOrientation().thirdAngle);
         engine.telemetry.addData("Distance Sensor", DistanceSensor.getDistance(DistanceUnit.CM));
         engine.telemetry.addData("target Rotation", targetRotation);
         engine.telemetry.addData("Rotation Difference", relativeRotation);
