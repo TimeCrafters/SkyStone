@@ -14,6 +14,7 @@ private DcMotor BackwardRightWheelDrive;
 private DcMotor BackwardLeftWheelDrive;
 private double Power;
 public DriverRelativeTest(Engine engine) { this.engine = engine;}
+private float targetdirecd;
 
     @Override
     public void init() {
@@ -33,8 +34,18 @@ BackwardRightWheelDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 
         @Override
     public void exec() throws InterruptedException {
+if (engine.gamepad1.y){
+    targetdirecd=0;
+}
+else if ( engine.gamepad1.b){ targetdirecd=90;}
 
-    if (engine.gamepad1.y) { ;
+            else if (engine.gamepad1.x){targetdirecd=-90;}
+
+            else if ( engine.gamepad1.a){targetdirecd=180;}
+
+
+
+    if (targetdirecd>=-45 &&  targetdirecd <=45) { ;
         ForwardRightWheelDrive. setPower(Power);
         ForwardLeftWheelDrive.setPower(Power);
         BackwardRightWheelDrive.setPower(Power);
@@ -42,19 +53,19 @@ BackwardRightWheelDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 
     }
 
-    if (engine.gamepad1.b) { ;
+    if (targetdirecd>=45  && targetdirecd <= 135) { ;
         ForwardRightWheelDrive. setPower(-Power);
         ForwardLeftWheelDrive.setPower(Power);
         BackwardRightWheelDrive.setPower(Power);
         BackwardLeftWheelDrive.setPower(-Power);
     }
-    if (engine.gamepad1.a) { ;
+    if (targetdirecd<=-135 && targetdirecd>= 135) { ;
         ForwardRightWheelDrive. setPower(-Power);
         ForwardLeftWheelDrive.setPower(-Power);
         BackwardRightWheelDrive.setPower(-Power);
         BackwardLeftWheelDrive.setPower(-Power);
     }
-    if (engine.gamepad1.x) { ;
+    if (targetdirecd<=-45 && targetdirecd>= -135) { ;
         ForwardRightWheelDrive. setPower(Power);
         ForwardLeftWheelDrive.setPower(-Power);
         BackwardRightWheelDrive.setPower(-Power);
