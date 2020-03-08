@@ -8,6 +8,6 @@ import org.timecrafters.engine.Engine;
 public class DriverRelativeEngine extends Engine {
     @Override
     public void setProcesses() {
-        addState(new DriverRelativeTest(this));
+        addState(new DriverRelativeTest(this ));
     }
 }
