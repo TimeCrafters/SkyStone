@@ -27,11 +27,12 @@ public class stateimuthing extends State {
     @Override
     public void telemetry() {
         engine.telemetry .addData("rotation X", IMU.getAngularOrientation().firstAngle);
-        engine.telemetry .addData("rotation Z", IMU.getAngularOrientation().firstAngle);
-        engine.telemetry .addData("rotation Y", IMU.getAngularOrientation().firstAngle);
+        engine.telemetry .addData("rotation Z", IMU.getAngularOrientation().secondAngle);
+        engine.telemetry .addData("rotation Y", IMU.getAngularOrientation().thirdAngle);
 
-        @Override
+
     }
+    @Override
     public void exec() throws InterruptedException {
 
     }
