@@ -8,7 +8,7 @@ import org.timecrafters.SkyStone_2019_2020.Autonomos.States.TurnToSkyStone;
 import org.timecrafters.SkyStone_2019_2020.IMUInit;
 import org.timecrafters.engine.Engine;
 
-@TeleOp (name = "Testing Ground", group = "Testing")
+//@TeleOp (name = "Testing Ground", group = "Testing")
 public class TestEngine extends Engine {
     @Override
     public void setProcesses() {

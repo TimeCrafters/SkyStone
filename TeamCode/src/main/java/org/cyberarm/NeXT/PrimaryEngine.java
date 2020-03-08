@@ -8,7 +8,7 @@ import org.cyberarm.NeXT.states.CyberarmPanic;
 import org.cyberarm.NeXT.states.CyberarmPostDropUTurn;
 import org.cyberarm.engine.V2.CyberarmEngineV2;
 
-@TeleOp(name = "Testing->PrimaryEngine", group = "Testing")
+//@TeleOp(name = "Testing->PrimaryEngine", group = "Testing")
 public class PrimaryEngine extends CyberarmEngineV2 {
  StateConfiguration config;
 
