@@ -15,7 +15,8 @@ private DcMotor DriveRight;
 private double Power;
 private int Ticks;
 private StateConfiguration StateConfig;
-
+private boolean FirstRun;
+private String StateConfigID;
 
     public DriveForwardState(Engine Engine) {
         this.engine = Engine;
@@ -26,12 +27,20 @@ private StateConfiguration StateConfig;
 DriveLeft = engine.hardwareMap.dcMotor.get("rightDrive");
 DriveRight = engine.hardwareMap.dcMotor.get("leftDrive");
 DriveLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-Power = StateConfig.get("DriveStateVroom").variable("Power");
-Ticks = StateConfig.get("DriveStateVroom").variable("Distance");
+Power = StateConfig.get(StateConfigID).variable("Power");
+Ticks = StateConfig.get(StateConfigID).variable("Distance");
+FirstRun = true;
     }
 
     @Override
     public void exec() throws InterruptedException {
+if (FirstRun){
+    DriveRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    DriveLeft. setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    DriveRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    DriveLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    FirstRun = false;
+}
 
         DriveLeft.setPower(Power);
         DriveRight.setPower(Power);
