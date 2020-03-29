@@ -18,8 +18,9 @@ private StateConfiguration StateConfig;
 private boolean FirstRun;
 private String StateConfigID;
 
-    public DriveForwardState(Engine Engine) {
+    public DriveForwardState(Engine Engine, StateConfiguration stateConfiguration) {
         this.engine = Engine;
+        StateConfig = stateConfiguration;
     }
 
     @Override
