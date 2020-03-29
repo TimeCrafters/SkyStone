@@ -32,6 +32,7 @@ public class MiniBotTesting extends CyberarmStateV2 {
     private boolean Reverseing;
     private int ReverseTicks;
 
+
     public MiniBotTesting(CyberarmEngineV2 engine, double highPower, double lowPower, double cmThreshold, double reverseThreshold , int reverseTicks) {
         this.engine = engine;
         HighPower = highPower;
@@ -43,7 +44,6 @@ public class MiniBotTesting extends CyberarmStateV2 {
 
     @Override
     public void init() {
-
 
         //IMU init
         //------------------------------------------------------------------------------------------
@@ -79,6 +79,7 @@ public class MiniBotTesting extends CyberarmStateV2 {
 
     @Override
     public void exec() {
+
 
         float currentRotatoin = IMU.getAngularOrientation().firstAngle;
         double distanceToObject = DistanceSensor.getDistance(DistanceUnit.CM);
