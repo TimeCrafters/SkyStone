@@ -17,8 +17,9 @@ private int Ticks;
 private StateConfiguration StateConfig;
 
 
-    public DriveForwardState(Engine Engine) {
+    public DriveForwardState(Engine Engine, StateConfiguration stateConfiguration) {
         this.engine = Engine;
+        StateConfig = stateConfiguration;
     }
 
     @Override
