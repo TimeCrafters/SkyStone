@@ -18,9 +18,10 @@ private StateConfiguration StateConfig;
 private boolean FirstRun;
 private String StateConfigID;
 
-    public DriveForwardState(Engine Engine, StateConfiguration stateConfiguration) {
+    public DriveForwardState(Engine Engine, StateConfiguration stateConfiguration, String stateConfigID) {
         this.engine = Engine;
         StateConfig = stateConfiguration;
+        StateConfigID = stateConfigID;
     }
 
     @Override
@@ -46,7 +47,7 @@ if (FirstRun){
         DriveLeft.setPower(Power);
         DriveRight.setPower(Power);
 
-        if (DriveRight.getCurrentPosition()>= Ticks){
+        if (Math.abs( DriveRight.getCurrentPosition())>= Ticks){
             DriveRight.setPower(0);
             DriveLeft.setPower(0);
             setFinished(true);

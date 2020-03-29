@@ -12,8 +12,8 @@ public class DriveForwardEngine extends Engine {
     @Override
     public void setProcesses() {
         StateConfiguration stateConfiguration = new StateConfiguration();
-        addState(new DriveForwardState(this, stateConfiguration));
-
+        addState(new DriveForwardState(this, stateConfiguration, "DriveStateVroom"));
+        addState(new DriveForwardState(this,stateConfiguration, "DriveBackwardsVroom") );
     }
 
 
