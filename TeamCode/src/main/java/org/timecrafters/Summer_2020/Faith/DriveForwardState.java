@@ -1,5 +1,6 @@
 package org.timecrafters.Summer_2020.Faith;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
@@ -14,6 +15,7 @@ private DcMotor DriveRight;
 private double Power;
 private int Ticks;
 private StateConfiguration StateConfig;
+
 
     public DriveForwardState(Engine Engine) {
         this.engine = Engine;

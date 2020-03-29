@@ -2,13 +2,14 @@ package org.timecrafters.Summer_2020.Nathaniel;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.cyberarm.engine.V2.CyberarmEngineV2;
 import org.timecrafters.engine.Engine;
 
 @TeleOp (name = "NRP: Strait Line Test", group = "NRP")
-public class DisplacementTestEngine extends Engine {
+public class DisplacementTestEngine extends CyberarmEngineV2 {
+
     @Override
-    public void setProcesses() {
-        //addState(new MiniBotTesting(this, .3, 0.15 , 0,0 , 1000));
-        addState(new DisplacementTest(this));
+    public void setup() {
+        addState(new MiniBotTesting(this, .3, 0.15 , 0,0 , 1000));
     }
 }

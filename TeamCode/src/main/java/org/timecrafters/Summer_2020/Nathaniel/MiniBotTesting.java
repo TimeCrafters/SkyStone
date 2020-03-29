@@ -5,13 +5,16 @@ import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.cyberarm.engine.V2.CyberarmEngineV2;
+import org.cyberarm.engine.V2.CyberarmStateV2;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.timecrafters.engine.Engine;
 import org.timecrafters.engine.State;
 
-public class MiniBotTesting extends State {
+public class MiniBotTesting extends CyberarmStateV2 {
 
     private BNO055IMU IMU;
+    private CyberarmEngineV2 engine;
     private DcMotor DriveLeft;
     private DcMotor DriveRight;
     private double HighPower;
@@ -29,7 +32,7 @@ public class MiniBotTesting extends State {
     private boolean Reverseing;
     private int ReverseTicks;
 
-    public MiniBotTesting(Engine engine, double highPower, double lowPower, double cmThreshold, double reverseThreshold , int reverseTicks) {
+    public MiniBotTesting(CyberarmEngineV2 engine, double highPower, double lowPower, double cmThreshold, double reverseThreshold , int reverseTicks) {
         this.engine = engine;
         HighPower = highPower;
         LowPower = lowPower;
@@ -75,7 +78,7 @@ public class MiniBotTesting extends State {
     }
 
     @Override
-    public void exec() throws InterruptedException {
+    public void exec() {
 
         float currentRotatoin = IMU.getAngularOrientation().firstAngle;
         double distanceToObject = DistanceSensor.getDistance(DistanceUnit.CM);
