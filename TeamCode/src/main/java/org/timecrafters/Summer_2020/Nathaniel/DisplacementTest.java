@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import org.timecrafters.engine.Engine;
 import org.timecrafters.engine.State;
@@ -15,7 +16,9 @@ public class DisplacementTest extends State {
     private BNO055IMU IMU;
     private Velocity currentVelocityMeasure;
     private Acceleration currentAccelMeasure;
+    private Position currentPositionMeasure;
     private Velocity[] VelocityData;
+    private boolean HasRun;
 
     public DisplacementTest(Engine engine) {
         this.engine = engine;
@@ -34,9 +37,11 @@ public class DisplacementTest extends State {
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.loggingEnabled = false;
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        parameters.accelerationIntegrationAlgorithm = null;
+
 
         IMU.initialize(parameters);
+        IMU.startAccelerationIntegration(null, null, 5);
     }
 
     @Override
@@ -44,6 +49,7 @@ public class DisplacementTest extends State {
 
         currentVelocityMeasure = IMU.getVelocity();
         currentAccelMeasure = IMU.getAcceleration();
+        currentPositionMeasure = IMU.getPosition();
     }
 
     @Override
@@ -55,5 +61,9 @@ public class DisplacementTest extends State {
         engine.telemetry.addData("X Accel", currentAccelMeasure.xAccel);
         engine.telemetry.addData("Y Accel", currentAccelMeasure.yAccel);
         engine.telemetry.addData("Z Accel", currentAccelMeasure.zAccel);
+
+        engine.telemetry.addData("X Pos", currentAccelMeasure.xAccel);
+        engine.telemetry.addData("Y Pos", currentAccelMeasure.yAccel);
+        engine.telemetry.addData("Z pos", currentAccelMeasure.zAccel);
     }
 }
