@@ -33,7 +33,7 @@ private float CurrentRotation;
     public void init() {
 DriveLeft = engine.hardwareMap.dcMotor.get("rightDrive");
 DriveRight = engine.hardwareMap.dcMotor.get("leftDrive");
-DriveLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+DriveRight.setDirection(DcMotorSimple.Direction.REVERSE);
 Power = StateConfig.get(StateConfigID).variable("Power");
 Ticks = StateConfig.get(StateConfigID).variable("Distance");
 FirstRun = true;
