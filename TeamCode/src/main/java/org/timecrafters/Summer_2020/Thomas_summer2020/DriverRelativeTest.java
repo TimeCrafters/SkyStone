@@ -43,7 +43,11 @@ BackwardRightWheelDrive.setDirection(DcMotorSimple.Direction.REVERSE);
             targetdirecd=-90;
         } else if ( engine.gamepad1.a){
             targetdirecd=180;
+        } else {
+            targetdirecd = 999;
         }
+
+
 
     if (targetdirecd>=-45 &&  targetdirecd <=45) { ;
         ForwardRightWheelDrive. setPower(Power);
@@ -51,33 +55,29 @@ BackwardRightWheelDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         BackwardRightWheelDrive.setPower(Power);
         BackwardLeftWheelDrive.setPower(Power);
 
-    }
-
-    if (targetdirecd>=45  && targetdirecd <= 135) { ;
+    } else if (targetdirecd>=45  && targetdirecd <= 135) { ;
         ForwardRightWheelDrive. setPower(-Power);
         ForwardLeftWheelDrive.setPower(Power);
         BackwardRightWheelDrive.setPower(Power);
         BackwardLeftWheelDrive.setPower(-Power);
-    }
-    if (targetdirecd<=-135 && targetdirecd>= 135) { ;
+    } else if (targetdirecd<=-135 && targetdirecd>= 135 && targetdirecd >= -180 && targetdirecd <= 180) { ;
         ForwardRightWheelDrive. setPower(-Power);
         ForwardLeftWheelDrive.setPower(-Power);
         BackwardRightWheelDrive.setPower(-Power);
         BackwardLeftWheelDrive.setPower(-Power);
-    }
-    if (targetdirecd<=-45 && targetdirecd>= -135) { ;
+    } else if (targetdirecd<=-45 && targetdirecd>= -135) { ;
         ForwardRightWheelDrive. setPower(Power);
         ForwardLeftWheelDrive.setPower(-Power);
         BackwardRightWheelDrive.setPower(-Power);
         BackwardLeftWheelDrive.setPower(Power);
-    }
-
-    if (!engine.gamepad1.b &&!engine.gamepad1.y &&!engine.gamepad1.x &&!engine.gamepad1.a ){
+    } else {
         ForwardRightWheelDrive.setPower(0.0);
         ForwardLeftWheelDrive.setPower(0.0);
         BackwardLeftWheelDrive.setPower(0.0);
         BackwardRightWheelDrive.setPower(0.0);
     }
+
+
 
 
 
