@@ -14,6 +14,10 @@ public class scott_bot_manual_drive_state extends State {
     private double dLeftDirection;
     private double dRightDirection;
 
+    private int iSpeedIncreaseState; // press +10% ... 0 = waiting for press, 1 = waiting for release
+    private int iSpeedDecreaseState; // press -10% ... 0 = waiting for press, 1 = waiting for release
+    private double dDrivePowerRatio; // limit the amount of power to the drive motors
+
     @Override
     public void init() {
         pLeftDrive = engine.hardwareMap.dcMotor.get("LeftWheel");
@@ -21,6 +25,10 @@ public class scott_bot_manual_drive_state extends State {
 
         pLeftDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         pRightDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        iSpeedDecreaseState = 0;
+        iSpeedIncreaseState = 0;
+        dDrivePowerRatio = 1;
     }
 
     @Override
@@ -56,8 +64,43 @@ public class scott_bot_manual_drive_state extends State {
             dRightDirection=0;
         }
 
-        pLeftDrive.setPower(dLeftDirection*1);
-        pRightDrive.setPower(dRightDirection*1);
+        switch (iSpeedIncreaseState) {
+            case 0:
+                if(engine.gamepad1.right_bumper){
+                    iSpeedIncreaseState = 1;
+                }
+                break;
+            case 1:
+                if(!engine.gamepad1.right_bumper){
+                    iSpeedIncreaseState = 0;
+                    if(dDrivePowerRatio <= .9) {
+                        dDrivePowerRatio += .1;
+                    }
+                }
+                break;
+        }
+
+        switch (iSpeedDecreaseState) {
+            case 0:
+                if(engine.gamepad1.left_bumper){
+                    iSpeedDecreaseState = 1;
+                }
+                break;
+            case 1:
+                if(!engine.gamepad1.left_bumper){
+                    iSpeedDecreaseState = 0;
+                    if(dDrivePowerRatio >= .2) {
+                        dDrivePowerRatio -= .1;
+                    }
+                }
+                break;
+        }
+
+        pLeftDrive.setPower(dLeftDirection*dDrivePowerRatio);
+        pRightDrive.setPower(dRightDirection*dDrivePowerRatio);
+
+        engine.telemetry.addData("drive power ..... ", (int)(dDrivePowerRatio*10));
+        engine.telemetry.update();
     }
 }
 

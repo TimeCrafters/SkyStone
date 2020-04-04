@@ -17,6 +17,9 @@ public class scott_bot_auto_drive_state extends State {
     private double dLeftDirection;  // -1 = backwards, 0 = stop, 1 = forward
     private double dRightDirection; // -1 = backwards, 0 = stop, 1 = forward
     private int iDriveState; // 0 = forward, 1 = back off, 2 = rotate
+    private int iSpeedIncreaseState; // press +10% ... 0 = waiting for press, 1 = waiting for release
+    private int iSpeedDecreaseState; // press -10% ... 0 = waiting for press, 1 = waiting for release
+    private double dDrivePowerRatio;
 
     /* distance sensor */
     private Rev2mDistanceSensor pFrontDistance;
@@ -51,6 +54,9 @@ public class scott_bot_auto_drive_state extends State {
         dRightDirection = 0;
 
         iDriveState = 0;
+        iSpeedDecreaseState = 0;
+        iSpeedIncreaseState = 0;
+        dDrivePowerRatio = 1;
     }
 
     @Override
@@ -66,6 +72,7 @@ public class scott_bot_auto_drive_state extends State {
 
         engine.telemetry.addData("distance", dFrontDistance);
         engine.telemetry.addData("angle", dIMU_Angle);
+        engine.telemetry.addData("power ..... ", (int)(dDrivePowerRatio*10));
         engine.telemetry.update();
 
         switch (iDriveState) {
@@ -103,7 +110,38 @@ public class scott_bot_auto_drive_state extends State {
 
                 }
                 break;
+        }
 
+        switch (iSpeedIncreaseState) {
+            case 0:
+                if(engine.gamepad1.right_bumper){
+                    iSpeedIncreaseState = 1;
+                }
+                break;
+            case 1:
+                if(!engine.gamepad1.right_bumper){
+                    iSpeedIncreaseState = 0;
+                    if(dDrivePowerRatio <= .9) {
+                        dDrivePowerRatio += .1;
+                    }
+                }
+                break;
+        }
+
+        switch (iSpeedDecreaseState) {
+            case 0:
+                if(engine.gamepad1.left_bumper){
+                    iSpeedDecreaseState = 1;
+                }
+                break;
+            case 1:
+                if(!engine.gamepad1.left_bumper){
+                    iSpeedDecreaseState = 0;
+                    if(dDrivePowerRatio >= .2) {
+                        dDrivePowerRatio -= .1;
+                    }
+                }
+                break;
         }
 
         pLeftDrive.setPower(dLeftDirection*1);
