@@ -6,11 +6,17 @@ import org.timecrafters.engine.Engine;
 import org.timecrafters.engine.State;
 
 public class scott_bot_manual_drive_state extends State {
-
     public scott_bot_manual_drive_state (Engine engine) { this.engine = engine;}
 
+    // config name "scott_bot"
+    private String szLeftWheel = "LeftWheel";
+    private String szRightWheel = "RightWheel";
+
+    // pointers to hardware
     private DcMotor pLeftDrive;
     private DcMotor pRightDrive;
+
+    // which way is each wheel going -1 backward, 0 stop, 1 forward
     private double dLeftDirection;
     private double dRightDirection;
 
@@ -20,8 +26,8 @@ public class scott_bot_manual_drive_state extends State {
 
     @Override
     public void init() {
-        pLeftDrive = engine.hardwareMap.dcMotor.get("LeftWheel");
-        pRightDrive = engine.hardwareMap.dcMotor.get("RightWheel");
+        pLeftDrive = engine.hardwareMap.dcMotor.get(szLeftWheel);
+        pRightDrive = engine.hardwareMap.dcMotor.get(szRightWheel);
 
         pLeftDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         pRightDrive.setDirection(DcMotorSimple.Direction.REVERSE);

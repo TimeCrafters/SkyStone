@@ -7,7 +7,7 @@ public class scott_arm_state extends State {
 
     public scott_arm_state (Engine engine) { this.engine = engine;}
 
-    // names in config
+    // names in config "scott_arm"
     private String szRotateZ   = "z";
     private String szShoulder  = "s";
     private String szElbow     = "e";
@@ -18,7 +18,6 @@ public class scott_arm_state extends State {
     private Servo pShoulder;
     private Servo pElbow;
     private Servo pClamp;
-
 
     // track location
     private double dRotateZ;
@@ -33,7 +32,7 @@ public class scott_arm_state extends State {
     private long lShoulder;
     private long lElbow;
     private long lClamp;
-    private long lServoStepTime = 100;
+    private long lServoStepTime = 50;
 
     @Override
     public void init() {
@@ -81,16 +80,16 @@ public class scott_arm_state extends State {
             pRotateZ.setPosition((0.0));
         }
 
-        if(engine.gamepad1.dpad_right &&
-                lCurrentTime > lRotateZ+lServoStepTime){ //.......... step right
+        if(engine.gamepad1.dpad_left &&
+                lCurrentTime > lRotateZ+lServoStepTime){ //.......... step right facing robot
             dRotateZ = pRotateZ.getPosition();
             if(dRotateZ < 1.0) {
                 pRotateZ.setPosition(dRotateZ += dServoStepSize);
                 lRotateZ = lCurrentTime;
             }
         }
-        else if(engine.gamepad1.dpad_left &&
-                lCurrentTime > lRotateZ+lServoStepTime){ //.......... step left
+        else if(engine.gamepad1.dpad_right &&
+                lCurrentTime > lRotateZ+lServoStepTime){ //.......... step left facing robot
             dRotateZ = pRotateZ.getPosition();
             if(dRotateZ > 0.0) {
                 pRotateZ.setPosition(dRotateZ -= dServoStepSize);
