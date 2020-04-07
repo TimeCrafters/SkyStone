@@ -5,7 +5,7 @@ import org.timecrafters.engine.State;
 
 public class scott_arm_state extends State {
 
-    public scott_arm_state (Engine engine) { this.engine = engine;}
+    scott_arm_state(Engine engine) { this.engine = engine;}
 
     // names in config "scott_arm"
     private String szRotateZ   = "z";
@@ -54,14 +54,12 @@ public class scott_arm_state extends State {
         dElbow = pElbow.getPosition();
         dClamp = pClamp.getPosition();
 
-        // time variables
+        // time variables for button presses
         lCurrentTime = System.currentTimeMillis();
         lRotateZ = lCurrentTime;
         lShoulder = lCurrentTime;
         lElbow = lCurrentTime;
         lClamp = lCurrentTime;
-
-
     }
 
     @Override
@@ -112,7 +110,8 @@ public class scott_arm_state extends State {
             if(dShoulder > 0.0) {
                 pShoulder.setPosition(dShoulder -= dServoStepSize);
                 pElbow.setPosition(dElbow += dServoStepSize);
-                lShoulder = lCurrentTime;
+                lElbow = lCurrentTime;
+                lShoulder = lElbow;
             }
         }
 
