@@ -66,28 +66,30 @@ if (FirstRun){
 }
 Time = System.currentTimeMillis()- Starttime;
 if (Power < Targetpower){
-    Power = .0005* Time;
+    Power = .0005 * Time;
 }
 CurrentRotation = IMU.getAngularOrientation().firstAngle;
-double PowerAdj = CurrentRotation * .01;
-        DriveLeft.setPower(Power + PowerAdj);
-        DriveRight.setPower(Power - PowerAdj);
 
-        if (CurrentRotation > 3 ){
+        double PowerAdj = CurrentRotation * .01;
 
-            DriveLeft.setPower(Power-.1);
-            DriveRight.setPower(Power+.1);
-        }
-
-        if (CurrentRotation < -3 ){
-            DriveLeft.setPower(Power+.1);
-            DriveRight.setPower(Power-.1);
-        }
-
-        if (CurrentRotation >= -3 && CurrentRotation <=3){
-            DriveLeft.setPower(Power);
-            DriveRight.setPower(Power);
-        }
+        DriveLeft.setPower(Power - PowerAdj);
+        DriveRight.setPower(Power + PowerAdj);
+//
+//        if (CurrentRotation > 3 ){
+//
+//            DriveLeft.setPower(Power-.1);
+//            DriveRight.setPower(Power+.1);
+//        }
+//
+//        if (CurrentRotation < -3 ){
+//            DriveLeft.setPower(Power+.1);
+//            DriveRight.setPower(Power-.1);
+//        }
+//
+//        if (CurrentRotation >= -3 && CurrentRotation <=3){
+//            DriveLeft.setPower(Power);
+//            DriveRight.setPower(Power);
+//        }
 
 
         if (Math.abs( DriveRight.getCurrentPosition())>= Ticks){
