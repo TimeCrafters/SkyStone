@@ -66,7 +66,7 @@ if (FirstRun){
 }
 Time = System.currentTimeMillis()- Starttime;
 if (Power < Targetpower){
-    Power = .001* Time;
+    Power = .0005* Time;
 }
 CurrentRotation = IMU.getAngularOrientation().firstAngle;
 double PowerAdj = CurrentRotation * .01;
