@@ -67,4 +67,9 @@ public class Faithturnsstate extends State {
             setFinished(true);
         }
     }
+
+    @Override
+    public void telemetry() {
+        engine.telemetry.addData("Current Rotation", Currentposition);
+    }
 }
