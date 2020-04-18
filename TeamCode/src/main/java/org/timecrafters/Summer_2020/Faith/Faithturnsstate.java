@@ -34,6 +34,7 @@ public class Faithturnsstate extends State {
         Rightdrive.setDirection(DcMotorSimple.Direction.REVERSE);
         Power = StateConfig.get(StateConfigID).variable("power");
         Degrees = StateConfig.get(StateConfigID).variable("degrees");
+        Direction = StateConfig.get(StateConfigID).variable("direction");
         Firstrun = true;
 
 
