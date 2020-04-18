@@ -11,7 +11,7 @@ import org.timecrafters.engine.State;
 
 import java.util.IllegalFormatCodePointException;
 
-public class DriveForwardState extends State {
+public class FaithDriveForwardState extends State {
 
 private DcMotor DriveLeft;
 private DcMotor DriveRight;
@@ -26,7 +26,7 @@ private float CurrentRotation;
 private long Time;
 private long Starttime;
 
-    public DriveForwardState(Engine Engine, StateConfiguration stateConfiguration, String stateConfigID) {
+    public FaithDriveForwardState(Engine Engine, StateConfiguration stateConfiguration, String stateConfigID) {
         this.engine = Engine;
         StateConfig = stateConfiguration;
         StateConfigID = stateConfigID;
