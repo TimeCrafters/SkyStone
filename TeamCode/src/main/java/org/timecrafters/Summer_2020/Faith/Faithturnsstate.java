@@ -54,7 +54,7 @@ public class Faithturnsstate extends State {
     @Override
     public void exec() throws InterruptedException {
 
-        Currentposition = IMU. getAngularOrientation().firstAngle;
+        Currentposition = -IMU. getAngularOrientation().firstAngle;
 
         if (Firstrun){
             Leftdrive.setPower(-Power * Direction);
