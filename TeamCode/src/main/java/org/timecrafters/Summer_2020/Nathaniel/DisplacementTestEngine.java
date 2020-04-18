@@ -10,6 +10,6 @@ public class DisplacementTestEngine extends CyberarmEngineV2 {
 
     @Override
     public void setup() {
-        addState(new MiniBotTesting(this, .3, 0.15 , 0,0 , 1000));
+        addState(new MiniBotTesting( .3, 0.15 , 0,0 , 1000));
     }
 }
