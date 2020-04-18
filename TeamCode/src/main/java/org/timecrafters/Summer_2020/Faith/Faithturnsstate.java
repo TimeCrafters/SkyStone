@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.cyberarm.NeXT.StateConfiguration;
 import org.timecrafters.engine.Engine;
 import org.timecrafters.engine.State;
+import org.timecrafters.gfp.Teleop.Brake;
 
 public class Faithturnsstate extends State {
 
@@ -25,6 +26,7 @@ public class Faithturnsstate extends State {
         this.engine = engine;
         this. StateConfig = stateConfiguration;
         this. StateConfigID = StateConfigID;
+
     }
 
     @Override
@@ -36,6 +38,8 @@ public class Faithturnsstate extends State {
         Degrees = StateConfig.get(StateConfigID).variable("degrees");
         Direction = StateConfig.get(StateConfigID).variable("direction");
         Firstrun = true;
+        Rightdrive. setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Leftdrive. setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
 
