@@ -14,7 +14,6 @@ import org.timecrafters.engine.State;
 public class MiniBotTesting extends CyberarmStateV2 {
 
     private BNO055IMU IMU;
-    private CyberarmEngineV2 engine;
     private DcMotor DriveLeft;
     private DcMotor DriveRight;
     private double HighPower;
@@ -33,8 +32,7 @@ public class MiniBotTesting extends CyberarmStateV2 {
     private int ReverseTicks;
 
 
-    public MiniBotTesting(CyberarmEngineV2 engine, double highPower, double lowPower, double cmThreshold, double reverseThreshold , int reverseTicks) {
-        this.engine = engine;
+    public MiniBotTesting(double highPower, double lowPower, double cmThreshold, double reverseThreshold , int reverseTicks) {
         HighPower = highPower;
         LowPower = lowPower;
         avoidThreshold = cmThreshold;
@@ -48,7 +46,7 @@ public class MiniBotTesting extends CyberarmStateV2 {
         //IMU init
         //------------------------------------------------------------------------------------------
 
-        IMU = engine.hardwareMap.get(BNO055IMU.class, "imu");
+        IMU = cyberarmEngine.hardwareMap.get(BNO055IMU.class, "imu");
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
@@ -62,8 +60,8 @@ public class MiniBotTesting extends CyberarmStateV2 {
         //Drive Motor Init
         //------------------------------------------------------------------------------------------
 
-        DriveRight = engine.hardwareMap.dcMotor.get("rightDrive");
-        DriveLeft = engine.hardwareMap.dcMotor.get("leftDrive");
+        DriveRight = cyberarmEngine.hardwareMap.dcMotor.get("rightDrive");
+        DriveLeft = cyberarmEngine.hardwareMap.dcMotor.get("leftDrive");
 
         DriveRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -74,7 +72,7 @@ public class MiniBotTesting extends CyberarmStateV2 {
 
         //Distance Sensor
 
-        DistanceSensor = engine.hardwareMap.get(Rev2mDistanceSensor.class, "forwardDistance");
+        DistanceSensor = cyberarmEngine.hardwareMap.get(Rev2mDistanceSensor.class, "forwardDistance");
     }
 
     @Override
@@ -123,7 +121,7 @@ public class MiniBotTesting extends CyberarmStateV2 {
                 HasChangedDirection = false;
             }
 
-            if (engine.gamepad1.right_bumper) {
+            if (cyberarmEngine.gamepad1.right_bumper) {
                 if (!HasSetDirection) {
                     targetRotation = getJoystickDegrees();
                     HasSetDirection = true;
@@ -131,6 +129,7 @@ public class MiniBotTesting extends CyberarmStateV2 {
             } else {
                 HasSetDirection = false;
             }
+
 
             if (distanceToObject < reverseThreshold) {
 
@@ -155,15 +154,15 @@ public class MiniBotTesting extends CyberarmStateV2 {
 
     @Override
     public void telemetry() {
-        engine.telemetry.addData("Rotaion X", IMU.getAngularOrientation().firstAngle);
-        engine.telemetry.addData("Rotaion Y", IMU.getAngularOrientation().secondAngle);
-        engine.telemetry.addData("Rotaion Z", IMU.getAngularOrientation().thirdAngle);
-        engine.telemetry.addData("Distance Sensor", DistanceSensor.getDistance(DistanceUnit.CM));
-        engine.telemetry.addData("target Rotation", targetRotation);
-        engine.telemetry.addData("Rotation Difference", relativeRotation);
-        engine.telemetry.addData("Speed Adjust", speedAdjust);
-        engine.telemetry.addData("Left Motor Power", DriveLeft.getPower());
-        engine.telemetry.addData("Right Motor Power", DriveRight.getPower());
+        cyberarmEngine.telemetry.addData("Rotaion X", IMU.getAngularOrientation().firstAngle);
+        cyberarmEngine.telemetry.addData("Rotaion Y", IMU.getAngularOrientation().secondAngle);
+        cyberarmEngine.telemetry.addData("Rotaion Z", IMU.getAngularOrientation().thirdAngle);
+        cyberarmEngine.telemetry.addData("Distance Sensor", DistanceSensor.getDistance(DistanceUnit.CM));
+        cyberarmEngine.telemetry.addData("target Rotation", targetRotation);
+        cyberarmEngine.telemetry.addData("Rotation Difference", relativeRotation);
+        cyberarmEngine.telemetry.addData("Speed Adjust", speedAdjust);
+        cyberarmEngine.telemetry.addData("Left Motor Power", DriveLeft.getPower());
+        cyberarmEngine.telemetry.addData("Right Motor Power", DriveRight.getPower());
     }
 
     private float randomDirection(float currentRotatoin) {
@@ -187,11 +186,11 @@ public class MiniBotTesting extends CyberarmStateV2 {
 
     private float getJoystickDegrees() {
 
-        double left_stick_y = -engine.gamepad1.left_stick_y;
-        double left_stick_x = engine.gamepad1.left_stick_x;
+        double left_stick_y = -cyberarmEngine.gamepad1.left_stick_y;
+        double left_stick_x = cyberarmEngine.gamepad1.left_stick_x;
         float zeroToNinety = (float) Math.toDegrees(Math.atan(left_stick_x / left_stick_y));
 
-        engine.telemetry.addData("raw", zeroToNinety);
+        cyberarmEngine.telemetry.addData("raw", zeroToNinety);
         float JoystickDegrees = 0;
 
         if (left_stick_y > 0) {
