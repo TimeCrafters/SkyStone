@@ -18,7 +18,7 @@ private String stateconfigID;
 private double muchpower;
 private int ticks;
 private BNO055IMU IMU;
-private float fristA;
+private float firstA;
 private float CA;
 private long startT;
 private long Ctime;
@@ -69,7 +69,7 @@ if (Bfirstrun){
     leftmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     Bfirstrun=false;
     startT  = System.currentTimeMillis();
-
+firstA=sensorR;
 }
 
 if (muchpower < targetpower){
@@ -78,7 +78,7 @@ if (muchpower < targetpower){
 }
 
 Ctime = System.currentTimeMillis()-startT;
-CA=fristA-sensorR;
+CA=firstA-sensorR;
 leftmotor.setPower(muchpower-powercor);
         rightmotor.setPower(muchpower+powercor);
 if (Math.abs( rightmotor.getCurrentPosition()) > ticks ) {
