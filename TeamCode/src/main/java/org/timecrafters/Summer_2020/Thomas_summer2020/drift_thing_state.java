@@ -39,7 +39,7 @@ leftmotor=engine.hardwareMap.dcMotor.get("leftDrive");
 rightmotor=engine.hardwareMap.dcMotor.get("rightDrive");
 leftmotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-muchpower=stateconfig.get(stateconfigID).variable("power");
+targetpower=stateconfig.get(stateconfigID).variable("power");
        ticks=stateconfig.get(stateconfigID).variable("ticks");
        Bfirstrun = true;
         IMU = engine.hardwareMap.get(BNO055IMU.class, "imu");
