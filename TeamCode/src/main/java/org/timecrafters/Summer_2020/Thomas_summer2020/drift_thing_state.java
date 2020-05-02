@@ -17,7 +17,9 @@ public class drift_thing_state  extends State {
 private String stateconfigID;
 private double muchpower;
 private int ticks;
-private BNO055IMU imu;
+private BNO055IMU IMU;
+private float fristA;
+private float CA;
 
     public drift_thing_state(Engine engine, StateConfiguration stateconfig,String stateconfigID) {
 this.stateconfigID=stateconfigID;
@@ -30,15 +32,27 @@ this.stateconfig=stateconfig;
     public void init() {
 leftmotor=engine.hardwareMap.dcMotor.get("leftDrive");
 rightmotor=engine.hardwareMap.dcMotor.get("rightDrive");
-rightmotor.setDirection(DcMotorSimple.Direction.REVERSE);
+leftmotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
 muchpower=stateconfig.get(stateconfigID).variable("power");
        ticks=stateconfig.get(stateconfigID).variable("ticks");
        Bfirstrun = true;
+        IMU = engine.hardwareMap.get(BNO055IMU.class, "imu");
+
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+
+        parameters.mode = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled = false;
+
+        IMU.initialize(parameters);
+
     }
 
     @Override
     public void exec() {
+        float sensorR = IMU.getAngularOrientation().firstAngle;
 if (Bfirstrun){
     rightmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     leftmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -46,7 +60,9 @@ if (Bfirstrun){
     leftmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     Bfirstrun=false;
 
+
 }
+CA=sensorR-fristA;
 leftmotor.setPower(muchpower);
         rightmotor.setPower(muchpower);
 if (Math.abs( rightmotor.getCurrentPosition()) > ticks ) {
@@ -54,7 +70,8 @@ if (Math.abs( rightmotor.getCurrentPosition()) > ticks ) {
     leftmotor.setPower(0);
     setFinished(true);
 }
-
+engine.telemetry.addData("curentA",CA);
+engine.telemetry.update();
     }
 
 
