@@ -53,7 +53,7 @@ public class stateTurnInPlace extends State {
        CD=IMU.getAngularOrientation().firstAngle;
         leftmotor.setPower(power*direction);
         rightmotor.setPower(-power*direction);
-            if (CD>targetD-DT && CD<targetD-DT){
+            if (CD>targetD-DT && CD<targetD+DT){
                 leftmotor.setPower(0);
                 rightmotor.setPower(0);
          setFinished(true);
