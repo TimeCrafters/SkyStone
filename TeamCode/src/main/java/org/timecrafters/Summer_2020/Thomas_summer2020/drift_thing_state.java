@@ -61,7 +61,7 @@ accamount= targetpower/acctime;
     public void exec() {
         float sensorR = IMU.getAngularOrientation().firstAngle;
         double powercor;
-        powercor=CA*0.0056;
+        powercor=CA*0.012;
 if (Bfirstrun){
     rightmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     leftmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
