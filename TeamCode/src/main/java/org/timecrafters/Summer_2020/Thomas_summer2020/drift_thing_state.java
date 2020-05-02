@@ -53,7 +53,7 @@ muchpower=stateconfig.get(stateconfigID).variable("power");
 
         IMU.initialize(parameters);
 
-        stateconfig.get(acctime).variable("acceltime");
+        acctime=   stateconfig.get(stateconfigID).variable("acceltime");
 accamount= targetpower/acctime;
     }
 
