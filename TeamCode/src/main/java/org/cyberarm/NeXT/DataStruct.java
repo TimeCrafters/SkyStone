@@ -44,7 +44,7 @@ public class DataStruct {
     this.enabled = enabled;
   }
 
-  public HashMap<String, String> variables() {
+  public HashMap<String, String> variables(String power) {
     return variables;
   }
 
