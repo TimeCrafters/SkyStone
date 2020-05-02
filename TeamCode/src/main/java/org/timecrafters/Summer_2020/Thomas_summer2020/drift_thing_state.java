@@ -47,6 +47,8 @@ if (Bfirstrun){
     Bfirstrun=false;
 
 }
+leftmotor.setPower(muchpower);
+        rightmotor.setPower(muchpower);
 if (Math.abs( rightmotor.getCurrentPosition()) > ticks ) {
     rightmotor.setPower(0);
     leftmotor.setPower(0);
