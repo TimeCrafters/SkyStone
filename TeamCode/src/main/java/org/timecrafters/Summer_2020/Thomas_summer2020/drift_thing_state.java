@@ -20,6 +20,11 @@ private int ticks;
 private BNO055IMU IMU;
 private float fristA;
 private float CA;
+private long startT;
+private long Ctime;
+private long acctime;
+private double accamount;
+private double targetpower;
 
     public drift_thing_state(Engine engine, StateConfiguration stateconfig,String stateconfigID) {
 this.stateconfigID=stateconfigID;
@@ -48,6 +53,8 @@ muchpower=stateconfig.get(stateconfigID).variable("power");
 
         IMU.initialize(parameters);
 
+        stateconfig.get(acctime).variable("acceltime");
+accamount= targetpower/acctime;
     }
 
     @Override
@@ -61,9 +68,16 @@ if (Bfirstrun){
     rightmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     leftmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     Bfirstrun=false;
-
+    startT  = System.currentTimeMillis();
 
 }
+
+if (muchpower < targetpower){
+    muchpower = accamount*Ctime;
+
+}
+
+Ctime = System.currentTimeMillis()-startT;
 CA=fristA-sensorR;
 leftmotor.setPower(muchpower-powercor);
         rightmotor.setPower(muchpower+powercor);
