@@ -12,6 +12,6 @@ public class drift_thing_engine extends Engine {
     @Override
     public void setProcesses() {
         StateConfiguration stateConfiguration= new StateConfiguration();
-        addState(new drift_thing_state(this,stateConfiguration,"ThomasStraitforward"));
+        addState(new stateTurnInPlace(this, "ThomasTurn", stateConfiguration));
     }
 }
