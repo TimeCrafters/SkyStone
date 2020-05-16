@@ -23,7 +23,7 @@ public class stateTurnInPlace extends State {
     private StateConfiguration stateconfig;
     private float curentrotation;
 private boolean frun=true;
-
+private boolean opdirection=false;
     public stateTurnInPlace(Engine engine,String stateconfigID, StateConfiguration stateconfig) {
       this.engine=engine;
         this.stateconfigID = stateconfigID;
@@ -72,14 +72,20 @@ private boolean frun=true;
         if (frun==true ){
             frun=false;
             if (direction==0){
-                 float degreedif=targetD-curentrotation;
-                 if (degreedif>180 || (degreedif<0 && degreedif>-180)){
-                         direction=-1;
-                 } else {
-                     direction=1;
-                 }
+              direction = getturndiretion();
             }
         }
+
+        if (!opdirection && direction==getturndiretion()){
+            opdirection=true;
+
+        }
+
+
+        if (opdirection){
+            direction=getturndiretion();
+        }
+
         leftmotor.setPower(power*direction);
         rightmotor.setPower(-power*direction);
 
@@ -98,6 +104,14 @@ private boolean frun=true;
 
     }
 
+private int getturndiretion(){
+    float degreedif=targetD-curentrotation;
+    if (degreedif>180 || (degreedif<0 && degreedif>-180)){
+        return -1;
+    } else {
+        return 1;
+    }
 
+}
 
 }
