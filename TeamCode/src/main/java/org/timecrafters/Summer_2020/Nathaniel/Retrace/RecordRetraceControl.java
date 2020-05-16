@@ -4,12 +4,13 @@ import org.cyberarm.engine.V2.CyberarmStateV2;
 
 public class RecordRetraceControl extends CyberarmStateV2 {
 
-    boolean Retracing;
+    private boolean Retracing;
     private Record RecordState = new Record();
     private Retrace RetraceState;
 
     @Override
     public void start() {
+        //
         addParallelState(RecordState);
     }
 
@@ -23,6 +24,7 @@ public class RecordRetraceControl extends CyberarmStateV2 {
         }
 
         if (childrenHaveFinished() && Retracing) {
+            children.remove(RecordState);
             addParallelState(RecordState);
             Retracing = false;
         }

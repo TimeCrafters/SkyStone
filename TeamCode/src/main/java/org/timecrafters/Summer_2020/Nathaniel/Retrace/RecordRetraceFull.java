@@ -7,9 +7,12 @@ import org.cyberarm.engine.V2.CyberarmStateV2;
 
 import java.util.ArrayList;
 
-public class Record extends CyberarmStateV2 {
+public class RecordRetraceFull extends CyberarmStateV2 {
 
     private long StartTime;
+    private boolean StartRecording;
+    private boolean StartRetracing;
+    private boolean Retracing;
     private long CurrentTime;
     private DcMotor DriveLeft;
     private DcMotor DriveRight;
@@ -43,6 +46,11 @@ public class Record extends CyberarmStateV2 {
 
     @Override
     public void exec() {
+
+
+    }
+
+    private void recording() {
         int encoderCurrentRight = DriveRight.getCurrentPosition();
         int encoderCurrentLeft = DriveLeft.getCurrentPosition();
         double powerRight = 0.3 * cyberarmEngine.gamepad1.right_stick_y;
@@ -64,6 +72,7 @@ public class Record extends CyberarmStateV2 {
             cyberarmEngine.telemetry.addData("Right Power", nrpAction.PowerRight);
             cyberarmEngine.telemetry.update();
         }
-
     }
+
+
 }

@@ -8,6 +8,6 @@ import org.cyberarm.engine.V2.CyberarmEngineV2;
 public class RetraceEngine extends CyberarmEngineV2 {
     @Override
     public void setup() {
-        addState(new Record());
+        addState(new RecordRetraceControl());
     }
 }

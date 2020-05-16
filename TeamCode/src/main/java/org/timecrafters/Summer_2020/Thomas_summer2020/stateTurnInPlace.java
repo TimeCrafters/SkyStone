@@ -1,5 +1,7 @@
 package org.timecrafters.Summer_2020.Thomas_summer2020;
 
+import android.util.Log;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -61,7 +63,7 @@ private boolean frun=true;
     @Override
     public void exec() throws InterruptedException {
        curentrotation=-IMU.getAngularOrientation().firstAngle;
-
+        Log.i("ThomasTurn", "Rotation Pre Adjustment : "+curentrotation);
 
        if (curentrotation<0){
            curentrotation+=360;
@@ -69,13 +71,14 @@ private boolean frun=true;
 
         if (frun==true ){
             frun=false;
-if (direction==0){
-    float degreedif=targetD-curentrotation;
-    if (degreedif>180||(degreedif<0 && degreedif>180)){
-        direction=-1;
-    }else{direction=1;}
-}
-
+            if (direction==0){
+                 float degreedif=targetD-curentrotation;
+                 if (degreedif>180 || (degreedif<0 && degreedif>-180)){
+                         direction=-1;
+                 } else {
+                     direction=1;
+                 }
+            }
         }
         leftmotor.setPower(power*direction);
         rightmotor.setPower(-power*direction);
@@ -88,12 +91,8 @@ if (direction==0){
             }
 
 
+        Log.i("ThomasTurn", "Rotation Post Adjustment : "+curentrotation);
 
-
-
-
-engine.telemetry.addData("curentrotation",curentrotation);
-            engine.telemetry.update();
 
 
 
