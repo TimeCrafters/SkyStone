@@ -8,7 +8,7 @@ import org.cyberarm.NeXT.StateConfiguration;
 import org.timecrafters.engine.Engine;
 import org.timecrafters.engine.State;
 
-public class drift_thing_state  extends State {
+public class drift_thing_state extends State {
 
     private DcMotor leftmotor;
     private DcMotor rightmotor;

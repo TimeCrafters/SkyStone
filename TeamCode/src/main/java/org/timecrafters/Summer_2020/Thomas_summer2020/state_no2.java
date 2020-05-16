@@ -18,7 +18,7 @@ public class state_no2 extends State {
     private DcMotor LiftLeft;
 
 
-    public state(Engine engine ) {
+    public state_no2(Engine engine ) {
         this.engine = engine;
 
     }
