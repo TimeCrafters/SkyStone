@@ -33,6 +33,9 @@ private boolean opdirection=false;
         leftmotor = engine.hardwareMap.dcMotor.get("leftDrive");
         rightmotor = engine.hardwareMap.dcMotor.get("rightDrive");
         leftmotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
     power=stateconfig.get(stateconfigID).variable("power");
     targetD=stateconfig.get(stateconfigID).variable("degrees");
     direction=stateconfig.get(stateconfigID).variable("direction");
@@ -48,6 +51,9 @@ private boolean opdirection=false;
         parameters.loggingEnabled = false;
 
         IMU.initialize(parameters);
+        if (direction==0){
+            opdirection=true;
+        }
 
         if (targetD<0){
             targetD+=360;
@@ -64,26 +70,24 @@ private boolean opdirection=false;
     public void exec() throws InterruptedException {
        curentrotation=-IMU.getAngularOrientation().firstAngle;
         Log.i("ThomasTurn", "Rotation Pre Adjustment : "+curentrotation);
-
+int optimalirection= getturndiretion();
        if (curentrotation<0){
            curentrotation+=360;
        }
 
-        if (frun==true ){
-            frun=false;
-            if (direction==0){
-              direction = getturndiretion();
-            }
-        }
 
-        if (!opdirection && direction==getturndiretion()){
+
+
+
+
+        if (!opdirection && direction==optimalirection){
             opdirection=true;
 
         }
 
 
         if (opdirection){
-            direction=getturndiretion();
+            direction=optimalirection;
         }
 
         leftmotor.setPower(power*direction);
