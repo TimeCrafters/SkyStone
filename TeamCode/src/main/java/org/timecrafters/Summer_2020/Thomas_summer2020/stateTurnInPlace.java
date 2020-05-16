@@ -8,8 +8,6 @@ import org.cyberarm.NeXT.StateConfiguration;
 import org.timecrafters.engine.Engine;
 import org.timecrafters.engine.State;
 
-import java.util.HashMap;
-
 public class stateTurnInPlace extends State {
 
     private DcMotor leftmotor;
@@ -19,9 +17,10 @@ public class stateTurnInPlace extends State {
     private double power;
     private float targetD;
     private int direction;
-  private float DT;
+  private float alowance;
     private StateConfiguration stateconfig;
-    private float CD;
+    private float curentrotation;
+private boolean frun=true;
 
     public stateTurnInPlace(Engine engine,String stateconfigID, StateConfiguration stateconfig) {
       this.engine=engine;
@@ -35,7 +34,7 @@ public class stateTurnInPlace extends State {
     power=stateconfig.get(stateconfigID).variable("power");
     targetD=stateconfig.get(stateconfigID).variable("degrees");
     direction=stateconfig.get(stateconfigID).variable("direction");
-    DT=stateconfig.get(stateconfigID).variable("allowance");
+    alowance =stateconfig.get(stateconfigID).variable("allowance");
 
         IMU = engine.hardwareMap.get(BNO055IMU.class, "imu");
 
@@ -47,13 +46,42 @@ public class stateTurnInPlace extends State {
         parameters.loggingEnabled = false;
 
         IMU.initialize(parameters);
+
+        if (targetD<0){
+            targetD+=360;
+        }
+
+
+
+
+
+
+
     }
     @Override
     public void exec() throws InterruptedException {
-       CD=IMU.getAngularOrientation().firstAngle;
+       curentrotation=-IMU.getAngularOrientation().firstAngle;
+
+
+       if (curentrotation<0){
+           curentrotation+=360;
+       }
+
+        if (frun==true ){
+            frun=false;
+if (direction==0){
+    float degreedif=targetD-curentrotation;
+    if (degreedif>180||(degreedif<0 && degreedif>180)){
+        direction=-1;
+    }else{direction=1;}
+}
+
+        }
         leftmotor.setPower(power*direction);
         rightmotor.setPower(-power*direction);
-            if (CD>targetD-DT && CD<targetD+DT){
+
+
+            if (curentrotation>targetD- alowance && curentrotation<targetD+ alowance){
                 leftmotor.setPower(0);
                 rightmotor.setPower(0);
          setFinished(true);
