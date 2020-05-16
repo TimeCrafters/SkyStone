@@ -92,9 +92,13 @@ if (direction==0){
 
 
 
-
+engine.telemetry.addData("curentrotation",curentrotation);
+            engine.telemetry.update();
 
 
 
     }
+
+
+
 }
