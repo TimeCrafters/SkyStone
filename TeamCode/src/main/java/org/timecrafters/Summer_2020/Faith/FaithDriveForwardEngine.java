@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.cyberarm.NeXT.StateConfiguration;
 import org.timecrafters.engine.Engine;
-@Autonomous(name = "Faith Drive", group = "Faith")
+@Autonomous(name = "Faith: Autonomous States",group = "Faith")
 public class FaithDriveForwardEngine extends Engine {
 
     @Override
