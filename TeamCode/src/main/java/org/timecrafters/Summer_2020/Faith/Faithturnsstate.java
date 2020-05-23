@@ -14,13 +14,14 @@ public class Faithturnsstate extends State {
     private DcMotor Leftdrive;
     private DcMotor Rightdrive;
     private double Power;
-    private float Degrees;
+    private float Degrees;            //target position
     private StateConfiguration StateConfig;
     private String StateConfigID;
     private boolean Firstrun;
     private int Direction;
     private BNO055IMU IMU;
     private float Currentposition;
+
 
     public Faithturnsstate(Engine engine, StateConfiguration stateConfiguration, String StateConfigID) {
         this.engine = engine;
@@ -59,8 +60,24 @@ public class Faithturnsstate extends State {
     public void exec() throws InterruptedException {
 
         Currentposition = -IMU. getAngularOrientation().firstAngle;
+int OptimalDirection;
+
+
+        if (Degrees > 180 + Currentposition){
+OptimalDirection = -1;
+        } else if (Degrees < -180 + Currentposition){
+            OptimalDirection = 1;
+        } else if (Degrees > Currentposition){
+            OptimalDirection = 1;
+        }else {
+            OptimalDirection = -1;
+        }
+
 
         if (Firstrun){
+if (Direction == 0){
+    Direction = OptimalDirection;
+}
             Leftdrive.setPower(-Power * Direction);
             Rightdrive.setPower(Power * Direction);
             Firstrun = false;

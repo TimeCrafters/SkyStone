@@ -74,22 +74,8 @@ CurrentRotation = IMU.getAngularOrientation().firstAngle;
 
         DriveLeft.setPower(Power - PowerAdj);
         DriveRight.setPower(Power + PowerAdj);
-//
-//        if (CurrentRotation > 3 ){
-//
-//            DriveLeft.setPower(Power-.1);
-//            DriveRight.setPower(Power+.1);
-//        }
-//
-//        if (CurrentRotation < -3 ){
-//            DriveLeft.setPower(Power+.1);
-//            DriveRight.setPower(Power-.1);
-//        }
-//
-//        if (CurrentRotation >= -3 && CurrentRotation <=3){
-//            DriveLeft.setPower(Power);
-//            DriveRight.setPower(Power);
-//        }
+
+
 
 
         if (Math.abs( DriveRight.getCurrentPosition())>= Ticks){
