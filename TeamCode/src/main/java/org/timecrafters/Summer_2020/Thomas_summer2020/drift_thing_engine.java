@@ -1,10 +1,11 @@
 package org.timecrafters.Summer_2020.Thomas_summer2020;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.cyberarm.NeXT.StateConfiguration;
 import org.timecrafters.engine.Engine;
-@TeleOp (name = "12345")
+@Autonomous(name = "Thomas: Autonomous States",group = "Thomas")
 public class drift_thing_engine extends Engine {
 
 

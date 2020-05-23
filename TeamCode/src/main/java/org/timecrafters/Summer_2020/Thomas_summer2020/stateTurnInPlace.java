@@ -70,11 +70,12 @@ private boolean opdirection=false;
     public void exec() throws InterruptedException {
        curentrotation=-IMU.getAngularOrientation().firstAngle;
         Log.i("ThomasTurn", "Rotation Pre Adjustment : "+curentrotation);
-int optimalirection= getturndiretion();
+
        if (curentrotation<0){
            curentrotation+=360;
        }
 
+        int optimalirection= getturndiretion();
 
 
 
