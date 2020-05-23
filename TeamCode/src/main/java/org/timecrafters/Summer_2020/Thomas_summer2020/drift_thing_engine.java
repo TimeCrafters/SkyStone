@@ -15,5 +15,15 @@ public class drift_thing_engine extends Engine {
         StateConfiguration stateConfiguration= new StateConfiguration();
         addState(new drift_thing_state(this, stateConfiguration, "ThomasStraitForward"));
         addState(new stateTurnInPlace(this, "ThomasTurn", stateConfiguration));
+
+        addState(new drift_thing_state(this, stateConfiguration, "ThomasStraitForward"));
+        addState(new stateTurnInPlace(this, "ThomasTurn", stateConfiguration));
+
+        addState(new drift_thing_state(this, stateConfiguration, "ThomasStraitForward"));
+        addState(new stateTurnInPlace(this, "ThomasTurn", stateConfiguration));
+
+        addState(new drift_thing_state(this, stateConfiguration, "ThomasStraitForward"));
+        addState(new stateTurnInPlace(this, "ThomasTurn", stateConfiguration));
+
     }
 }
