@@ -21,7 +21,8 @@ public class Faithturnsstate extends State {
     private int Direction;
     private BNO055IMU IMU;
     private float Currentposition;
-
+    private boolean useoptimaldirection;
+    private float tolerance;
 
     public Faithturnsstate(Engine engine, StateConfiguration stateConfiguration, String StateConfigID) {
         this.engine = engine;
@@ -38,10 +39,14 @@ public class Faithturnsstate extends State {
         Power = StateConfig.get(StateConfigID).variable("power");
         Degrees = StateConfig.get(StateConfigID).variable("degrees");
         Direction = StateConfig.get(StateConfigID).variable("direction");
+        tolerance = StateConfig.get(StateConfigID).variable("tolerance");
         Firstrun = true;
         Rightdrive. setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Leftdrive. setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        if (Direction == 0){
+            useoptimaldirection=true;
+        }
 
 
         IMU = engine.hardwareMap.get(BNO055IMU.class, "imu");
@@ -73,17 +78,18 @@ OptimalDirection = -1;
             OptimalDirection = -1;
         }
 
-
-        if (Firstrun){
-if (Direction == 0){
-    Direction = OptimalDirection;
+if (!useoptimaldirection && OptimalDirection == Direction){
+    useoptimaldirection = true;
 }
-            Leftdrive.setPower(-Power * Direction);
-            Rightdrive.setPower(Power * Direction);
-            Firstrun = false;
-        }
 
-        if (Currentposition > Degrees - 5 && Currentposition < Degrees + 5 ) {
+       if (useoptimaldirection ){
+           Direction = OptimalDirection;
+       }
+
+        Leftdrive.setPower(-Power * Direction);
+        Rightdrive.setPower(Power * Direction);
+
+        if (Currentposition > Degrees - tolerance && Currentposition < Degrees + tolerance ) {
             Rightdrive.setPower(0);
             Leftdrive.setPower(0);
             setFinished(true);
