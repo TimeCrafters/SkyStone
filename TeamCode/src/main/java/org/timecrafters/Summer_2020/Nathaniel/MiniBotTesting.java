@@ -78,16 +78,16 @@ public class MiniBotTesting extends CyberarmStateV2 {
     @Override
     public void exec() {
 
+        double leftStickX = cyberarmEngine.gamepad1.left_stick_x;
+        double leftStickY = cyberarmEngine.gamepad1.left_stick_y;
 
-        float currentRotatoin = IMU.getAngularOrientation().firstAngle;
-        double distanceToObject = DistanceSensor.getDistance(DistanceUnit.CM);
+        if (leftStickX != 0 || leftStickY !=0) {
 
-        if (!hasRun) {
-            targetRotation = currentRotatoin;
-            hasRun = true;
-        }
+            float currentRotatoin = IMU.getAngularOrientation().firstAngle;
+            HighPower = Math.sqrt(Math.pow(leftStickX,2) + Math.pow(leftStickY, 2));
 
-        if (!Reverseing) {
+            targetRotation= getJoystickDegrees();
+
             relativeRotation = currentRotatoin - targetRotation;
 
             if (relativeRotation < -180) {
@@ -110,44 +110,10 @@ public class MiniBotTesting extends CyberarmStateV2 {
             DriveLeft.setPower(leftPower * speedAdjust);
             DriveRight.setPower(rightPower * speedAdjust);
 
-            long currentTime = System.currentTimeMillis();
 
-            if (distanceToObject < avoidThreshold && distanceToObject > reverseThreshold && !HasChangedDirection && currentTime > lastTurnTime + 1500) {
-            targetRotation = randomDirection(targetRotation);
-
-                lastTurnTime = currentTime;
-                HasChangedDirection = true;
-            } else {
-                HasChangedDirection = false;
-            }
-
-            if (cyberarmEngine.gamepad1.right_bumper) {
-                if (!HasSetDirection) {
-                    targetRotation = getJoystickDegrees();
-                    HasSetDirection = true;
-                }
-            } else {
-                HasSetDirection = false;
-            }
-
-
-            if (distanceToObject < reverseThreshold) {
-
-                DriveLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                DriveRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                DriveLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                DriveRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-                DriveRight.setPower(-HighPower);
-                DriveLeft.setPower(-HighPower);
-                Reverseing = true;
-            }
-        }
-
-        if (Reverseing && Math.abs(DriveRight.getCurrentPosition()) > ReverseTicks) {
-            targetRotation = randomDirection(targetRotation);
-//            targetRotation += 100;
-            Reverseing = false;
+        } else {
+            DriveLeft.setPower(0);
+            DriveRight.setPower(0);
         }
 
     }
