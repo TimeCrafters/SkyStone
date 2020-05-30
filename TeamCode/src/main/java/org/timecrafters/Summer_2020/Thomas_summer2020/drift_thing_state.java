@@ -65,8 +65,7 @@ accamount= targetpower/acctime;
         if (stateconfig.allow(stateconfigID)) {
 
             float sensorR = IMU.getAngularOrientation().firstAngle;
-            double powercor;
-            powercor = CA * 0.012;
+
             if (Bfirstrun) {
                 rightmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 leftmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -84,8 +83,10 @@ accamount= targetpower/acctime;
 
             Ctime = System.currentTimeMillis() - startT;
             CA = firstA - sensorR;
+            double powercor = CA * 0.012;
             leftmotor.setPower(muchpower - powercor);
             rightmotor.setPower(muchpower + powercor);
+
             if (Math.abs(rightmotor.getCurrentPosition()) > ticks) {
                 rightmotor.setPower(0);
                 leftmotor.setPower(0);
