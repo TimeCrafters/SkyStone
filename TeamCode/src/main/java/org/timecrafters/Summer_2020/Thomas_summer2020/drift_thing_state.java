@@ -62,35 +62,40 @@ accamount= targetpower/acctime;
 
     @Override
     public void exec() {
-        float sensorR = IMU.getAngularOrientation().firstAngle;
-        double powercor;
-        powercor=CA*0.012;
-if (Bfirstrun){
-    rightmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    leftmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    rightmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    leftmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    Bfirstrun=false;
-    startT  = System.currentTimeMillis();
-firstA=sensorR;
-}
+        if (stateconfig.allow(stateconfigID)) {
 
-if (muchpower < targetpower){
-    muchpower = accamount*Ctime;
+            float sensorR = IMU.getAngularOrientation().firstAngle;
+            double powercor;
+            powercor = CA * 0.012;
+            if (Bfirstrun) {
+                rightmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                leftmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                rightmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                leftmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                Bfirstrun = false;
+                startT = System.currentTimeMillis();
+                firstA = sensorR;
+            }
 
-}
+            if (muchpower < targetpower) {
+                muchpower = accamount * Ctime;
 
-Ctime = System.currentTimeMillis()-startT;
-CA=firstA-sensorR;
-leftmotor.setPower(muchpower-powercor);
-        rightmotor.setPower(muchpower+powercor);
-if (Math.abs( rightmotor.getCurrentPosition()) > ticks ) {
-    rightmotor.setPower(0);
-    leftmotor.setPower(0);
-    setFinished(true);
-}
-engine.telemetry.addData("curentA",CA);
-engine.telemetry.update();
+            }
+
+            Ctime = System.currentTimeMillis() - startT;
+            CA = firstA - sensorR;
+            leftmotor.setPower(muchpower - powercor);
+            rightmotor.setPower(muchpower + powercor);
+            if (Math.abs(rightmotor.getCurrentPosition()) > ticks) {
+                rightmotor.setPower(0);
+                leftmotor.setPower(0);
+                setFinished(true);
+            }
+            engine.telemetry.addData("curentA", CA);
+            engine.telemetry.update();
+        }
+    }else{
+        setFinished(true);
     }
 
 
