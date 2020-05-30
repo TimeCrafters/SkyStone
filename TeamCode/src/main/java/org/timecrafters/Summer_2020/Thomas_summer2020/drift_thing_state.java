@@ -26,6 +26,7 @@ private long acctime;
 private double accamount;
 private double targetpower;
 
+
     public drift_thing_state(Engine engine, StateConfiguration stateconfig,String stateconfigID) {
 this.stateconfigID=stateconfigID;
 this.stateconfig=stateconfig;
@@ -40,9 +41,11 @@ rightmotor=engine.hardwareMap.dcMotor.get("rightDrive");
 leftmotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
 targetpower=stateconfig.get(stateconfigID).variable("power");
-       ticks=stateconfig.get(stateconfigID).variable("ticks");
+       double disance=stateconfig.get(stateconfigID).variable("cm");
        Bfirstrun = true;
         IMU = engine.hardwareMap.get(BNO055IMU.class, "imu");
+
+        ticks=(int) ((560/(Math.PI*11.5))*disance);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
