@@ -86,8 +86,8 @@ targetpower=stateconfig.get(stateconfigID).variable("power");
             Ctime = System.currentTimeMillis() - startT;
             CA = sensorR-firstA ;
             double powercor = CA * 0.012;
-            leftmotor.setPower(muchpower - powercor);
-            rightmotor.setPower(muchpower + powercor);
+            leftmotor.setPower(muchpower + powercor);
+            rightmotor.setPower(muchpower - powercor);
 
             if (Math.abs(rightmotor.getCurrentPosition()) > ticks) {
                 rightmotor.setPower(0);
