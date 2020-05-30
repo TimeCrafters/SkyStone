@@ -10,9 +10,14 @@ public class FaithDriveForwardEngine extends Engine {
     @Override
     public void setProcesses() {
         StateConfiguration stateConfiguration = new StateConfiguration();
-        //addState(new FaithDriveForwardState(this, stateConfiguration, "DriveStateVroom"));
-      //  addState(new FaithDriveForwardState(this,stateConfiguration,"DriveBackwardsVroom") );
+       addState(new FaithDriveForwardState(this, stateConfiguration,"FaithDrive1"));
         addState(new Faithturnsstate(this, stateConfiguration, "FaithTurn1"));
+        addState(new FaithDriveForwardState(this,stateConfiguration,"FaithDrive2"));
+        addState(new Faithturnsstate(this, stateConfiguration, "FaithTurn2"));
+        addState(new FaithDriveForwardState(this, stateConfiguration, "FaithDrive3"));
+        addState(new Faithturnsstate(this, stateConfiguration, "FaithTurn3"));
+        addState(new FaithDriveForwardState(this, stateConfiguration, "FaithDrive4"));
+        addState(new Faithturnsstate(this, stateConfiguration, "FaithTurn4"));
     }
 
 

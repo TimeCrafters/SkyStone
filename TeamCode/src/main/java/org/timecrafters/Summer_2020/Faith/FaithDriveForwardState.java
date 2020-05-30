@@ -25,6 +25,7 @@ private BNO055IMU IMU;
 private float CurrentRotation;
 private long Time;
 private long Starttime;
+private float ForwardDirection;
 
     public FaithDriveForwardState(Engine Engine, StateConfiguration stateConfiguration, String stateConfigID) {
         this.engine = Engine;
@@ -56,19 +57,28 @@ FirstRun = true;
 
     @Override
     public void exec() throws InterruptedException {
-if (FirstRun){
+        Float IMUAngle = IMU.getAngularOrientation().firstAngle;
+
+
+        if (FirstRun){
     Starttime = System.currentTimeMillis();
+    ForwardDirection = IMUAngle;
     DriveRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     DriveLeft. setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     DriveRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     DriveLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     FirstRun = false;
 }
+
+      CurrentRotation=IMUAngle-ForwardDirection;
+
+
+
+
 Time = System.currentTimeMillis()- Starttime;
 if (Power < Targetpower){
     Power = .0005 * Time;
 }
-CurrentRotation = IMU.getAngularOrientation().firstAngle;
 
         double PowerAdj = CurrentRotation * .01;
 
