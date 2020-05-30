@@ -47,14 +47,14 @@ targetpower=stateconfig.get(stateconfigID).variable("power");
 
         ticks=(int) ((560/(Math.PI*11.5))*disance);
 
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+       // BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
-        parameters.mode = BNO055IMU.SensorMode.IMU;
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled = false;
+     //   parameters.mode = BNO055IMU.SensorMode.IMU;
+       // parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+       // parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        //parameters.loggingEnabled = false;
 
-        IMU.initialize(parameters);
+        //IMU.initialize(parameters);
 
         acctime=   stateconfig.get(stateconfigID).variable("acceltime");
 accamount= targetpower/acctime;
