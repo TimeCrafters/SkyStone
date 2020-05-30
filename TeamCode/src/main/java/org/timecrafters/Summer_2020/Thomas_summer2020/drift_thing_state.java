@@ -84,7 +84,7 @@ targetpower=stateconfig.get(stateconfigID).variable("power");
             }
 
             Ctime = System.currentTimeMillis() - startT;
-            CA = firstA - sensorR;
+            CA = sensorR-firstA ;
             double powercor = CA * 0.012;
             leftmotor.setPower(muchpower - powercor);
             rightmotor.setPower(muchpower + powercor);
