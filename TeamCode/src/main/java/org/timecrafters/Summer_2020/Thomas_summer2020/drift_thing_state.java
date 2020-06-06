@@ -1,5 +1,7 @@
 package org.timecrafters.Summer_2020.Thomas_summer2020;
 
+import android.util.Log;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -105,6 +107,7 @@ targetpower=stateconfig.get(stateconfigID).variable("power");
             engine.telemetry.addData("curentA", CA);
             engine.telemetry.update();
         } else {
+            Log.i("disabledStates", "Skipped State : "+stateconfigID);
             setFinished(true);
         }
 

@@ -15,10 +15,10 @@ public class auto_drivePractice extends Engine {
 
         addState(new stateTurnInPlace(this, "T2AAstartTurn", stateConfiguration));
         addState(new drift_thing_state(this, stateConfiguration, "T2ABstartForward"));
-        addState(new stateTurnInPlace(this, "T2AClineDoor", stateConfiguration));
+        addState(new stateTurnInPlace(this, "T2ACalignDoor", stateConfiguration));
         addState(new drift_thing_state(this, stateConfiguration, "T2ADdoorForward"));
-        addState(new stateTurnInPlace(this, "T2AEturnPostdoor", stateConfiguration));
-        addState(new drift_thing_state(this, stateConfiguration, "T2AFdrivePostdoor"));
+        addState(new stateTurnInPlace(this, "T2AEturnPostDoor", stateConfiguration));
+        addState(new drift_thing_state(this, stateConfiguration, "T2AFdrivePostDoor"));
         addState(new stateTurnInPlace(this, "T2AGturnToOpening", stateConfiguration));
         addState(new drift_thing_state(this, stateConfiguration, "T2AHdriveTOOpening"));
         addState(new stateTurnInPlace(this, "T2AIturnTrench", stateConfiguration));

@@ -17,6 +17,7 @@ public class MiniBotTesting2 extends CyberarmStateV2 {
     private double basePower;
     private float startingRotation;
     private boolean resetCurrentPosition;
+    private double SpeedControler;
 
 
 

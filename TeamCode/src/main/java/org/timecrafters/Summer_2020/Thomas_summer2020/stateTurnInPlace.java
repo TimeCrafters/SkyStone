@@ -105,6 +105,7 @@ private boolean opdirection=false;
 
 
         } else {
+            Log.i("disabledStates", "Skipped State : "+stateconfigID);
             setFinished(true);
         }
     }
