@@ -41,11 +41,12 @@ rightmotor=engine.hardwareMap.dcMotor.get("rightDrive");
 leftmotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
 targetpower=stateconfig.get(stateconfigID).variable("power");
-       double disance=stateconfig.get(stateconfigID).variable("cm");
+       double disance = stateconfig.get(stateconfigID).variable("cm");
        Bfirstrun = true;
-        IMU = engine.hardwareMap.get(BNO055IMU.class, "imu");
 
         ticks=(int) ((560/(Math.PI*11.5))*disance);
+
+        IMU = engine.hardwareMap.get(BNO055IMU.class, "imu");
 
        // BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
@@ -57,7 +58,7 @@ targetpower=stateconfig.get(stateconfigID).variable("power");
         //IMU.initialize(parameters);
 
         acctime=   stateconfig.get(stateconfigID).variable("acceltime");
-accamount= targetpower/acctime;
+        accamount= targetpower/acctime;
     }
 
     @Override
@@ -103,11 +104,10 @@ accamount= targetpower/acctime;
             }
             engine.telemetry.addData("curentA", CA);
             engine.telemetry.update();
+        } else {
+            setFinished(true);
         }
-    }else{
-        setFinished(true);
+
     }
-
-
 
 }

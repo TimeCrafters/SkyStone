@@ -104,18 +104,19 @@ private boolean opdirection=false;
             Log.i("ThomasTurn", "Rotation Post Adjustment : " + curentrotation);
 
 
+        } else {
+            setFinished(true);
         }
-
-        private int getturndiretion () {
-            float degreedif = targetD - curentrotation;
-            if (degreedif > 180 || (degreedif < 0 && degreedif > -180)) {
-                return -1;
-            } else {
-                return 1;
-            }
-
-        }
-    }else{
-        setFinished(true);
     }
+
+    private int getturndiretion () {
+        float degreedif = targetD - curentrotation;
+        if (degreedif > 180 || (degreedif < 0 && degreedif > -180)) {
+            return -1;
+        } else {
+            return 1;
+        }
+
+    }
+
 }
