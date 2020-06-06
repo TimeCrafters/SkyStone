@@ -45,7 +45,6 @@ targetpower=stateconfig.get(stateconfigID).variable("power");
        Bfirstrun = true;
 
         ticks=(int) ((560/(Math.PI*11.5))*disance);
-        ticks = 1000;
 
         IMU = engine.hardwareMap.get(BNO055IMU.class, "imu");
 
