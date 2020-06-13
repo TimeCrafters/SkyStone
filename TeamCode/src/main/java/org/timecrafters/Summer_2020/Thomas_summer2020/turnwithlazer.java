@@ -47,11 +47,16 @@ if (frun){
     frun=false;
 }
 
-if (lazersensor.getDistance(DistanceUnit.MM)<distancethreshold){
+double senordistance=lazersensor.getDistance(DistanceUnit.MM);
+
+if (senordistance<distancethreshold){
     leftmotor.setPower(0);
     rightmotor.setPower(0);
     setFinished(true);
+
 }
+engine.telemetry.addData("currentDistance",senordistance);
+engine.telemetry.update();
     }
 }
 
