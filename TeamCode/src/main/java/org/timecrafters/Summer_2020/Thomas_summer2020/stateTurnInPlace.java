@@ -45,7 +45,9 @@ private float startangle;
 
     try {
         relativerotaion=stateconfig.get(stateconfigID).variable("robotrelative");
-    }catch (NullPointerException e){relativerotaion=false}
+    }catch (NullPointerException e) {
+        relativerotaion=false;
+    }
 
         IMU = engine.hardwareMap.get(BNO055IMU.class, "imu");
 

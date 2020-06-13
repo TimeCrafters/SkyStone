@@ -7,8 +7,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.cyberarm.NeXT.StateConfiguration;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.timecrafters.engine.Engine;
+import org.timecrafters.engine.State;
 
-public class turnwithlazer extends state{
+public class turnwithlazer extends State {
     private DcMotor leftmotor;
     private DcMotor rightmotor;
 private double power;
@@ -19,10 +20,10 @@ private double distancethreshold;
 private boolean frun=true;
 
 
-    public turnwithlazer(Engine engine,String stateconfigID, StateConfiguration stateconfig) {
-        this.engine=engine;
-        this.stateconfigID = stateconfigID;
+    public turnwithlazer(Engine engine, StateConfiguration stateconfig, String stateconfigID) {
+        this.engine = engine;
         this.stateconfig = stateconfig;
+        this.stateconfigID = stateconfigID;
     }
 
     @Override

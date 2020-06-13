@@ -15,9 +15,11 @@ public class MiniBotTesting2 extends CyberarmStateV2 {
     private float targetRotation;
     private double speedAdjust;
     private double basePower;
+    private float currentRotation;
     private float startingRotation;
     private boolean resetCurrentPosition;
-    private double SpeedControler;
+    private boolean changedControlSpeed;
+    private double controlSpeed =0.6;
 
 
 
@@ -57,6 +59,16 @@ public class MiniBotTesting2 extends CyberarmStateV2 {
     @Override
     public void exec() {
 
+        if (cyberarmEngine.gamepad1.dpad_up && !changedControlSpeed && controlSpeed < 1.0) {
+            controlSpeed += 0.2;
+            changedControlSpeed = true;
+        } else if (cyberarmEngine.gamepad1.dpad_down && !changedControlSpeed && controlSpeed > 0.2) {
+            controlSpeed -= 0.2;
+            changedControlSpeed = true;
+        } else {
+            changedControlSpeed = false;
+        }
+
         double leftStickX = cyberarmEngine.gamepad1.left_stick_x;
         double leftStickY = cyberarmEngine.gamepad1.left_stick_y;
 
@@ -72,9 +84,9 @@ public class MiniBotTesting2 extends CyberarmStateV2 {
 
         if ((leftStickX != 0 || leftStickY !=0) && !cyberarmEngine.gamepad1.start) {
 
-            basePower = Math.sqrt(Math.pow(leftStickX,2) + Math.pow(leftStickY, 2));
+            basePower = controlSpeed * Math.sqrt(Math.pow(leftStickX,2) + Math.pow(leftStickY, 2));
 
-            float currentRotation = getRelativeAngle(startingRotation, sensorRotation);
+            currentRotation = getRelativeAngle(startingRotation, sensorRotation);
 
             targetRotation= getJoystickDegrees();
 
@@ -115,15 +127,10 @@ public class MiniBotTesting2 extends CyberarmStateV2 {
 
     @Override
     public void telemetry() {
-        cyberarmEngine.telemetry.addData("Rotaion X", IMU.getAngularOrientation().firstAngle);
-        cyberarmEngine.telemetry.addData("Rotaion Y", IMU.getAngularOrientation().secondAngle);
-        cyberarmEngine.telemetry.addData("Rotaion Z", IMU.getAngularOrientation().thirdAngle);
 
-        cyberarmEngine.telemetry.addData("target Rotation", targetRotation);
-        cyberarmEngine.telemetry.addData("Rotation Difference", relativeRotation);
+        cyberarmEngine.telemetry.addData("Starting Rotation", startingRotation);
+        cyberarmEngine.telemetry.addData("Relative Rotation", relativeRotation);
         cyberarmEngine.telemetry.addData("Speed Adjust", speedAdjust);
-        cyberarmEngine.telemetry.addData("Left Motor Power", DriveLeft.getPower());
-        cyberarmEngine.telemetry.addData("Right Motor Power", DriveRight.getPower());
     }
 
     private float getRelativeAngle(float target, float current) {
