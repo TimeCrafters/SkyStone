@@ -24,6 +24,8 @@ public class stateTurnInPlace extends State {
     private float curentrotation;
 private boolean frun=true;
 private boolean opdirection=false;
+private boolean relativerotaion;
+private float startangle;
     public stateTurnInPlace(Engine engine,String stateconfigID, StateConfiguration stateconfig) {
       this.engine=engine;
         this.stateconfigID = stateconfigID;
@@ -40,6 +42,10 @@ private boolean opdirection=false;
     targetD=stateconfig.get(stateconfigID).variable("degrees");
     direction=stateconfig.get(stateconfigID).variable("direction");
     alowance =stateconfig.get(stateconfigID).variable("allowance");
+
+    try {
+        relativerotaion=stateconfig.get(stateconfigID).variable("robotrelative");
+    }catch (NullPointerException e){relativerotaion=false}
 
         IMU = engine.hardwareMap.get(BNO055IMU.class, "imu");
 
@@ -72,6 +78,16 @@ private boolean opdirection=false;
 
             curentrotation = -IMU.getAngularOrientation().firstAngle;
             Log.i("ThomasTurn", "Rotation Pre Adjustment : " + curentrotation);
+
+            if (frun){
+                frun=false;
+                startangle=curentrotation;
+            }
+
+            if (relativerotaion){
+                curentrotation-=startangle;
+
+            }
 
             if (curentrotation < 0) {
                 curentrotation += 360;
