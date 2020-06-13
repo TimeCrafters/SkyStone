@@ -121,6 +121,7 @@ private float startangle;
 
 
         } else {
+            Log.i("disabledStates", "Skipped State : "+stateconfigID);
             setFinished(true);
         }
     }
