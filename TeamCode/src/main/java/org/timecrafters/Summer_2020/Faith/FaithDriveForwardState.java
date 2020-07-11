@@ -46,14 +46,14 @@ FirstRun = true;
 
         IMU = engine.hardwareMap.get(BNO055IMU.class, "imu");
 
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+       // BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
-        parameters.mode = BNO055IMU.SensorMode.IMU;
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled = false;
-
-        IMU.initialize(parameters);
+      //  parameters.mode = BNO055IMU.SensorMode.IMU;
+      //  parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+      //  parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+//        parameters.loggingEnabled = false;
+//
+//        IMU.initialize(parameters);
 
 
 
