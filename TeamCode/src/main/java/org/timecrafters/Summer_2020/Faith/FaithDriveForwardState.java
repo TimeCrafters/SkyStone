@@ -40,7 +40,8 @@ DriveRight = engine.hardwareMap.dcMotor.get("leftDrive");
 DriveRight.setDirection(DcMotorSimple.Direction.REVERSE);
 Targetpower = StateConfig.get(StateConfigID).variable("Power");
 Power = .1;
-Ticks = StateConfig.get(StateConfigID).variable("Distance");
+double centimeters = StateConfig.get(StateConfigID).variable("Distance");
+Ticks = (int)(centimeters*(560/(Math.PI*11.5)));
 FirstRun = true;
 
         IMU = engine.hardwareMap.get(BNO055IMU.class, "imu");
@@ -53,6 +54,9 @@ FirstRun = true;
         parameters.loggingEnabled = false;
 
         IMU.initialize(parameters);
+
+
+
     }
 
     @Override
