@@ -24,6 +24,8 @@ public class stateTurnInPlace extends State {
     private float curentrotation;
 private boolean frun=true;
 private boolean opdirection=false;
+private boolean relativerotaion;
+private float startangle;
     public stateTurnInPlace(Engine engine,String stateconfigID, StateConfiguration stateconfig) {
       this.engine=engine;
         this.stateconfigID = stateconfigID;
@@ -41,16 +43,22 @@ private boolean opdirection=false;
     direction=stateconfig.get(stateconfigID).variable("direction");
     alowance =stateconfig.get(stateconfigID).variable("allowance");
 
+    try {
+        relativerotaion=stateconfig.get(stateconfigID).variable("robotrelative");
+    }catch (NullPointerException e) {
+        relativerotaion=false;
+    }
+
         IMU = engine.hardwareMap.get(BNO055IMU.class, "imu");
 
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+       // BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
-        parameters.mode = BNO055IMU.SensorMode.IMU;
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled = false;
+        //parameters.mode = BNO055IMU.SensorMode.IMU;
+        //parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+       // parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        //parameters.loggingEnabled = false;
 
-        IMU.initialize(parameters);
+        //IMU.initialize(parameters);
         if (direction==0){
             opdirection=true;
         }
@@ -68,55 +76,66 @@ private boolean opdirection=false;
     }
     @Override
     public void exec() throws InterruptedException {
-       curentrotation=-IMU.getAngularOrientation().firstAngle;
-        Log.i("ThomasTurn", "Rotation Pre Adjustment : "+curentrotation);
+        if (stateconfig.allow(stateconfigID)) {
 
-       if (curentrotation<0){
-           curentrotation+=360;
-       }
+            curentrotation = -IMU.getAngularOrientation().firstAngle;
+            Log.i("ThomasTurn", "Rotation Pre Adjustment : " + curentrotation);
 
-        int optimalirection= getturndiretion();
+            if (frun){
+                frun=false;
+                startangle=curentrotation;
+            }
 
+            if (relativerotaion){
+                curentrotation-=startangle;
 
+            }
 
+            if (curentrotation < 0) {
+                curentrotation += 360;
+            }
 
-
-        if (!opdirection && direction==optimalirection){
-            opdirection=true;
-
-        }
-
-
-        if (opdirection){
-            direction=optimalirection;
-        }
-
-        leftmotor.setPower(power*direction);
-        rightmotor.setPower(-power*direction);
+            int optimalirection = getturndiretion();
 
 
-            if (curentrotation>targetD- alowance && curentrotation<targetD+ alowance){
-                leftmotor.setPower(0);
-                rightmotor.setPower(0);
-         setFinished(true);
+            if (!opdirection && direction == optimalirection) {
+                opdirection = true;
+
             }
 
 
-        Log.i("ThomasTurn", "Rotation Post Adjustment : "+curentrotation);
+            if (opdirection) {
+                direction = optimalirection;
+            }
+
+            leftmotor.setPower(power * direction);
+            rightmotor.setPower(-power * direction);
 
 
+            if (curentrotation > targetD - alowance && curentrotation < targetD + alowance) {
+                leftmotor.setPower(0);
+                rightmotor.setPower(0);
+                setFinished(true);
+            }
 
 
+            Log.i("ThomasTurn", "Rotation Post Adjustment : " + curentrotation);
+
+
+        } else {
+            Log.i("disabledStates", "Skipped State : "+stateconfigID);
+            setFinished(true);
+        }
     }
 
-private int getturndiretion(){
-    float degreedif=targetD-curentrotation;
-    if (degreedif>180 || (degreedif<0 && degreedif>-180)){
-        return -1;
-    } else {
-        return 1;
-    }
+    private int getturndiretion () {
+        float degreedif = targetD - curentrotation;
+        if (degreedif > 180 || (degreedif < 0 && degreedif > -180)) {
+            return -1;
+        } else {
+            return 1;
+        }
 
-}
+    }
 
 }
