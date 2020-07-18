@@ -35,14 +35,14 @@ private float ForwardDirection;
 
     @Override
     public void init() {
-DriveLeft = engine.hardwareMap.dcMotor.get("rightDrive");
-DriveRight = engine.hardwareMap.dcMotor.get("leftDrive");
-DriveRight.setDirection(DcMotorSimple.Direction.REVERSE);
-Targetpower = StateConfig.get(StateConfigID).variable("Power");
-Power = .1;
-double centimeters = StateConfig.get(StateConfigID).variable("Distance");
-Ticks = (int)(centimeters*(560/(Math.PI*11.5)));
-FirstRun = true;
+        DriveLeft = engine.hardwareMap.dcMotor.get("rightDrive");
+        DriveRight = engine.hardwareMap.dcMotor.get("leftDrive");
+        DriveRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        Targetpower = StateConfig.get(StateConfigID).variable("Power");
+        Power = .1;
+        double centimeters = StateConfig.get(StateConfigID).variable("Distance");
+        Ticks = (int)(centimeters*(560/(Math.PI*11.5)));
+        FirstRun = true;
 
         IMU = engine.hardwareMap.get(BNO055IMU.class, "imu");
 
@@ -84,7 +84,8 @@ if (Power < Targetpower){
     Power = .0005 * Time;
 }
 
-        double PowerAdj = CurrentRotation * .01;
+//        double PowerAdj = CurrentRotation * .01;
+        double PowerAdj = 0;
 
         DriveLeft.setPower(Power - PowerAdj);
         DriveRight.setPower(Power + PowerAdj);
@@ -100,5 +101,10 @@ if (Power < Targetpower){
 
     }
 
+    @Override
+    public void telemetry() {
+        engine.telemetry.addData("Target Ticks", Ticks);
+        engine.telemetry.addData("Current Rotatoin", CurrentRotation);
 
+    }
 }

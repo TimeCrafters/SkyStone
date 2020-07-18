@@ -1,5 +1,7 @@
 package org.timecrafters.Summer_2020.Nathaniel.Retrace;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
@@ -15,6 +17,8 @@ public class Record extends CyberarmStateV2 {
     private DcMotor DriveRight;
     private int EncoderPrevLeft;
     private int EncoderPrevRight;
+    private double powerRight;
+    private double powerLeft;
     public ArrayList<NRPAction> Actions = new ArrayList<NRPAction>();
 
 
@@ -25,7 +29,7 @@ public class Record extends CyberarmStateV2 {
         DriveRight.setDirection(DcMotorSimple.Direction.REVERSE);
         DriveLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         DriveRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+        Log.i("RecordRetrace", "ran init");
 
     }
 
@@ -39,15 +43,19 @@ public class Record extends CyberarmStateV2 {
         Actions.add(new NRPAction(StartTime, 0, 0, 0, 0));
         EncoderPrevLeft = 0;
         EncoderPrevRight = 0;
+        Log.i("RecordRetrace", "Ran start");
     }
 
     @Override
     public void exec() {
+        Log.i("RecordRetrace", "Ran exec");
         int encoderCurrentRight = DriveRight.getCurrentPosition();
         int encoderCurrentLeft = DriveLeft.getCurrentPosition();
-        double powerRight = 0.3 * cyberarmEngine.gamepad1.right_stick_y;
-        double powerLeft = 0.3 * cyberarmEngine.gamepad1.left_stick_y;
-
+        powerRight = 0.3 * cyberarmEngine.gamepad1.right_stick_y;
+        powerLeft = 0.3 * cyberarmEngine.gamepad1.left_stick_y;
+        cyberarmEngine.telemetry.addData("Left Power", powerLeft);
+        cyberarmEngine.telemetry.addData("Right Power", powerRight);
+        cyberarmEngine.telemetry.update();
 
         DriveLeft.setPower(powerLeft);
         DriveRight.setPower(powerRight);
@@ -64,6 +72,13 @@ public class Record extends CyberarmStateV2 {
             cyberarmEngine.telemetry.addData("Right Power", nrpAction.PowerRight);
             cyberarmEngine.telemetry.update();
         }
+    }
 
+    @Override
+    public void telemetry() {
+
+        cyberarmEngine.telemetry.addData("Controler Input Y", cyberarmEngine.gamepad1.right_stick_y);
+        cyberarmEngine.telemetry.addData("Controler Input A", cyberarmEngine.gamepad1.a);
+        cyberarmEngine.telemetry.addData("run time", runTime());
     }
 }

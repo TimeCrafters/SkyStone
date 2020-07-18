@@ -13,7 +13,7 @@ public class MiniBotTesting2 extends CyberarmStateV2 {
     private DcMotor DriveRight;
     private float relativeRotation;
     private float targetRotation;
-    private double speedAdjust;
+    private double powerAdjust;
     private double basePower;
     private float currentRotation;
     private float startingRotation;
@@ -65,7 +65,9 @@ public class MiniBotTesting2 extends CyberarmStateV2 {
         } else if (cyberarmEngine.gamepad1.dpad_down && !changedControlSpeed && controlSpeed > 0.2) {
             controlSpeed -= 0.2;
             changedControlSpeed = true;
-        } else {
+        }
+
+        if (!cyberarmEngine.gamepad1.dpad_up && !cyberarmEngine.gamepad1.dpad_down && changedControlSpeed) {
             changedControlSpeed = false;
         }
 
@@ -78,7 +80,7 @@ public class MiniBotTesting2 extends CyberarmStateV2 {
         resetCurrentPosition = (cyberarmEngine.gamepad1.start && cyberarmEngine.gamepad1.left_bumper && !resetCurrentPosition);
 
         if (resetCurrentPosition) {
-            startingRotation = sensorRotation;
+            startingRotation = getJoystickDegrees();
         }
 
 
@@ -112,10 +114,10 @@ public class MiniBotTesting2 extends CyberarmStateV2 {
 
             //calculates speed adjuster that slows the motors to be closer to the BasePower while
             // maintaining the power ratio nesesary to execute the turn.
-            speedAdjust = ((2 * basePower) / (Math.abs(leftPower) + Math.abs(rightPower)));
+            powerAdjust = ((2 * basePower) / (Math.abs(leftPower) + Math.abs(rightPower)));
 
-            DriveLeft.setPower(leftPower * speedAdjust);
-            DriveRight.setPower(rightPower * speedAdjust);
+            DriveLeft.setPower(leftPower * powerAdjust);
+            DriveRight.setPower(rightPower * powerAdjust);
 
 
         } else {
@@ -129,12 +131,13 @@ public class MiniBotTesting2 extends CyberarmStateV2 {
     public void telemetry() {
 
         cyberarmEngine.telemetry.addData("Starting Rotation", startingRotation);
+        cyberarmEngine.telemetry.addData("Current Rotation", currentRotation);
         cyberarmEngine.telemetry.addData("Relative Rotation", relativeRotation);
-        cyberarmEngine.telemetry.addData("Speed Adjust", speedAdjust);
+        cyberarmEngine.telemetry.addData("Speed Adjust", powerAdjust);
     }
 
-    private float getRelativeAngle(float target, float current) {
-        float relative = current - target;
+    private float getRelativeAngle(float reference, float current) {
+        float relative = current - reference;
 
         if (relative < -180) {
             relative += 360;
