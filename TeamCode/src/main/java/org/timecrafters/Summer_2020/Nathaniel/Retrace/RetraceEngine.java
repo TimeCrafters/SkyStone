@@ -6,11 +6,13 @@ import org.cyberarm.engine.V2.CyberarmEngineV2;
 
 @TeleOp(name = "NRP : Retrace", group = "NRP")
 public class RetraceEngine extends CyberarmEngineV2 {
-    private Record RecordState = new Record();
+    private Record RecordState;
 
     @Override
     public void setup() {
+        RecordState = new Record();
         addState(RecordState);
-        addState(new RecordRetraceControl(RecordState));
+        //addState(new RecordRetraceControl(RecordState));
+        addState(new Retrace(RecordState.Actions));
     }
 }

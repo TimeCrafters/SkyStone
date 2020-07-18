@@ -48,7 +48,7 @@ public class Record extends CyberarmStateV2 {
 
     @Override
     public void exec() {
-        Log.i("RecordRetrace", "Ran exec");
+        //Log.i("RecordRetrace", "Ran exec");
         int encoderCurrentRight = DriveRight.getCurrentPosition();
         int encoderCurrentLeft = DriveLeft.getCurrentPosition();
         powerRight = 0.3 * cyberarmEngine.gamepad1.right_stick_y;
@@ -60,17 +60,21 @@ public class Record extends CyberarmStateV2 {
         DriveLeft.setPower(powerLeft);
         DriveRight.setPower(powerRight);
 
+        CurrentTime = System.currentTimeMillis();
+
         if (encoderCurrentLeft != EncoderPrevLeft || encoderCurrentRight != EncoderPrevRight) {
             EncoderPrevLeft = encoderCurrentLeft;
             EncoderPrevRight = encoderCurrentRight;
-            NRPAction nrpAction = new NRPAction(System.currentTimeMillis() - StartTime, powerLeft, powerRight, encoderCurrentLeft, encoderCurrentRight);
+            NRPAction nrpAction = new NRPAction(CurrentTime - StartTime, powerLeft, powerRight, encoderCurrentLeft, encoderCurrentRight);
             Actions.add(nrpAction);
+            StartTime = CurrentTime;
             cyberarmEngine.telemetry.addData("Time Stamp", nrpAction.TimeStamp);
             cyberarmEngine.telemetry.addData("Left Tick", nrpAction.CurrentTickLeft);
             cyberarmEngine.telemetry.addData("Right Tick", nrpAction.CurrentTickRight);
             cyberarmEngine.telemetry.addData("Left Power", nrpAction.PowerLeft);
             cyberarmEngine.telemetry.addData("Right Power", nrpAction.PowerRight);
             cyberarmEngine.telemetry.update();
+
         }
 
         setHasFinished(cyberarmEngine.gamepad1.left_bumper);

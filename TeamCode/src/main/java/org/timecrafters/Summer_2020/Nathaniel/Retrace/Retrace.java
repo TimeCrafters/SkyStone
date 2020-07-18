@@ -1,5 +1,7 @@
 package org.timecrafters.Summer_2020.Nathaniel.Retrace;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
@@ -16,6 +18,7 @@ public class Retrace extends CyberarmStateV2 {
     private NRPAction CurrentAction;
     private long NextActionTime;
     private long PreviousActionTime;
+    private long TotalRecordedTime;
     private ArrayList<NRPAction> Actions;
 
     public Retrace(ArrayList<NRPAction> actions) {
@@ -33,9 +36,8 @@ public class Retrace extends CyberarmStateV2 {
     public void start() {
         DriveLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         DriveRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        StartTime = System.currentTimeMillis() - StartTime;
+        StartTime = System.currentTimeMillis();
         CurrentAction = Actions.get(Actions.size() - 1);
-        NextActionTime = Actions.get(Actions.size() - 2).TimeStamp;
         PreviousActionTime = 0;
         performAction();
     }
@@ -46,7 +48,10 @@ public class Retrace extends CyberarmStateV2 {
 
         long timeSinceLastAction = CurrentTime - PreviousActionTime;
 
-        if (CurrentAction.TimeStamp - NextActionTime >= timeSinceLastAction) {
+
+        if (CurrentAction.TimeStamp >= timeSinceLastAction) {
+            Log.i("RecordRetrace", "Performed Action");
+
 
             if (Actions.indexOf(CurrentAction) >= 1) {
                 CurrentAction = Actions.get(Actions.indexOf(CurrentAction) - 1);
@@ -54,12 +59,7 @@ public class Retrace extends CyberarmStateV2 {
                 setHasFinished(true);
             }
 
-            if (Actions.indexOf(CurrentAction) >= 2) {
-                NextActionTime = Actions.get(Actions.indexOf(CurrentAction) - 2).TimeStamp;
-            } else {
-                NextActionTime = 50;
-            }
-
+            Log.i("RecordRetrace", "Action Duration "+CurrentAction.TimeStamp);
 
             PreviousActionTime = CurrentTime;
 
@@ -79,5 +79,12 @@ public class Retrace extends CyberarmStateV2 {
         DriveRight.setPower(CurrentAction.PowerRight);
         DriveLeft.setTargetPosition(CurrentAction.CurrentTickLeft);
         DriveRight.setTargetPosition(CurrentAction.CurrentTickRight);
+    }
+
+    @Override
+    public void telemetry() {
+        cyberarmEngine.telemetry.addData("Action Size", Actions.size());
+        cyberarmEngine.telemetry.addData("First Action Duration", Actions.get(0).TimeStamp);
+        cyberarmEngine.telemetry.addData("Second Action Duration", Actions.get(1).TimeStamp);
     }
 }
