@@ -6,7 +6,7 @@ import org.cyberarm.engine.V2.CyberarmStateV2;
 
 public class RecordRetraceControl extends CyberarmStateV2 {
 
-    private boolean Retracing;
+    private boolean Retracing = false;
     private Record RecordState; //= new Record();
     private Retrace RetraceState;
 
@@ -24,7 +24,7 @@ public class RecordRetraceControl extends CyberarmStateV2 {
     @Override
     public void exec() {
         //Log.i("RecordRetrace", "ran Control Exec");
-        if (cyberarmEngine.gamepad1.right_bumper && !Retracing) {
+        if (cyberarmEngine.gamepad1.left_bumper && !Retracing) {
             Log.i("RecordRetrace", "bumper");
             //children.get(children.indexOf(RecordState)).setHasFinished(true);
 
@@ -33,11 +33,15 @@ public class RecordRetraceControl extends CyberarmStateV2 {
          addParallelState(RetraceState);
         }
 
-//        if (childrenHaveFinished() && Retracing) {
-//            children.remove(RecordState);
-//            addParallelState(RecordState);
-//            Retracing = false;
-//        }
+        boolean childrenFinished = childrenHaveFinished();
+        if (childrenFinished && Retracing) {
+            children.remove(RecordState);
+            addParallelState(RecordState);
+            Retracing = false;
+        } else {
+            Log.i("RecordRetrace", "Retracing :"+Retracing+"Children have finished :"+childrenFinished);
+        }
+
 
     }
 

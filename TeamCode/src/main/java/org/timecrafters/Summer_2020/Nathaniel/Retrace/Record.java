@@ -40,7 +40,7 @@ public class Record extends CyberarmStateV2 {
 
         StartTime = System.currentTimeMillis();
         Actions.clear();
-        Actions.add(new NRPAction(StartTime, 0, 0, 0, 0));
+        Actions.add(new NRPAction(0, 0, 0, 0, 0));
         EncoderPrevLeft = 0;
         EncoderPrevRight = 0;
         Log.i("RecordRetrace", "Ran start");

@@ -12,7 +12,7 @@ public class RetraceEngine extends CyberarmEngineV2 {
     public void setup() {
         RecordState = new Record();
         addState(RecordState);
-        //addState(new RecordRetraceControl(RecordState));
-        addState(new Retrace(RecordState.Actions));
+        addState(new RecordRetraceControl(RecordState));
+
     }
 }
