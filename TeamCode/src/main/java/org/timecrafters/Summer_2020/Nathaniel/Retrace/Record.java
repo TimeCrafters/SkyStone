@@ -72,6 +72,8 @@ public class Record extends CyberarmStateV2 {
             cyberarmEngine.telemetry.addData("Right Power", nrpAction.PowerRight);
             cyberarmEngine.telemetry.update();
         }
+
+        setHasFinished(cyberarmEngine.gamepad1.left_bumper);
     }
 
     @Override
