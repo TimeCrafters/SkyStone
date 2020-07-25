@@ -45,13 +45,14 @@ public class lzerturnstate extends CyberarmStateV2 {
     @Override
     public void exec() {
         if (robot.stateConfiguration.allow(stateKey)) {
-           robot.motorDriveRight.setPower(-power);
-           robot.motorDriveLeft.setPower(power);
+            robot.motorDriveRight.setPower(-power);
+            robot.motorDriveLeft.setPower(power);
             boolean observingObject=(observedSensor.getDistance(DistanceUnit.CM)<=distanceThreshold);
 
             if (observingObject && !observedObject){
                 observedObject=true;
             }
+
             if (!observingObject && observingObject){
                 robot.motorDriveLeft.setPower(0);
                 robot.motorDriveRight.setPower(0);
@@ -65,6 +66,6 @@ public class lzerturnstate extends CyberarmStateV2 {
 
     @Override
     public void telemetry() {
-
+        cyberarmEngine.telemetry.addData("Observed Sensor value", observedSensor.getDistance(DistanceUnit.CM));
     }
 }
