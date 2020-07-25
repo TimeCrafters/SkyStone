@@ -20,7 +20,7 @@ public class lazerturnengine extends CyberarmEngineV2 {
 
     @Override
     public void setup() {
-
+addState(new lzerturnstate(minibot,"t010_turnPast"));
 
 
     }
