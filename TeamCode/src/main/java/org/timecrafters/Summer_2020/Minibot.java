@@ -46,10 +46,11 @@ public class Minibot {
         //initialize drive motors
         //-------------------------------------------------------------------------------------
 
-        motorDriveRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorDriveLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        motorDriveLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorDriveRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorDriveLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
     }
 
