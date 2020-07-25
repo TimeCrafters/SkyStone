@@ -100,11 +100,8 @@ public class MiniBotTesting2 extends CyberarmStateV2 {
             //calculate how the power of each motor should be adjusted to make the robot curve
             //towards the target angle
             //--------------------------------------------------------------------------------------
-            double turnPowerCorrection = (Math.pow(relativeRotation, 2)) / 900;
 
-            if (relativeRotation < 0) {
-                turnPowerCorrection*=-1;
-            }
+            double turnPowerCorrection = Math.pow(0.03 * relativeRotation, 3) + 0.01 * relativeRotation;
 
             //Adjusts power based on degrees off from target.
             double leftPower = basePower - turnPowerCorrection;
