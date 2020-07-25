@@ -52,7 +52,7 @@ public class lzerturnstate extends CyberarmStateV2 {
             if (observingObject && !observedObject){
                 observedObject=true;
             }
-            if (!observingObject && observingObject){
+            if (!observingObject && observedObject){
                 robot.motorDriveLeft.setPower(0);
                 robot.motorDriveRight.setPower(0);
                 setHasFinished(true);
