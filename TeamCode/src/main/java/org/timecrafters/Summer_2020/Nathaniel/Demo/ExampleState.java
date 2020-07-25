@@ -76,12 +76,15 @@ public class ExampleState extends CyberarmStateV2 {
             robot.motorDriveRight.setPower(powerUnlimitedRight * powerScalar);
             robot.motorDriveLeft.setPower(powerUnlimitedLeft * powerScalar);
 
+
             tickCurrent = Math.abs(robot.motorDriveLeft.getCurrentPosition());
             if (tickCurrent >= tickTarget) {
                 robot.motorDriveRight.setPower(0);
                 robot.motorDriveLeft.setPower(0);
                 setHasFinished(true);
             }
+        } else {
+            setHasFinished(true);
         }
     }
 

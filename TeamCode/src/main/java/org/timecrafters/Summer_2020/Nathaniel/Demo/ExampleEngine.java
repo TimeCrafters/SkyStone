@@ -21,7 +21,10 @@ public class ExampleEngine extends CyberarmEngineV2 {
     public void setup() {
 
         addState(new ExampleState(minibot, "a010_test"));
+        addState(new ExampleState(minibot,"a011_test"));
         addState(new ExampleState(minibot, "a020_test"));
+        addState(new ExampleState(minibot, "a030_test"));
+        addState(new ExampleState(minibot, "a040_test"));
 
     }
 }
