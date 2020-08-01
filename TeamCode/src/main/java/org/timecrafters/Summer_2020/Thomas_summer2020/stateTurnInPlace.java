@@ -129,12 +129,12 @@ private float startangle;
     }
 
     private int getturndiretion () {
-        float degreedif = targetD - curentrotation;
-        if (degreedif > 180 || (degreedif < 0 && degreedif > -180)) {
-            return -1;
-        } else {
-            return 1;
-        }
+            float degreedif = targetD - curentrotation;
+            if (degreedif > 180 || (degreedif < 0 && degreedif > -180)) {
+                return -1;
+            } else {
+                return 1;
+            }
 
     }
 
