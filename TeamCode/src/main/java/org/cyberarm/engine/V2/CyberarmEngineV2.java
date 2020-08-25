@@ -181,7 +181,23 @@ public abstract class CyberarmEngineV2 extends OpMode {
     Log.i(TAG, "Adding cyberarmState "+ state.getClass());
     cyberarmStates.add(state);
 
-    if (isRunning()) { state.init(); }
+    if (isRunning()) { initState(state); }
+
+    return state;
+  }
+
+  /**
+   * Inserts state after the query state plus an offset to ensure logical insertion
+   * @param query State to add state after
+   * @param state State to be inserted
+   * @return
+   */
+  public CyberarmStateV2 insertState(CyberarmStateV2 query, CyberarmStateV2 state) {
+    int index = cyberarmStates.indexOf(query) + query.insertOffset;
+    cyberarmStates.add(index, state);
+    query.insertOffset++;
+
+    if (isRunning()) { initState(state); }
 
     return state;
   }

@@ -14,6 +14,7 @@ public abstract class CyberarmStateV2 implements Runnable {
   public org.cyberarm.engine.V2.CyberarmEngineV2 cyberarmEngine = CyberarmEngineV2.instance;
   public ArrayList<CyberarmStateV2> children = new ArrayList<>();
   public long startTime = 0;
+  public int insertOffset = 1;
 
   /**
    * Called when INIT button on Driver Station is pushed
@@ -66,6 +67,15 @@ public abstract class CyberarmStateV2 implements Runnable {
     children.add(state);
 
     if (isRunning()) { state.init(); cyberarmEngine.runState(state); }
+
+    return state;
+  }
+
+  /**
+   * Add a state to engine which will run after this one finishes
+   */
+  public CyberarmStateV2 addState(CyberarmStateV2 state) {
+    cyberarmEngine.insertState(this, state);
 
     return state;
   }
